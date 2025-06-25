@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Soda Flavour</title>
+  
+  <!-- This page allows users to select a soda flavour for their burger combo -->
+  <link rel="stylesheet" href="dashboard.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff8f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff4b2b;
+    }
+
+    .flavour-container {
+      max-width: 500px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      background: #28a745;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Select Flavour</h1>
+
+<!-- This section allows users to select a soda flavour for their burger combo -->
+  <div class="flavour-container">
+     <select id="flavour">
+      <option value="">-- Select Flavour --</option>
+      <label for="flavour">Choose Flavour for <span id="sizeLabel"></span>:</label>
+    <select id="flavour">
+      <option value="">*Select Flavour*</option>
+      <option value="CocaCola">CocaCola</option>
+      <option value="Sprite">Sprite</option>
+      <option value="Fanta Orange">Fanta Orange</option>
+      <option value="Fanta Blackcurrant">Fanta Blackcurrant</option>
+      <option value="Fanta Passion">Fanta Passion</option>
+      <option value="Fanta Pineapple">Fanta Pineapple</option>
+      <option value="Stoney">Stoney</option>
+      <option value="Krest">Krest</option>
+    </select>
+
+    <button onclick="addFlavourToCart()">Add to Cart</button>
+  </div>
+
+    <footer>
+        <p>&copy; 2023 Ron'z Pizza. All rights reserved.</p>
+    </footer>
+</div>
+  <script>
+    // This script retrieves the size from the URL and updates the label
+    // so that users know which size they are selecting a flavour for.
+    // Get the size from the URL
+    const params = new URLSearchParams(window.location.search);
+    const size = params.get('size') || 'Selected Size';
+    document.getElementById('sizeLabel').textContent = size;
+
+    function addFlavourToCart() {
+      const selectedFlavour = document.getElementById('flavour').value;
+      if (!selectedFlavour) {
+        alert("Please select a flavour.");
+        return;
+      }
+
+      // Format the item name with size and flavour
+      const itemName = `${selectedFlavour} (${size})`;
+
+      // Set a default price based on size (you can adjust these)
+      const prices = {
+        "300ml": 100,
+        "500ml": 150,
+        "1ltr": 200,
+        "2ltr": 300
+      };
+      const price = prices[size] || 150;
+
+      // Store in localStorage cart
+      let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+      const existing = cart.find(item => item.name === itemName);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ id: Date.now(), name: itemName, price: price, quantity: 1 });
+      }
+
+      localStorage.setItem('ronz_cart', JSON.stringify(cart));
+      alert(`Added ${itemName} to cart!`);
+
+      // Optionally redirect to dashboard
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

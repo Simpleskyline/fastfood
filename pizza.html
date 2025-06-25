@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pizza Varieties</title>
+  <link rel="stylesheet" href="dashboard.css" />
+
+<!-- This script manages a shopping cart by adding items to local storage, -->
+  <script>
+    function addToCart(item) {
+      let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+      const existingItem = cartItems.find(i => i.id === item.id);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cartItems.push({ ...item, quantity: 1 });
+      }
+      localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+      alert(item.name + " added to cart!");
+    }
+  </script>
+
+</head>
+<body>
+  <header>
+    <h1>🍕 Pizza Varieties</h1>
+  </header>
+  <main>
+
+    <div class="food-item">
+      <h3>Small-size Pizza</h3>
+      <p class="price">Ksh.500</p>
+      <button onclick="addToCart({id: 21, name: 'Small-size Pizza', price: 500})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <h3>Medium-size Pizza</h3>
+      <p class="price">Ksh.650</p>
+      <button onclick="addToCart({id: 22, name: 'Medium-size Pizza', price: 650})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <h3>Large-size Pizza</h3>
+      <p class="price">Ksh.850</p>
+      <button onclick="addToCart({id: 23, name: 'Large-size Pizza', price: 850})">Add toCart</button>
+    </div>
+    
+    <div class="food-item">
+      <h3>Extra Large-size Pizza</h3>
+      <p class="price">Ksh.1500</p>
+      <button onclick="addToCart({id: 24, name: 'Extra Large-size Pizza', price: 1500})">Add to Cart</button>
+    </div>
+  </main>
+</body>
+</html>

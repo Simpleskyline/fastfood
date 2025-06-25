@@ -1,0 +1,293 @@
+/* General Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #fff8f01b;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* Header layout, background image and styling */
+header {
+  background-image: url("https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1350&q=80");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 220px;
+}
+
+/* Header title */
+h1 {
+  font-size: 54px;
+  font-weight: bold;
+}
+
+/* Cart and hamburger menu alignment */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Cart button styling */
+#cart-icon {
+  background: white;
+  color: #ff4b2b;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Hamburger menu */
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  width: 25px;
+  cursor: pointer;
+}
+
+.bar {
+  background: white;
+  height: 3px;
+  margin: 3px 0;
+  border-radius: 2px;
+}
+
+/* Nav links menu popup */
+.nav-links {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  background: #ff4b2b;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.nav-links a {
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-links.active {
+  display: flex;
+}
+
+.signout {
+  background: black;
+  color: #ff4b2b;
+  padding: 8px 0;
+  margin: 10px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+/* Main grid layout for food cards */
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 85px;
+  padding: 10px;
+}
+
+/* Food item card */
+.food-item {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.food-item img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.food-item h3 a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.price {
+  color: #ff4b2b;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* Food button updated to black */
+.food-item button {
+  background: black;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.food-item button:hover {
+  background: #333;
+}
+
+/* Cart container */
+#cart-container {
+  position: fixed;
+  top: 80px;
+  right: 15px;
+  width: 320px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  padding: 15px;
+  display: none;
+  z-index: 999;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#cart-container.active {
+  display: block;
+}
+
+.cart-item {
+  border-bottom: 1px solid #eee;
+  padding: 8px 0;
+}
+
+.quantity-controls {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.quantity-controls button {
+  background: #06f106;
+  padding: 2px 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.remove-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 2px 8px;
+  margin-top: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-footer {
+  margin-top: 10px;
+  text-align: right;
+}
+/* Style for Close and Checkout buttons */
+#close-cart,
+#checkout-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Close Button - Red Theme */
+#close-cart {
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 75, 43, 0.4);
+}
+
+#close-cart:hover {
+  background: #ff1e00;
+  transform: scale(1.05);
+}
+
+/* Checkout Button - Green Theme */
+#checkout-btn {
+  background: linear-gradient(to right, #28a745, #218838);
+  color: white;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+}
+
+#checkout-btn:hover {
+  background: #1e7e34;
+  transform: scale(1.05);
+}
+
+
+/* Footer section */
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: #0c0c0c;
+  font-size: 14px;
+  color: #fdfafa;
+}
+
+/* ✅ Notification popup */
+.cart-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-weight: bold;
+  display: none;
+  z-index: 9999;
+  animation: fadeOut 3s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+/* ✅ Stylish Sign Up Button (only for signup page) */
+.signup-btn {
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.signup-btn:hover {
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+}

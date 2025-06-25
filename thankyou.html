@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You!</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+
+  <div style="text-align: center; padding: 60px;">
+    <h1>🎉 Thank You for Your Order!</h1>
+    <p>Your order was placed successfully.</p>
+    <p><strong id="order-total"></strong></p>
+    <a href="dashboard.html">← Back to Menu</a>
+  </div>
+
+  <script>
+    // Get total from localStorage and display
+    const total = localStorage.getItem('last_order_total');
+    if (total) {
+      document.getElementById('order-total').textContent = `Total: Ksh.${total}`;
+      localStorage.removeItem('last_order_total');
+    }
+  </script>
+  
+</body>
+</html>
+<script>
+  // Ensure localStorage is cleared after displaying the total
+  window.addEventListener('load', () => {
+    localStorage.removeItem('last_order_total');
+  });

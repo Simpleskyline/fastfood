@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Our Burgers</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+  <header>
+    <h1>🍔 Burger Varieties</h1>
+  </header>
+
+  <main>
+
+    <div class="food-item">
+      <h3>Single Cheese Burger</h3>
+      <p class="price">Ksh.250</p>
+      <button onclick="addToCart({id: 11, name: 'Single Cheese Burger', price: 250})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <h3>Double Cheese Burger</h3>
+      <p class="price">Ksh.350</p>
+      <button onclick="addToCart({id: 12, name: 'Double Cheese Burger', price: 550})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <h3>Double Cheese Burger with Fries</h3>
+      <p class="price">Ksh.300</p>
+      <button onclick="addToCart({id: 13, name: 'Double Cheese Burger', price: 300})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <h3>Burger Combo with fries and Soda</h3>
+      <p class="price">Ksh.350</p>
+      <a class="button" href="soda-flavours.html?size=300ml" target="_blank">Choose Soda Flavour</a>
+      <button onclick="addToCart({id: 14, name: 'Veggie Burger', price: 350})">Add to Cart</button>
+    </div>
+
+    <script>
+  function addToCart(item) {
+    // Get existing cart or create new
+    let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+
+    // Check if item exists
+    const existingItem = cart.find(i => i.id === item.id);
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cart.push({ ...item, quantity: 1 });
+    }
+
+    // Save updated cart to localStorage
+    localStorage.setItem('ronz_cart', JSON.stringify(cart));
+
+    // Notify user
+    alert(`${item.name} added to cart!`);
+  }
+</script>
+
+  </main>
+</body>
+</html>

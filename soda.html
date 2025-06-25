@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Soda Options | Ron'z Pizza</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff8f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ff4b2b;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .soda-container {
+      /* This is already set up for horizontal alignment with wrapping */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      /* Optional: Center the container itself */
+      max-width: 1200px; /* Adjust as needed */
+      margin: 0 auto;
+    }
+
+    .soda-size {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .soda-size h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .soda-size a.button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.3s ease;
+    }
+
+    .soda-size a.button:hover {
+      background: #218838;
+    }
+
+    /* Additional styling for price if needed */
+    .soda-size .price {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Choose Your Soda Size</h1>
+  <div class="soda-container">
+    <div class="soda-size">
+      <h3>300ml</h3>
+      <p class="price">Ksh.50</p>
+      <a class="button" href="soda-flavours.html?size=300ml" target="_blank">Choose Flavour</a>
+    </div>
+
+    <div class="soda-size">
+      <h3>350ml</h3>
+      <p class="price">Ksh.60</p>
+      <a class="button" href="soda-flavours.html?size=300ml" target="_blank">Choose Flavour</a>
+    </div>
+
+    <div class="soda-size">
+      <h3>500ml</h3>
+      <p class="price">Ksh.80</p>
+      <a class="button" href="soda-flavours.html?size=500ml" target="_blank">Choose Flavour</a>
+    </div>
+    
+    <div class="soda-size">
+      <h3>1.25 Litre</h3>
+      <p class="price">Ksh.150</p>
+      <a class="button" href="soda-flavours.html?size=1ltr" target="_blank">Choose Flavour</a>
+    </div>
+
+    <div class="soda-size">
+      <h3>2 Litre</h3>
+      <p class="price">Ksh.200</p>
+      <a class="button" href="soda-flavours.html?size=2ltr" target="_blank">Choose Flavour</a>
+    </div>
+  </div>
+
+</body>
+</html>

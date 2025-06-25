@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile | FastFoodie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:600,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="profile.css"/>   
+</head>
+
+<body>
+    <div class="profile-container">
+        <form id="profileForm" autocomplete="off">
+            <label for="name">First Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your Name">
+
+            <label for="lastname">Last Name</label>
+            <input type="text" id="lastname" name="lastname" required placeholder="Your Name">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="Email address">
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. 0712345678">
+
+            <div class="profile-actions">
+                <button type="submit"><i class="fa fa-save"></i> Update</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchUserProfile();
+        });
+
+        function fetchUserProfile() {
+            const user = {
+                name: "John",
+                lastname: "Doe",
+                email: "john@fastfoodie.com",
+                phone: "0712345678",
+                address: "123 Burger Lane, Nairobi"
+            };
+            document.getElementById('name').value = user.name;
+            document.getElementById('lastname').value = user.lastname;
+            document.getElementById('email').value = user.email;
+            document.getElementById('phone').value = user.phone;
+            document.getElementById('address').value = user.address;
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const data = {
+                name: document.getElementById('name').value,
+                lastname: document.getElementById('lastname').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value
+            };
+
+            fetch('update_profile.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(json => {
+                alert(json.message);
+                if (json.success) {
+                    window.location.href = "dashboard.html";
+                }
+            })
+            .catch(err => {
+                alert("An error occurred while updating. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>
