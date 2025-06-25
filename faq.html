@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - Ronz's Fast Food</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #e44d26; /* A common fast-food red/orange */
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        .faq-section {
+            margin-bottom: 30px;
+        }
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 15px;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .question {
+            font-weight: bold;
+            color: #555;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .answer {
+            margin-top: 5px;
+            padding-left: 20px;
+            color: #666;
+            display: none; /* Hidden by default */
+        }
+        .answer.active {
+            display: block; /* Shown when active */
+        }
+        .question::after {
+            content: '+';
+            font-size: 1.2em;
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+        .question.active::after {
+            content: '-';
+            transform: rotate(180deg);
+        }
+        .highlight {
+            color: #e44d26;
+            font-weight: bold;
+        }
+        .contact-info {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        .contact-info p {
+            margin: 5px 0;
+        }
+        .contact-info a {
+            color: #e44d26;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Frequently Asked Questions (FAQ)</h1>
+
+        <div class="faq-section">
+            <h2>General Information</h2>
+
+            <div class="faq-item">
+                <div class="question">What are your operating hours?</div>
+                <div class="answer">
+                    Ronz's Fast Food in Utawala is proud to be open <span class="highlight">24 hours a day, 7 days a week!</span> We're always here to satisfy your cravings.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Where is Ronz's Fast Food Utawala located?</div>
+                <div class="answer">
+                    You can find us conveniently located in <span class="highlight">Utawala, Nairobi, right near V-Mall.</span> We're easily accessible for both dine-in and takeout.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Do you offer dine-in, takeout, or delivery?</div>
+                <div class="answer">
+                    Yes, we offer all three! You're welcome to <span class="highlight">dine-in</span> at our comfortable restaurant, grab your order for <span class="highlight">takeout</span>, or enjoy the convenience of <span class="highlight">delivery</span> right to your doorstep.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Do you have parking available?</div>
+                <div class="answer">
+                    Yes, we have ample parking space available for our customers right at our Utawala location.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Ordering & Delivery</h2>
+
+            <div class="faq-item">
+                <div class="question">How can I place an order for delivery?</div>
+                <div class="answer">
+                    You can place a delivery order directly through our website, or by calling us at [Your Phone Number Here, e.g., 07XX-XXXXXX]. We also partner with popular food delivery apps.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What areas do you deliver to?</div>
+                <div class="answer">
+                    We primarily deliver within the Utawala area and its immediate surroundings. Please enter your address on our website's ordering platform to confirm if we deliver to your specific location.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What is the minimum order for delivery?</div>
+                <div class="answer">
+                    Our minimum order for delivery is Ksh. [Your Minimum Amount, e.g., 500]. A small delivery fee may apply depending on your location.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Can I pre-order for a specific time?</div>
+                <div class="answer">
+                    Yes, you can schedule your order for a future pickup or delivery time through our online ordering system.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">How long does delivery take?</div>
+                <div class="answer">
+                    Delivery times can vary depending on your location, traffic, and current demand. We aim to deliver within [Your Average Delivery Time, e.g., 30-45 minutes], but you'll receive an estimated time upon order confirmation.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Menu & Food</h2>
+
+            <div class="faq-item">
+                <div class="question">What kind of food do you serve?</div>
+                <div class="answer">
+                    Ronz's Fast Food specializes in delicious and quick meals including [mention 3-4 key items, e.g., burgers, fried chicken, pizzas, fries, milkshakes, snacks, etc.]. Check out our full menu for all our offerings!
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Do you have vegetarian or vegan options?</div>
+                <div class="answer">
+                    We offer a selection of vegetarian options, such as [mention specific items, e.g., veggie burgers, salads, specific sides]. Please check our menu or ask our staff for details on vegan choices.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Do you offer catering services?</div>
+                <div class="answer">
+                    Yes, we do! For large orders or event catering, please contact us directly to discuss your needs and get a customized quote.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What payment methods do you accept?</div>
+                <div class="answer">
+                    We accept various payment methods including M-Pesa, major credit/debit cards, and cash on delivery/pickup.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Customer Service</h2>
+
+            <div class="faq-item">
+                <div class="question">What if there's an issue with my order?</div>
+                <div class="answer">
+                    Please contact us immediately at [Your Phone Number Here] or use our contact form. We aim for 100% customer satisfaction and will do our best to resolve any issues promptly.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Can I provide feedback on my experience?</div>
+                <div class="answer">
+                    We welcome your feedback! You can leave a review on our website, Google Maps, or contact us directly. Your input helps us improve.
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-info">
+            <p>Can't find your answer here? <span class="highlight">Contact Us!</span></p>
+            <p>Phone: <a href="tel:+2547XXXXXXXX">+254 7XX XXXXXX</a></p>
+            <p>Email: <a href="mailto:info@ronzsfastfood.com">info@ronzsfastfood.com</a></p>
+            <p>Address: Utawala, near V-Mall, Nairobi</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.question');
+                const answer = item.querySelector('.answer');
+
+                question.addEventListener('click', () => {
+                    // Close all other open answers
+                    faqItems.forEach(otherItem => {
+                        const otherAnswer = otherItem.querySelector('.answer');
+                        const otherQuestion = otherItem.querySelector('.question');
+                        if (otherAnswer !== answer && otherAnswer.classList.contains('active')) {
+                            otherAnswer.classList.remove('active');
+                            otherQuestion.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle current answer
+                    answer.classList.toggle('active');
+                    question.classList.toggle('active'); // Add active class to question for styling the '+' / '-'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
