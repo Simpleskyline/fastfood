@@ -9,7 +9,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = ""; // use your MySQL password if set
-$dbname = "firstprojectdb";
+$dbname = "fastfood";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
@@ -31,13 +31,13 @@ if ($Password !== $ConfirmPassword) {
 }
 
 // Check if user already exists
-$check_sql = "SELECT * FROM users WHERE Email = '$Email' OR Username = '$Username'";
+$check_sql = "SELECT * FROM clients WHERE Email = '$Email' OR Username = '$Username'";
 $result = $conn->query($check_sql);
 
 if ($result->num_rows > 0) {
     echo "<script>
         alert('An account with that email or username already exists. Please sign in instead.');
-        window.location.href = 'http://localhost/project1/signin.html';
+        window.location.href = 'http://localhost/fastfood/signin.html';
     </script>";
     exit();
 }
@@ -46,14 +46,14 @@ if ($result->num_rows > 0) {
 $hashed_password = password_hash($Password, PASSWORD_DEFAULT);
 
 // Insert new user
-$insert_sql = "INSERT INTO users (FirstName, LastName, Username, Email, Password)
+$insert_sql = "INSERT INTO clients (FirstName, LastName, Username, Email, Password)
                VALUES ('$FirstName', '$LastName', '$Username', '$Email', '$hashed_password')";
                
 // Check if insert was successful
 if ($conn->query($insert_sql) === TRUE) {
     echo "<script>
         alert('Registration successful! Please sign in now.');
-        window.location.href = 'http://localhost/project1/signin.html';
+        window.location.href = 'http://localhost/fastfood/signin.html';
     </script>";
 } else {
     echo "Error: " . $conn->error;
