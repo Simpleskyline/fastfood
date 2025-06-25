@@ -19,7 +19,7 @@ $input_username = $_POST['username'];
 $input_password = $_POST['password'];
 
 // Check user by username
-$sql = "SELECT * FROM users WHERE Username = '$input_username'";
+$sql = "SELECT * FROM clients WHERE Username = '$input_username'";
 $result = $conn->query($sql);
 
 if ($result->num_rows === 1) {
