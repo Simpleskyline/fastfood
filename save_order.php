@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 // 1. Connect to database
-$conn = new mysqli("localhost", "root", "", "firstprojectdb");
+$conn = new mysqli("localhost", "root", "", "fastfood");
 
 // Check connection
 if ($conn->connect_error) {
