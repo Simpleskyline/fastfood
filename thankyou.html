@@ -1,33 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Thank You!</title>
-  <link rel="stylesheet" href="dashboard.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Your Order!</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <style>
+        /* Existing styles from your snippet and some basic additions */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+        }
+
+        .thank-you-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        h1 {
+            color: #28a745; /* Success green */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .thank-you-container p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        #order-total {
+            font-size: 1.3em;
+            color: #e44d26; /* Fast-food accent color */
+            font-weight: bold;
+            display: block; /* Ensures it's on its own line */
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .payment-options-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .payment-options-section h2 {
+            color: #555;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+            justify-content: center;
+            gap: 20px; /* Space between payment icons */
+            margin-bottom: 30px;
+        }
+
+        .payment-method {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 120px; /* Fixed width for icons */
+            min-height: 100px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .payment-method:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-method img {
+            max-width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+            filter: grayscale(0.2); /* Slightly desaturate */
+        }
+
+        .payment-method span {
+            font-weight: bold;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .pay-now-btn {
+            display: inline-block;
+            background-color: #e44d26; /* Fast-food accent color */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 20px;
+        }
+
+        .pay-now-btn:hover {
+            background-color: #cc421f;
+            transform: translateY(-2px);
+        }
+
+        .back-to-menu-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #e44d26;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            padding: 8px 15px;
+            border: 1px solid #e44d26;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .back-to-menu-link:hover {
+            background-color: #e44d26;
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .thank-you-container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .payment-methods {
+                flex-direction: column; /* Stack methods vertically on very small screens */
+                align-items: center;
+            }
+            .payment-method {
+                width: 80%; /* Make them wider when stacked */
+                max-width: 200px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <div style="text-align: center; padding: 60px;">
-    <h1>🎉 Thank You for Your Order!</h1>
-    <p>Your order was placed successfully.</p>
-    <p><strong id="order-total"></strong></p>
-    <a href="dashboard.html">← Back to Menu</a>
-  </div>
+    <div class="thank-you-container">
+        <h1>🎉 Thank You for Your Order!</h1>
+        <p>Your order was placed successfully. We appreciate your business!</p>
+        <p><strong id="order-total"></strong></p>
 
-  <script>
-    // Get total from localStorage and display
-    const total = localStorage.getItem('last_order_total');
-    if (total) {
-      document.getElementById('order-total').textContent = `Total: Ksh.${total}`;
-      localStorage.removeItem('last_order_total');
-    }
-  </script>
-  
+        <div class="payment-options-section">
+            <h2>Choose Your Payment Method</h2>
+            <p>Please select your preferred payment option to complete your purchase:</p>
+
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <img src="https://placehold.co/80x50/3f51b5/ffffff?text=Bank" alt="Bank Transfer Icon">
+                    <span>Bank Transfer</span>
+                </div>
+                <div class="payment-method">
+                    <img src="https://placehold.co/80x50/3cb371/ffffff?text=M-Pesa" alt="M-Pesa Icon">
+                    <span>M-Pesa</span>
+                </div>
+                <div class="payment-method">
+                    <img src="https://placehold.co/80x50/f7931a/ffffff?text=Crypto" alt="Crypto Icon">
+                    <span>Cryptocurrency</span>
+                </div>
+                <div class="payment-method">
+                    <img src="https://placehold.co/80x50/000000/ffffff?text=Mastercard" alt="Mastercard Icon">
+                    <span>MasterCard</span>
+                </div>
+                <!-- You can add more payment methods here -->
+            </div>
+
+            <a href="#" class="pay-now-btn" onclick="alert('This is a placeholder for actual payment integration. In a real application, clicking this would initiate the payment process for the selected method.')">Pay Now</a>
+            <p style="font-size: 0.9em; color: #888; margin-top: 15px;">
+                Actual payment processing would be handled securely by your chosen payment gateway.
+            </p>
+        </div>
+
+        <a href="dashboard.html" class="back-to-menu-link">← Back to Menu</a>
+    </div>
+
+    <script>
+        // Get total from localStorage and display
+        document.addEventListener('DOMContentLoaded', () => {
+            const total = localStorage.getItem('last_order_total');
+            const orderTotalElement = document.getElementById('order-total');
+
+            if (total) {
+                orderTotalElement.textContent = `Total: Ksh.${total}`;
+
+            } else {
+                orderTotalElement.textContent = `Total: Ksh.0.00 (Amount not found)`;
+                orderTotalElement.style.color = '#888'; // Grey out if no total
+            }
+            // Clear the last order total after displaying it
+        });
+    </script>
+
 </body>
 </html>
-<script>
-  // Ensure localStorage is cleared after displaying the total
-  window.addEventListener('load', () => {
-    localStorage.removeItem('last_order_total');
-  });
