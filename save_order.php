@@ -1,16 +1,30 @@
 <?php
-// Enable debugging
+// Enable debugging (for development, disable in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+// Set header to indicate JSON content
+header('Content-Type: application/json');
+
+// Initialize a response array
+$response = [
+    'success' => false,
+    'message' => '',
+    'data' => []
+];
 
 // Connect to the database
 $conn = new mysqli("localhost", "root", "", "fastfood");
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    $response['message'] = "Database connection failed: " . $conn->connect_error;
+    echo json_encode($response);
+    exit(); // Stop script execution
 }
 
 // SQL to get orders with client name and items
+// Ensure the 'status' column exists in your 'orders' table in the database.
+// If it doesn't, add it using: ALTER TABLE orders ADD COLUMN status VARCHAR(50) NOT NULL DEFAULT 'pending';
 $sql = "
 SELECT 
     o.order_id,
@@ -30,34 +44,27 @@ ORDER BY o.order_date DESC
 
 $result = $conn->query($sql);
 
-// Check and output results
-if ($result->num_rows > 0) {
-    echo "<h2>Customer Orders</h2>";
-    echo "<table border='1' cellpadding='10'>
-            <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Items</th>
-                <th>Total Price (Ksh)</th>
-                <th>Order Date</th>
-                <th>Status</th>
-            </tr>";
-    
-    while($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$row['order_id']}</td>
-                <td>{$row['FirstName']} {$row['LastName']}</td>
-                <td>{$row['items']}</td>
-                <td>{$row['total_price']}</td>
-                <td>{$row['order_date']}</td>
-                <td>{$row['status']}</td>
-              </tr>";
+if ($result) { // Check if the SQL query itself was successful
+    if ($result->num_rows > 0) {
+        $orders = [];
+        while($row = $result->fetch_assoc()) {
+            $orders[] = $row; // Add each order row to the data array
+        }
+        $response['success'] = true;
+        $response['message'] = 'Orders fetched successfully.';
+        $response['data'] = $orders;
+    } else {
+        // Query successful, but no rows returned (no orders found)
+        $response['success'] = true; 
+        $response['message'] = 'No orders found.';
     }
-
-    echo "</table>";
 } else {
-    echo "No orders found.";
+    // SQL query failed (e.g., 'o.status' column still missing, or syntax error in query)
+    $response['message'] = "Error executing query: " . $conn->error;
 }
 
 $conn->close();
+
+// Output the JSON response
+echo json_encode($response);
 ?>
