@@ -6,7 +6,7 @@
     <title>Thank You for Your Order!</title>
     <link rel="stylesheet" href="dashboard.css" />
     <style>
-        /* Existing styles from your snippet and some basic additions */
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -16,7 +16,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Ensure it takes full viewport height */
+            min-height: 100vh; 
         }
 
         .thank-you-container {
@@ -27,11 +27,11 @@
             text-align: center;
             max-width: 600px;
             width: 90%;
-            box-sizing: border-box; /* Include padding in width */
+            box-sizing: border-box; 
         }
 
         h1 {
-            color: #28a745; /* Success green */
+            color: #28a745; 
             font-size: 2.5em;
             margin-bottom: 20px;
         }
@@ -43,9 +43,9 @@
 
         #order-total {
             font-size: 1.3em;
-            color: #e44d26; /* Fast-food accent color */
+            color: #e44d26; 
             font-weight: bold;
-            display: block; /* Ensures it's on its own line */
+            display: block;
             margin-top: 10px;
             margin-bottom: 25px;
         }
@@ -64,9 +64,9 @@
 
         .payment-methods {
             display: flex;
-            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 20px; /* Space between payment icons */
+            gap: 20px; 
             margin-bottom: 30px;
         }
 
@@ -79,7 +79,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 120px; /* Fixed width for icons */
+            width: 120px; 
             min-height: 100px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -94,7 +94,7 @@
             max-width: 80px;
             height: auto;
             margin-bottom: 10px;
-            filter: grayscale(0.2); /* Slightly desaturate */
+            filter: grayscale(0.2); 
         }
 
         .payment-method span {
@@ -105,7 +105,7 @@
 
         .pay-now-btn {
             display: inline-block;
-            background-color: #e44d26; /* Fast-food accent color */
+            background-color: #e44d26; 
             color: white;
             padding: 12px 25px;
             border-radius: 5px;
@@ -139,7 +139,7 @@
             color: white;
         }
 
-        /* Responsive adjustments */
+        
         @media (max-width: 480px) {
             .thank-you-container {
                 padding: 25px;
@@ -148,11 +148,11 @@
                 font-size: 2em;
             }
             .payment-methods {
-                flex-direction: column; /* Stack methods vertically on very small screens */
+                flex-direction: column; 
                 align-items: center;
             }
             .payment-method {
-                width: 80%; /* Make them wider when stacked */
+                width: 80%;
                 max-width: 200px;
             }
         }
@@ -187,7 +187,7 @@
                     <img src="https://placehold.co/80x50/000000/ffffff?text=Mastercard" alt="Mastercard Icon">
                     <span>MasterCard</span>
                 </div>
-                <!-- You can add more payment methods here -->
+             
             </div>
 
             <a href="#" class="pay-now-btn" onclick="alert('This is a placeholder for actual payment integration. In a real application, clicking this would initiate the payment process for the selected method.')">Pay Now</a>
