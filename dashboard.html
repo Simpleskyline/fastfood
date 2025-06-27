@@ -275,7 +275,7 @@
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const user_id = 1;
 
-    fetch('save_order.php', {
+    fetch('process_order.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

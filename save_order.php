@@ -1,71 +1,43 @@
 <?php
-// Enable debugging (for development, disable in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+session_start();
 
-// Set header to indicate JSON content
-header('Content-Type: application/json');
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "fastfood";
 
-// Initialize a response array
-$response = [
-    'success' => false,
-    'message' => '',
-    'data' => []
-];
-
-// Connect to the database
-$conn = new mysqli("localhost", "root", "", "fastfood");
-
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    $response['message'] = "Database connection failed: " . $conn->connect_error;
-    echo json_encode($response);
-    exit(); // Stop script execution
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// SQL to get orders with client name and items
-// Ensure the 'status' column exists in your 'orders' table in the database.
-// If it doesn't, add it using: ALTER TABLE orders ADD COLUMN status VARCHAR(50) NOT NULL DEFAULT 'pending';
-$sql = "
-SELECT 
-    o.order_id,
-    c.FirstName,
-    c.LastName,
-    o.total_price,
-    o.order_date,
-    o.status,
-    o.mpesa_transaction_id,
-    GROUP_CONCAT(CONCAT(p.name, ' x', oi.quantity) SEPARATOR ', ') AS items
-FROM orders o
-JOIN clients c ON o.client_id = c.client_id
-JOIN order_items oi ON o.order_id = oi.order_id
-JOIN products p ON oi.product_id = p.product_id
-GROUP BY o.order_id
-ORDER BY o.order_date DESC
-";
+// Collect form input
+$input_username = $_POST['username'];
+$input_password = $_POST['password'];
 
+// Check user by username
+$sql = "SELECT * FROM clients WHERE Username = '$input_username'";
 $result = $conn->query($sql);
 
-if ($result) { // Check if the SQL query itself was successful
-    if ($result->num_rows > 0) {
-        $orders = [];
-        while($row = $result->fetch_assoc()) {
-            $orders[] = $row; // Add each order row to the data array
-        }
-        $response['success'] = true;
-        $response['message'] = 'Orders fetched successfully.';
-        $response['data'] = $orders;
+if ($result->num_rows === 1) {
+    $user = $result->fetch_assoc();
+
+    // Verify password
+    if (password_verify($input_password, $user['Password'])) {
+        $_SESSION['username'] = $user['Username'];
+
+        // Redirect to dashboard.html after login
+        header("Location: dashboard.html");
+        exit();
     } else {
-        // Query successful, but no rows returned (no orders found)
-        $response['success'] = true; 
-        $response['message'] = 'No orders found.';
+        echo "<script>alert('Incorrect password.'); window.history.back();</script>";
     }
 } else {
-    // SQL query failed (e.g., 'o.status' column still missing, or syntax error in query)
-    $response['message'] = "Error executing query: " . $conn->error;
+    echo "<script>alert('Username not found.'); window.history.back();</script>";
 }
 
 $conn->close();
-
-// Output the JSON response
-echo json_encode($response);
 ?>
