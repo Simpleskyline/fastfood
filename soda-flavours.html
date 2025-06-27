@@ -81,77 +81,77 @@
 </div>
 
 <script>
-  function addToCart(item) {
-    let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+function addToCart(item) {
+let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
 
-    const existingItem = cartItems.find(i => i.id === item.id);
-    if (existingItem) {
-      existingItem.quantity++;
-    } else {
-      cartItems.push({ ...item, quantity: 1 });
-    }
+const existingItem = cartItems.find(i => i.id === item.id);
+if (existingItem) {
+existingItem.quantity++;
+ } else {
+ cartItems.push({ ...item, quantity: 1 });
+ }
 
-    localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-  }
+localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+}
 
-  function addSelectedFlavourToCart() {
-    const flavourSelect = document.getElementById('flavour'); // Get the select element
-    const selectedOption = flavourSelect.options[flavourSelect.selectedIndex]; // Get the selected option
-    
-    const flavourName = selectedOption.value; // e.g., "Fanta Blackcurrant"
-    const productId = parseInt(selectedOption.dataset.productId); // <<< Get the numeric product ID
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const sodaSize = urlParams.get('size'); // Get the size from the URL
+ function addSelectedFlavourToCart() {
+const flavourSelect = document.getElementById('flavour'); // Get the select element
+const selectedOption = flavourSelect.options[flavourSelect.selectedIndex]; // Get the selected option
 
-    if (!flavourName || isNaN(productId)) { // Check if flavour is selected AND productId is a valid number
-      alert("Please select a flavour and ensure it has a valid product ID.");
-      return;
-    }
+const flavourName = selectedOption.value; // e.g., "Fanta Blackcurrant"
+ const productId = parseInt(selectedOption.dataset.productId); // <<< Get the numeric product ID
 
-    let price;
-    switch(sodaSize) {
-        case '300ml':
-            price = 50;
-            break;
-        case '350ml':
-            price = 60;
-            break;
-        case '500ml':
-            price = 80;
-            break;
-        case '1ltr': // Assuming this is for 1.25 Litre
-            price = 150;
-            break;
-        case '2ltr':
-            price = 200;
-            break;
-        default:
-            price = 0;
-            console.warn("Soda size not found in URL parameters or price not defined for size:", sodaSize);
-    }
+const urlParams = new URLSearchParams(window.location.search);
+const sodaSize = urlParams.get('size'); // Get the size from the URL
 
-    const sodaItem = {
-      id: productId, // <<< Use the numeric product ID here
-      name: `${sodaSize} ${flavourName} Soda`, // Use flavourName for display
-      price: price
-    };
+ if (!flavourName || isNaN(productId)) { // Check if flavour is selected AND productId is a valid number
+ alert("Please select a flavour and ensure it has a valid product ID.");
+return;
+ }
 
-    addToCart(sodaItem); // Add item to cart
+ let price;
+switch(sodaSize) {
+ case '300ml':
+ price = 50;
+ break;
+case '350ml':
+price = 60;
+ break;
+ case '500ml':
+ price = 80;
+ break;
+ case '1ltr': // Assuming this is for 1.25 Litre
+ price = 150;
+ break;
+ case '2ltr':
+ price = 200;
+ break;
+ default:
+ price = 0;
+ console.warn("Soda size not found in URL parameters or price not defined for size:", sodaSize);
+ }
 
-    // Show the success popup and then redirect
-    alert(sodaItem.name + " added to cart!");
-    window.location.href = 'dashboard.html';
-  }
+ const sodaItem = {
+ id: productId, // <<< Use the numeric product ID here
+ name: `${sodaSize} ${flavourName} Soda`, // Use flavourName for display
+ price: price
+ };
 
-  // Script to display the selected size
-  document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const size = urlParams.get('size');
-    if (size) {
-      document.getElementById('sizeLabel').textContent = size;
-    }
-  });
+ addToCart(sodaItem); // Add item to cart
+
+ // Show the success popup and then redirect
+ alert(sodaItem.name + " added to cart!");
+ window.location.href = 'dashboard.html';
+}
+
+ // Script to display the selected size
+document.addEventListener('DOMContentLoaded', () => {
+ const urlParams = new URLSearchParams(window.location.search);
+ const size = urlParams.get('size');
+ if (size) {
+document.getElementById('sizeLabel').textContent = size;
+ }
+});
 </script>
 
 </body>
