@@ -64,91 +64,98 @@
   <h1>Select Flavour</h1>
 
   <div class="flavour-container">
-    <label for="flavour">Choose Flavour for <span id="sizeLabel"></span>:</label>
-    <select id="flavour">
-      <option value="">-- Select Flavour --</option>
-      <option value="CocaCola">CocaCola</option>
-      <option value="Sprite">Sprite</option>
-      <option value="Fanta Orange">Fanta Orange</option>
-      <option value="Fanta Blackcurrant">Fanta Blackcurrant</option>
-      <option value="Fanta Passion">Fanta Passion</option>
-      <option value="Fanta Pineapple">Fanta Pineapple</option>
-      <option value="Stoney">Stoney</option>
-      <option value="Krest">Krest</option>
-    </select>
+ <label for="flavour">Choose Flavour for <span id="sizeLabel"></span>:</label>
+ <select id="flavour">
+ <option value="" data-product-id="">-- Select Flavour --</option>
+ <option value="CocaCola" data-product-id="5">CocaCola</option>
+<option value="Sprite" data-product-id="19">Sprite</option>
+<option value="Fanta Orange" data-product-id="20">Fanta Orange</option>
+<option value="Fanta Blackcurrant" data-product-id="21">Fanta Blackcurrant</option>
+<option value="Fanta Passion" data-product-id="22">Fanta Passion</option>
+<option value="Fanta Pineapple" data-product-id="23">Fanta Pineapple</option>
+<option value="Stoney" data-product-id="24">Stoney</option>
+<option value="Krest" data-product-id="25">Krest</option>
+</select>
 
-    <button onclick="addSelectedFlavourToCart()">Add to Cart</button>
-  </div>
+<button onclick="addSelectedFlavourToCart()">Add to Cart</button>
+</div>
+
 <script>
-  function addToCart(item) {
-    let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+  function addToCart(item) {
+    let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
 
-    const existingItem = cartItems.find(i => i.id === item.id);
-    if (existingItem) {
-      existingItem.quantity++;
-    } else {
-      cartItems.push({ ...item, quantity: 1 });
-    }
+    const existingItem = cartItems.find(i => i.id === item.id);
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cartItems.push({ ...item, quantity: 1 });
+    }
 
-    localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-    // The alert and redirect logic is now handled in addSelectedFlavourToCart()
-    // so we remove it from here.
-  }
+    localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+  }
 
-  function addSelectedFlavourToCart() {
-    const flavour = document.getElementById('flavour').value;
-    const urlParams = new URLSearchParams(window.location.search);
-    const sodaSize = urlParams.get('size'); // Get the size from the URL
+  function addSelectedFlavourToCart() {
+    const flavourSelect = document.getElementById('flavour'); // Get the select element
+    const selectedOption = flavourSelect.options[flavourSelect.selectedIndex]; // Get the selected option
+    
+    const flavourName = selectedOption.value; // e.g., "Fanta Blackcurrant"
+    const productId = parseInt(selectedOption.dataset.productId); // <<< Get the numeric product ID
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const sodaSize = urlParams.get('size'); // Get the size from the URL
 
-    if (!flavour) {
-      alert("Please select a flavour.");
-      return;
-    }
+    if (!flavourName || isNaN(productId)) { // Check if flavour is selected AND productId is a valid number
+      alert("Please select a flavour and ensure it has a valid product ID.");
+      return;
+    }
 
-    let price;
-    switch(sodaSize) {
-        case '300ml':
-            price = 50;
-            break;
-        case '350ml':
-            price = 60;
-            break;
-        case '500ml':
-            price = 80;
-            break;
-        case '1ltr': // Assuming this is for 1.25 Litre
-            price = 150;
-            break;
-        case '2ltr':
-            price = 200;
-            break;
-        default:
-            price = 0;
-            console.warn("Soda size not found in URL parameters or price not defined for size:", sodaSize);
-    }
+    let price;
+    switch(sodaSize) {
+        case '300ml':
+            price = 50;
+            break;
+        case '350ml':
+            price = 60;
+            break;
+        case '500ml':
+            price = 80;
+            break;
+        case '1ltr': // Assuming this is for 1.25 Litre
+            price = 150;
+            break;
+        case '2ltr':
+            price = 200;
+            break;
+        default:
+            price = 0;
+            console.warn("Soda size not found in URL parameters or price not defined for size:", sodaSize);
+    }
 
-    const sodaItem = {
-      id: `soda-${flavour.toLowerCase().replace(/\s+/g, '-')}-${sodaSize}`,
-      name: `${sodaSize} ${flavour} Soda`,
-      price: price
-    };
+    const sodaItem = {
+      id: productId, // <<< Use the numeric product ID here
+      name: `${sodaSize} ${flavourName} Soda`, // Use flavourName for display
+      price: price
+    };
 
-    addToCart(sodaItem); // Add item to cart first
+    addToCart(sodaItem); // Add item to cart
 
-    // Show the success popup and then redirect
-    alert(sodaItem.name + " added to cart!");
-    window.location.href = 'dashboard.html';
-  }
+    // Show the success popup and then redirect
+    alert(sodaItem.name + " added to cart!");
+    window.location.href = 'dashboard.html';
+  }
 
-  // Script to display the selected size
-  document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const size = urlParams.get('size');
-    if (size) {
-      document.getElementById('sizeLabel').textContent = size;
-    }
-  });
+  // Script to display the selected size
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const size = urlParams.get('size');
+    if (size) {
+      document.getElementById('sizeLabel').textContent = size;
+    }
+  });
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
