@@ -33,6 +33,7 @@ SELECT
     o.total_price,
     o.order_date,
     o.status,
+    o.mpesa_transaction_id,
     GROUP_CONCAT(CONCAT(p.name, ' x', oi.quantity) SEPARATOR ', ') AS items
 FROM orders o
 JOIN clients c ON o.client_id = c.client_id
