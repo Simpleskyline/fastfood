@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ron'z Pizza</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+
+  <header>
+  <h1>🍔 Ron'z Pizza</h1>
+
+  <div class="header-controls">
+    <button id="cart-icon">🛒 Cart (<span id="cart-count">0</span>)</button>
+
+    <div class="menu-toggle" id="toggle">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+  </div>
+
+  <nav class="nav-links" id="nav">
+    <a href="profile.html">Profile</a>
+    <a href="aboutus.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="faq.html">FAQ</a>
+    <a href="logout.php" class="signout">Sign Out</a>
+  </nav>
+</header>
+
+  <main>
+
+    <div class="food-item">
+      <img src="https://www.kitchensanctuary.com/wp-content/uploads/2021/05/Double-Cheeseburger-square-FS-42.jpg" alt="Burger" />
+      <h3><a href="burger.html" class="food-link">Burger</a></h3>
+    </div>
+
+    <div class="food-item">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/db/05/bd/my-special-order-pizza.jpg?w=900&h=500&s=1" alt="Pizza" />
+      <h3><a href="pizza.html" class="food-link">Pizza</a></h3>
+    </div>
+
+    <div class="food-item">
+      <img src="https://images.themodernproper.com/production/posts/2022/Homemade-French-Fries_8.jpg?w=1200&h=1200&q=60&fm=jpg&fit=crop&dm=1662474181&s=15046582e76b761a200998df2dcad0fd" alt="Fries">
+      <h3><a href="fries.html" class="food-link">Fries</a></h3>
+    </div>
+
+    <div class="food-item">
+      <img src="https://www.munatycooking.com/wp-content/uploads/2023/12/chicken-shawarma-image-feature-2023.jpg" alt="Shawarma" />
+      <h3>Shawarma</h3>
+      <p class="price">Ksh.350</p>
+      <button onclick="addToCart({id: 4, name: 'Shawarma', price: 350})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://media.istockphoto.com/id/537699621/photo/fanta-drink-in-can-on-ice-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=SYrfyTjTukaR6_IsWusmOX-2-ZjCF5UyuvFZEAqTChs=" alt="Soda">
+      <h3><a href="soda.html" class="food-link">Soda</a></h3>
+    </div>
+
+    <div class="food-item">
+      <img src="https://toasterding.com/wp-content/uploads/2024/04/Screenshot-2025-04-16-at-12.46.56.webp" alt="Chapati" />
+      <h3>Chapati</h3>
+      <p class="price">Ksh.30</p>
+      <button onclick="addToCart({id: 6, name: 'Chapati', price: 30})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://hips.hearstapps.com/hmg-prod/images/roast-chicken-recipe-2-66b231ac9a8fb.jpg?resize=1200:*" alt="Chicken" />
+     <h3><a href="chicken.html" class="food-link">Chicken</a></h3>
+    </div>
+
+    <div class="food-item">
+      <img src="https://life-in-the-lofthouse.com/wp-content/uploads/2022/08/Grilled-Cheeseburger-Wraps282-500x500.jpg" alt="Cheese Wraps" />
+     <h3><a href="cheese_wraps.html" class="food-link">Cheese Wraps</a></h3>
+    </div>
+
+    <div class="food-item">
+      <img src="https://dukamajuu.com/wp-content/uploads/2024/06/Fm-Beef-Kebabs-160G_2.jpg" alt="Kebab"/>
+      <h3>Beef Kebab</h3>
+      <p class="price">Ksh.80</p>
+      <button onclick="addToCart({id: 8, name: 'Kebab', price: 80})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://www.thefooddictator.com/wp-content/uploads/2019/09/rolex1-907x1024.jpg" alt="Egg Rolex"/>
+      <h3>Egg Rolex</h3>
+      <p class="price">Ksh.100</p>
+      <button onclick="addToCart({id: 9, name: 'Egg Rolex', price: 100})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://littlesunnykitchen.com/wp-content/uploads/2020/11/Crockpot-Little-Smokies-10.jpg" alt="Smokies"/>
+      <h3>Beef Smokies</h3>
+      <p class="price">Ksh.40</p>
+      <button onclick="addToCart({id: 10, name: 'Smokies', price: 40})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://api.campbellsmeat.com/wp-content/uploads/2022/08/HowtoCookSausagesTheCompleteGuideforBeginners.png" alt="Smokies"/>
+      <h3>Beef Sausages</h3>
+      <p class="price">Ksh.50</p>
+      <button onclick="addToCart({id: 10, name: 'Smokies', price: 50})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://www.awesomecuisine.com/wp-content/uploads/2014/11/vegetable-samosa.jpg" alt="Samosa"/>
+      <h3>Beef Samosa</h3>
+      <p class="price">Ksh.50</p>
+      <button onclick="addToCart({id: 11, name: 'Samosa', price: 50})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://toquehotels.com/wp-content/uploads/2025/01/KENYAN-BHAJIAS-2.jpg" alt="Bhajia"/>
+      <h3>Bhajia</h3>
+      <p class="price">Ksh.170</p>
+      <button onclick="addToCart({id: 11, name: 'Bhajia', price: 170})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://www.vfi.co.ke/wp-content/uploads/2020/02/Fresh-Juice-1-1024x988.jpg" alt="Fresh Juice"/>
+      <h3><a href="fresh_juice.html" class="food-link">Fresh Juice</a></h3>
+    </div>
+
+    <div class="food-item">
+      <img src="https://corkframes.com/cdn/shop/articles/Corkframes_Coffee_Guide_520x500_422ebe38-4cfa-42b5-a266-b9bfecabaf30.jpg?v=1734598727" alt="Coffee"/>
+      <h3>Coffee</h3>
+      <p class="price">Ksh.140</p>
+      <button onclick="addToCart({id: 11, name: 'Coffee', price: 140})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://toplinebites.com/wp-content/uploads/2024/07/african-tea.jpg" alt="African Tea"/>
+      <h3>African Tea</h3>
+      <p class="price">Ksh.50</p>
+      <button onclick="addToCart({id: 11, name: 'African Tea', price: 50})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <img src="https://olkeriliquor.com/wp-content/uploads/2023/06/DASANI-500ML-MINERAL-WATER.jpg" alt="Water"/>
+      <h3><a href="water.html" class="food-link">Water</a></h3>
+    </div>
+  </main>
+
+  <aside id="cart-container" aria-label="Shopping Cart">
+    <h2>Your Cart</h2>
+    <div id="cart-items">
+      <p>Your cart is empty.</p><!-- Placeholder text when cart is empty -->
+    </div>
+    <button id="close-cart" aria-label="Close Cart">Close</button>
+    <button id="checkout-btn" aria-label="Checkout" style="display:none;">Checkout</button>
+  </aside>
+
+<script>
+  const cartIcon = document.getElementById('cart-icon');
+  const cartContainer = document.getElementById('cart-container');
+  const closeCartBtn = document.getElementById('close-cart');
+  const cartItemsContainer = document.getElementById('cart-items');
+  const cartCount = document.getElementById('cart-count');
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const toggle = document.getElementById('toggle');
+  const nav = document.getElementById('nav');
+
+  let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];  // Load cart items into UI
+
+// Render the cart on page load
+  renderCartItems();
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    nav.classList.toggle('active');// Show/hide nav menu
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+      nav.classList.remove('active');// Hide menu if clicking outside
+    }
+  });
+
+  cartIcon.addEventListener('click', () => {
+    cartContainer.classList.toggle('active');// Toggle cart sidebar
+  });
+
+  closeCartBtn.addEventListener('click', () => {
+    cartContainer.classList.remove('active');// Close cart sidebar
+  });
+
+  function addToCart(item) {
+    const existingItem = cartItems.find(i => i.id === item.id);
+    if (existingItem) {
+      existingItem.quantity++;// Increment quantity if item already in cart
+    } else {
+      cartItems.push({ ...item, quantity: 1 });// Add new item with quantity
+    }
+    localStorage.setItem('ronz_cart', JSON.stringify(cartItems));// Save updated cart
+    renderCartItems();// Refresh cart UI
+    cartContainer.classList.add('active');
+  }
+
+  function renderCartItems() {
+    cartItemsContainer.innerHTML = '';// Clear cart before re-rendering
+
+    if (cartItems.length === 0) {
+      cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+      checkoutBtn.style.display = 'none';// Hide checkout if empty
+    } else {
+      checkoutBtn.style.display = 'block';
+      let totalCost = 0;
+
+      cartItems.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('cart-item');
+
+        itemDiv.innerHTML = `
+          <div class="cart-item-details">
+            <h4>${item.name}</h4>
+            <p>Price: Ksh.${item.price.toFixed(2)}</p>
+            ${item.details ? `<p>${item.details}</p>` : ''}
+          </div>
+          <div class="quantity-controls">
+            <button class="decrease-btn">−</button>
+            <span>${item.quantity}</span>
+            <button class="increase-btn">+</button>
+          </div>
+          <button class="remove-btn">×</button>
+        `;
+
+             // Decrease quantity or remove item
+        itemDiv.querySelector('.decrease-btn').addEventListener('click', () => {
+          if (item.quantity > 1) {
+            item.quantity--;
+          } else if (confirm(`Remove ${item.name} from cart?`)) {
+            cartItems = cartItems.filter(i => i.id !== item.id);
+          }
+          localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+          renderCartItems();
+        });
+
+          // Increase quantity
+        itemDiv.querySelector('.increase-btn').addEventListener('click', () => {
+          item.quantity++;
+          localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+          renderCartItems();
+        });
+
+         // Remove item from cart
+        itemDiv.querySelector('.remove-btn').addEventListener('click', () => {
+          if (confirm(`Remove ${item.name} from cart?`)) {
+            cartItems = cartItems.filter(i => i.id !== item.id);
+            localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+            renderCartItems();
+          }
+        });
+
+        cartItemsContainer.appendChild(itemDiv);
+        totalCost += item.price * item.quantity;// Add to total
+      });
+
+       // Show total
+      const totalDiv = document.createElement('div');
+      totalDiv.classList.add('cart-total');
+      totalDiv.innerHTML = `<p><strong>Total: Ksh.${totalCost.toFixed(2)}</strong></p>`;
+      cartItemsContainer.appendChild(totalDiv);
+    }
+    
+     // Update cart icon quantity
+    const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    cartCount.textContent = totalQuantity;
+  }
+
+    // Handle Checkout
+  checkoutBtn.addEventListener('click', () => {
+    if (cartItems.length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
+    
+
+    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const user_id = 1;// Replace with actual logged-in user ID
+
+    fetch('process_order.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: user_id,
+        items: cartItems,
+        total_price: total.toFixed(2)
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        localStorage.setItem('last_order_total', total.toFixed(2));// Store order
+        localStorage.removeItem('ronz_cart');// Clear cart
+        cartItems = [];
+        renderCartItems();// Refresh UI
+        cartContainer.classList.remove('active');// Hide cart
+        window.location.href = 'thankyou.html';// Redirect to thank you
+      } else {
+        alert("Checkout failed: " + data.message);
+      }
+    })
+    .catch(error => {
+      alert("Error placing order: " + error);
+    });
+  });
+
+  // Hide cart if clicking outside
+  document.addEventListener('click', (e) => {
+    if (!cartContainer.contains(e.target) && !cartIcon.contains(e.target)) {
+      cartContainer.classList.remove('active');
+    }
+  });
+
+  window.addToCart = addToCart;// Make addToCart globally accessible
+</script>
+
+  <footer class="footer">
+    <p>© 2025 Ron'z Pizza. All rights reserved.</p>
+  </footer>
+
+  
+</body>
+</html>

@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['message'] = "Registration successful! Welcome, $firstname.";
-        header("Location: dashboard.php");
+        header("Location: dashboard.html");
         exit();
     } else {
         echo "Error: " . $conn->error;
