@@ -1,94 +1,96 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 session_start();
+require_once "db.php"; // make sure this connects to your DB
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "fastfood";
+header("Content-Type: application/json");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$action = $_GET['action'] ?? '';
+
+if ($action === "process") {
+    // Save new order
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    if (!$input || !isset($_SESSION['user_id'])) {
+        echo json_encode(["success" => false, "message" => "Invalid request"]);
+        exit;
+    }
+
+    $user_id = $_SESSION['user_id'];
+    $items = $input['items'] ?? [];
+    $total = $input['total'] ?? 0;
+
+    if (empty($items)) {
+        echo json_encode(["success" => false, "message" => "Cart is empty"]);
+        exit;
+    }
+
+    // Insert into orders table
+    $stmt = $conn->prepare("INSERT INTO orders (user_id, total, order_date) VALUES (?, ?, NOW())");
+    $stmt->bind_param("id", $user_id, $total);
+    $stmt->execute();
+    $order_id = $stmt->insert_id;
+    $stmt->close();
+
+    // Insert order items
+    $stmt = $conn->prepare("INSERT INTO order_items (order_id, item_name, quantity, price) VALUES (?, ?, ?, ?)");
+    foreach ($items as $item) {
+        $name = $item['name'];
+        $qty = $item['quantity'];
+        $price = $item['price'];
+        $stmt->bind_param("isid", $order_id, $name, $qty, $price);
+        $stmt->execute();
+    }
+    $stmt->close();
+
+    echo json_encode(["success" => true, "order_id" => $order_id]);
+    exit;
 }
 
-// Determine action
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+if ($action === "fetch") {
+    // Fetch user’s past orders
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode([]);
+        exit;
+    }
 
-switch ($action) {
-    case "save": // LOGIN
-        $input_username = $_POST['username'];
-        $input_password = $_POST['password'];
+    $user_id = $_SESSION['user_id'];
 
-        $stmt = $conn->prepare("SELECT * FROM clients WHERE Username = ?");
-        $stmt->bind_param("s", $input_username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $orders = [];
+    $stmt = $conn->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
+    while ($row = $result->fetch_assoc()) {
+        $order_id = $row['id'];
 
-            if (password_verify($input_password, $user['Password'])) {
-                $_SESSION['username'] = $user['Username'];
-                $_SESSION['client_id'] = $user['client_id'];
+        $items = [];
+        $stmt_items = $conn->prepare("SELECT item_name, quantity, price FROM order_items WHERE order_id = ?");
+        $stmt_items->bind_param("i", $order_id);
+        $stmt_items->execute();
+        $result_items = $stmt_items->get_result();
 
-                header("Location: dashboard.html");
-                exit();
-            } else {
-                echo "<script>alert('Incorrect password.'); window.history.back();</script>";
-            }
-        } else {
-            echo "<script>alert('Username not found.'); window.history.back();</script>";
+        while ($item = $result_items->fetch_assoc()) {
+            $items[] = [
+                "name" => $item['item_name'],
+                "quantity" => $item['quantity'],
+                "price" => $item['price']
+            ];
         }
-        $stmt->close();
-        break;
+        $stmt_items->close();
 
-    case "process": // PLACE ORDER
-        if (!isset($_SESSION['client_id'])) {
-            echo json_encode(["status" => "error", "message" => "Not logged in"]);
-            exit();
-        }
+        $orders[] = [
+            "id" => $row['id'],
+            "total" => $row['total'],
+            "order_date" => $row['order_date'],
+            "items" => $items
+        ];
+    }
 
-        $client_id = $_SESSION['client_id'];
-        $order_items = $_POST['order_items']; // JSON string
-        $order_items = json_decode($order_items, true);
-
-        $stmt = $conn->prepare("INSERT INTO orders (client_id, items, order_date) VALUES (?, ?, NOW())");
-        $items_json = json_encode($order_items);
-        $stmt->bind_param("is", $client_id, $items_json);
-        $stmt->execute();
-
-        echo json_encode(["status" => "success", "message" => "Order placed successfully"]);
-        $stmt->close();
-        break;
-
-    case "fetch": // FETCH ORDER HISTORY
-        if (!isset($_SESSION['client_id'])) {
-            echo json_encode(["status" => "error", "message" => "Not logged in"]);
-            exit();
-        }
-
-        $client_id = $_SESSION['client_id'];
-        $stmt = $conn->prepare("SELECT * FROM orders WHERE client_id = ? ORDER BY order_date DESC");
-        $stmt->bind_param("i", $client_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        $orders = [];
-        while ($row = $result->fetch_assoc()) {
-            $row['items'] = json_decode($row['items'], true);
-            $orders[] = $row;
-        }
-
-        echo json_encode($orders);
-        $stmt->close();
-        break;
-
-    default:
-        echo "Invalid action.";
+    $stmt->close();
+    echo json_encode($orders);
+    exit;
 }
 
-$conn->close();
-?>
+// Default: invalid action
+echo json_encode(["success" => false, "message" => "Invalid action"]);

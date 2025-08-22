@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ron'z Pizza</title>
-<link rel="stylesheet" href="main.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="main.css" />
 </head>
 
 <body>
@@ -14,6 +15,13 @@
 
   <div class="header-controls">
     <button id="cart-icon">🛒 Cart (<span id="cart-count">0</span>)</button>
+
+    <section id="order-history">
+  <h2>📜 Order History</h2>
+  <div id="history-container">
+    <p>Loading your past orders...</p>
+  </div>
+</section>
 
     <div class="menu-toggle" id="toggle">
       <div class="bar"></div>
@@ -322,6 +330,61 @@
     <p>© 2025 Ron'z Pizza. All rights reserved.</p>
   </footer>
 
-  
+  <script>
+// Fetch and display order history
+function loadOrderHistory() {
+  fetch("orders.php?action=fetch")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("history-container");
+      container.innerHTML = "";
+
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p>You haven’t placed any orders yet.</p>";
+        return;
+      }
+
+      data.forEach(order => {
+        const orderDiv = document.createElement("div");
+        orderDiv.classList.add("order-card");
+        orderDiv.innerHTML = `
+          <h4>Order #${order.id} – ${new Date(order.order_date).toLocaleString()}</h4>
+          <p><strong>Total:</strong> Ksh.${order.total}</p>
+          <ul>
+            ${order.items.map(i => `<li>${i.name} × ${i.quantity} (Ksh.${i.price})</li>`).join("")}
+          </ul>
+        `;
+        container.appendChild(orderDiv);
+      });
+    })
+    .catch(() => {
+      document.getElementById("history-container").innerHTML = "<p>Error loading order history.</p>";
+    });
+}
+
+// Handle checkout
+function checkout(cart) {
+  fetch("orders.php?action=process", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(cart)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      Swal.fire("🎉 Success!", "Your order has been placed!", "success");
+      loadOrderHistory();
+    } else {
+      Swal.fire("⚠️ Error", data.message, "error");
+    }
+  })
+  .catch(() => {
+    Swal.fire("⚠️ Error", "Something went wrong", "error");
+  });
+}
+
+document.addEventListener("DOMContentLoaded", loadOrderHistory);
+</script>
+
 </body>
 </html>
