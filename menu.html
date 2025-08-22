@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu | Ron'z Pizza</title>
+<link rel="stylesheet" href="main.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    header { text-align: center; margin-bottom: 30px; }
+    section { margin: 40px 0; }
+    h2 { border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
+    .food-item { margin: 15px 0; }
+    .price { font-weight: bold; }
+    button { margin-top: 5px; padding: 5px 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🍽️ Ron'z Pizza Full Menu</h1>
+  </header>
+
+  <main>
+
+    <!-- 🍔 Burgers -->
+    <section id="burgers">
+      <h2>🍔 Burgers</h2>
+      <div class="food-item">
+        <h3>Single Cheese Burger</h3>
+        <p class="price">Ksh.250</p>
+        <button onclick="addToCart({id: 101, name: 'Single Cheese Burger', price: 250})">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <h3>Double Cheese Burger</h3>
+        <p class="price">Ksh.350</p>
+        <button onclick="addToCart({id: 102, name: 'Double Cheese Burger', price: 350})">Add to Cart</button>
+      </div>
+    </section>
+
+    <!-- 🍕 Pizza -->
+    <section id="pizza">
+      <h2>🍕 Pizza</h2>
+      <div class="food-item">
+        <h3>Small-size Pizza</h3>
+        <p class="price">Ksh.500</p>
+        <button onclick="addToCart({id: 201, name: 'Small-size Pizza', price: 500})">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <h3>Medium-size Pizza</h3>
+        <p class="price">Ksh.650</p>
+        <button onclick="addToCart({id: 202, name: 'Medium-size Pizza', price: 650})">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <h3>Large-size Pizza</h3>
+        <p class="price">Ksh.800</p>
+        <button onclick="addToCart({id: 203, name: 'Large-size Pizza', price: 800})">Add to Cart</button>
+      </div>
+    </section>
+
+    <!-- 🍟 Fries -->
+    <section id="fries">
+      <h2>🍟 Fries</h2>
+      <div class="food-item">
+        <h3>Regular Fries</h3>
+        <p class="price">Ksh.100</p>
+        <button onclick="addToCart({id: 301, name: 'Regular Fries', price: 100})">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <h3>Chips Masala</h3>
+        <p class="price">Ksh.150</p>
+        <button onclick="addToCart({id: 302, name: 'Chips Masala', price: 150})">Add to Cart</button>
+      </div>
+    </section>
+
+    <!-- 🍗 Chicken -->
+    <section id="chicken">
+      <h2>🍗 Chicken</h2>
+      <div class="food-item">
+        <h3>Grilled Chicken</h3>
+        <p class="price">Ksh.400</p>
+        <button onclick="addToCart({id: 401, name: 'Grilled Chicken', price: 400})">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <h3>Chicken Wings</h3>
+        <p class="price">Ksh.350</p>
+        <button onclick="addToCart({id: 402, name: 'Chicken Wings', price: 350})">Add to Cart</button>
+      </div>
+    </section>
+
+    <!-- 🌯 Wraps -->
+    <section id="wraps">
+      <h2>🌯 Cheese Wraps</h2>
+      <div class="food-item">
+        <h3>Veggie Cheese Wrap</h3>
+        <p class="price">Ksh.250</p>
+        <button onclick="addToCart({id: 501, name: 'Veggie Cheese Wrap', price: 250})">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <h3>Chicken Cheese Wrap</h3>
+        <p class="price">Ksh.300</p>
+        <button onclick="addToCart({id: 502, name: 'Chicken Cheese Wrap', price: 300})">Add to Cart</button>
+      </div>
+    </section>
+
+    <!-- 🥤 Fresh Juice -->
+    <section id="juice">
+      <h2>🥤 Fresh Juice</h2>
+      <select id="juice-flavour">
+        <option value="">-- Select Flavour --</option>
+        <option value="Cocktail">Cocktail</option>
+        <option value="Mango">Mango</option>
+        <option value="Apple">Apple</option>
+      </select>
+      <button onclick="addJuice()">Add to Cart (Ksh.150)</button>
+    </section>
+
+    <!-- 🥤 Soda -->
+    <section id="soda">
+      <h2>🥤 Soda</h2>
+      <label for="soda-flavour">Choose Flavour:</label>
+      <select id="soda-flavour">
+        <option value="">-- Select Flavour --</option>
+        <option value="Coca-Cola">Coca-Cola</option>
+        <option value="Sprite">Sprite</option>
+        <option value="Fanta Orange">Fanta Orange</option>
+      </select>
+
+      <label for="soda-size">Choose Size:</label>
+      <select id="soda-size">
+        <option value="350ml">350ml - Ksh.60</option>
+        <option value="500ml">500ml - Ksh.80</option>
+        <option value="1L">1 Litre - Ksh.150</option>
+      </select>
+
+      <button onclick="addSoda()">Add Soda</button>
+    </section>
+
+    <!-- 💧 Water -->
+    <section id="water">
+      <h2>💧 Water</h2>
+      <div class="food-item">
+        <h3>500ml Water</h3>
+        <p class="price">Ksh.50</p>
+        <button onclick="addToCart({id: 801, name: '500ml Water', price: 50})">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <h3>1 Litre Water</h3>
+        <p class="price">Ksh.80</p>
+        <button onclick="addToCart({id: 802, name: '1 Litre Water', price: 80})">Add to Cart</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Generic cart adder
+    function addToCart(item) {
+      let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+      const existingItem = cart.find(i => i.id === item.id);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({ ...item, quantity: 1 });
+      }
+      localStorage.setItem('ronz_cart', JSON.stringify(cart));
+      alert(item.name + " added to cart!");
+      window.location.href = 'dashboard.html';
+    }
+
+    // Add Juice with flavour
+    function addJuice() {
+      const flavour = document.getElementById('juice-flavour').value;
+      if (!flavour) { alert("Pick a juice flavour!"); return; }
+      addToCart({ id: 601 + Math.floor(Math.random()*100), name: flavour + " Juice", price: 150 });
+    }
+
+    // Add Soda with flavour + size
+    function addSoda() {
+      const flavour = document.getElementById('soda-flavour').value;
+      const size = document.getElementById('soda-size').value;
+      if (!flavour) { alert("Pick a soda flavour!"); return; }
+      let price = 60;
+      if (size === "500ml") price = 80;
+      if (size === "1L") price = 150;
+      addToCart({ id: 701 + Math.floor(Math.random()*100), name: flavour + " (" + size + ")", price: price });
+    }
+  </script>
+
+</body>
+</html>
