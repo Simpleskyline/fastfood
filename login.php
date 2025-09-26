@@ -1,55 +1,47 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
 session_start();
 
 // Database connection
-$conn = new mysqli("localhost", "root", "", "fastfood");
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "fastfood";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $input_email = $_POST['Email'] ?? '';
-    $input_password = $_POST['Password'] ?? '';
+// Collect form input
+$input_email = $_POST['email'];
+$input_password = $_POST['password'];
 
-    // Query the same table used in signup
-    $sql = "SELECT id AS client_id, firstname, email, password FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
+// Prepare statement (prevents SQL injection)
+$stmt = $conn->prepare("SELECT * FROM clients WHERE email = ?");
+$stmt->bind_param("s", $input_email);
+$stmt->execute();
+$result = $stmt->get_result();
 
-    if (!$stmt) {
-        echo "<script>alert('Database error: Could not prepare statement.'); window.history.back();</script>";
+if ($result->num_rows === 1) {
+    $user = $result->fetch_assoc();
+
+    // Verify password
+    if (password_verify($input_password, $user['password'])) {
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['name'] = $user['name'];
+
+        // Redirect to dashboard
+        header("Location: dashboard.html");
         exit();
-    }
-
-    $stmt->bind_param("s", $input_email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
-
-        // Verify password
-        if (password_verify($input_password, $user['password'])) {
-            $_SESSION['client_id'] = $user['client_id'];
-            $_SESSION['Email'] = $user['email'];
-            $_SESSION['firstname'] = $user['firstname'];
-
-            header("Location: dashboard.html");
-            exit();
-        } else {
-            echo "<script>alert('Incorrect password.'); window.history.back();</script>";
-        }
     } else {
-        echo "<script>alert('Email not found.'); window.history.back();</script>";
+        echo "<script>alert('Incorrect password.'); window.history.back();</script>";
     }
-
-    $stmt->close();
 } else {
-    header("Location: signin.html");
-    exit();
+    echo "<script>alert('Email not found.'); window.history.back();</script>";
 }
 
+$stmt->close();
 $conn->close();
 ?>

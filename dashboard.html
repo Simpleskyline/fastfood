@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -147,7 +148,7 @@
   <aside id="cart-container" aria-label="Shopping Cart">
     <h2>Your Cart</h2>
     <div id="cart-items">
-      <p>Your cart is empty.</p><!-- Placeholder text when cart is empty -->
+      <p>Your cart is empty.</p>
     </div>
     <button id="close-cart" aria-label="Close Cart">Close</button>
     <button id="checkout-btn" aria-label="Checkout" style="display:none;">Checkout</button>
@@ -163,48 +164,48 @@
   const toggle = document.getElementById('toggle');
   const nav = document.getElementById('nav');
 
-  let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];  // Load cart items into UI
+  let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
 
-// Render the cart on page load
+  // Load cart items into UI
   renderCartItems();
 
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
-    nav.classList.toggle('active');// Show/hide nav menu
+    nav.classList.toggle('active');
   });
 
   document.addEventListener('click', (e) => {
     if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-      nav.classList.remove('active');// Hide menu if clicking outside
+      nav.classList.remove('active');
     }
   });
 
   cartIcon.addEventListener('click', () => {
-    cartContainer.classList.toggle('active');// Toggle cart sidebar
+    cartContainer.classList.toggle('active');
   });
 
   closeCartBtn.addEventListener('click', () => {
-    cartContainer.classList.remove('active');// Close cart sidebar
+    cartContainer.classList.remove('active');
   });
 
   function addToCart(item) {
     const existingItem = cartItems.find(i => i.id === item.id);
     if (existingItem) {
-      existingItem.quantity++;// Increment quantity if item already in cart
+      existingItem.quantity++;
     } else {
-      cartItems.push({ ...item, quantity: 1 });// Add new item with quantity
+      cartItems.push({ ...item, quantity: 1 });
     }
-    localStorage.setItem('ronz_cart', JSON.stringify(cartItems));// Save updated cart
-    renderCartItems();// Refresh cart UI
+    localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+    renderCartItems();
     cartContainer.classList.add('active');
   }
 
   function renderCartItems() {
-    cartItemsContainer.innerHTML = '';// Clear cart before re-rendering
+    cartItemsContainer.innerHTML = '';
 
     if (cartItems.length === 0) {
       cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-      checkoutBtn.style.display = 'none';// Hide checkout if empty
+      checkoutBtn.style.display = 'none';
     } else {
       checkoutBtn.style.display = 'block';
       let totalCost = 0;
@@ -227,7 +228,6 @@
           <button class="remove-btn">×</button>
         `;
 
-             // Decrease quantity or remove item
         itemDiv.querySelector('.decrease-btn').addEventListener('click', () => {
           if (item.quantity > 1) {
             item.quantity--;
@@ -238,14 +238,12 @@
           renderCartItems();
         });
 
-          // Increase quantity
         itemDiv.querySelector('.increase-btn').addEventListener('click', () => {
           item.quantity++;
           localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
           renderCartItems();
         });
 
-         // Remove item from cart
         itemDiv.querySelector('.remove-btn').addEventListener('click', () => {
           if (confirm(`Remove ${item.name} from cart?`)) {
             cartItems = cartItems.filter(i => i.id !== item.id);
@@ -255,33 +253,29 @@
         });
 
         cartItemsContainer.appendChild(itemDiv);
-        totalCost += item.price * item.quantity;// Add to total
+        totalCost += item.price * item.quantity;
       });
 
-       // Show total
       const totalDiv = document.createElement('div');
       totalDiv.classList.add('cart-total');
       totalDiv.innerHTML = `<p><strong>Total: Ksh.${totalCost.toFixed(2)}</strong></p>`;
       cartItemsContainer.appendChild(totalDiv);
     }
-    
-     // Update cart icon quantity
+
     const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
     cartCount.textContent = totalQuantity;
   }
 
-    // Handle Checkout
   checkoutBtn.addEventListener('click', () => {
     if (cartItems.length === 0) {
       alert('Your cart is empty!');
       return;
     }
-    
 
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const user_id = 1;// Replace with actual logged-in user ID
+    const user_id = 1;
 
-    fetch('process_order.php', {
+    fetch('save_order.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -293,12 +287,12 @@
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        localStorage.setItem('last_order_total', total.toFixed(2));// Store order
-        localStorage.removeItem('ronz_cart');// Clear cart
+        localStorage.setItem('last_order_total', total.toFixed(2));
+        localStorage.removeItem('ronz_cart');
         cartItems = [];
-        renderCartItems();// Refresh UI
-        cartContainer.classList.remove('active');// Hide cart
-        window.location.href = 'thankyou.html';// Redirect to thank you
+        renderCartItems();
+        cartContainer.classList.remove('active');
+        window.location.href = 'thankyou.html';
       } else {
         alert("Checkout failed: " + data.message);
       }
@@ -308,15 +302,16 @@
     });
   });
 
-  // Hide cart if clicking outside
   document.addEventListener('click', (e) => {
     if (!cartContainer.contains(e.target) && !cartIcon.contains(e.target)) {
       cartContainer.classList.remove('active');
     }
   });
 
-  window.addToCart = addToCart;// Make addToCart globally accessible
+  window.addToCart = addToCart;
 </script>
+
+ 
 
   <footer class="footer">
     <p>© 2025 Ron'z Pizza. All rights reserved.</p>

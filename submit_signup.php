@@ -1,59 +1,62 @@
 <?php
+// Debug errors if needed
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
 // Database connection
-$conn = new mysqli("localhost", "root", "", "fastfood");
+$servername = "localhost";
+$username = "root";
+$password = ""; // use your MySQL password if set
+$dbname = "fastfood";
 
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get inputs & match HTML form names (case sensitive)
-    $firstname = $_POST['FirstName'];
-    $lastname  = $_POST['LastName'];
-    $email     = $_POST['Email'];
-    $phone     = $_POST['PhoneNumber'];
-    $address   = $_POST['address'];
-    $password  = $_POST['Password'];
-    $confirmpw = $_POST['ConfirmPassword'];
+// Collect form data
+$FirstName = $_POST['FirstName'];
+$LastName = $_POST['LastName'];
+$Username = $_POST['Username'];
+$Email = $_POST['Email'];
+$Password = $_POST['Password'];
+$ConfirmPassword = $_POST['ConfirmPassword'];
 
-    // Password match check
-    if ($password !== $confirmpw) {
-        $_SESSION['message'] = "Passwords do not match!";
-        header("Location: signup.html");
-        exit();
-    }
+// Basic password confirmation
+if ($Password !== $ConfirmPassword) {
+    echo "<script>alert('Passwords do not match.'); window.history.back();</script>";
+    exit();
+}
 
-    // Check if email already exists
-    $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
-    $check->bind_param("s", $email);
-    $check->execute();
-    $check->store_result();
+// Check if user already exists
+$check_sql = "SELECT * FROM clients WHERE Email = '$Email' OR Username = '$Username'";
+$result = $conn->query($check_sql);
 
-    if ($check->num_rows > 0) {
-        $_SESSION['message'] = "Email is already registered. Please log in.";
-        header("Location: signin.html");
-        exit();
-    }
-    $check->close();
+if ($result->num_rows > 0) {
+    echo "<script>
+        alert('An account with that email or username already exists. Please sign in instead.');
+        window.location.href = 'http://localhost/fastfood/signin.html';
+    </script>";
+    exit();
+}
 
-    // Insert new user
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $sql = $conn->prepare("INSERT INTO users (firstname, lastname, email, phone, address, password) VALUES (?, ?, ?, ?, ?, ?)");
-    $sql->bind_param("ssssss", $firstname, $lastname, $email, $phone, $address, $hashedPassword);
+// Hash password
+$hashed_password = password_hash($Password, PASSWORD_DEFAULT);
 
-    if ($sql->execute()) {
-        $_SESSION['message'] = "Registration successful! Welcome, $firstname.";
-        $_SESSION['client_id'] = $conn->insert_id; // Store user ID in session
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        $_SESSION['message'] = "Something went wrong. Please try again.";
-        header("Location: signup.html");
-        exit();
-    }
+// Insert new user
+$insert_sql = "INSERT INTO clients (FirstName, LastName, Username, Email, Password)
+               VALUES ('$FirstName', '$LastName', '$Username', '$Email', '$hashed_password')";
+               
+// Check if insert was successful
+if ($conn->query($insert_sql) === TRUE) {
+    echo "<script>
+        alert('Registration successful! Please sign in now.');
+        window.location.href = 'http://localhost/fastfood/signin.html';
+    </script>";
+} else {
+    echo "Error: " . $conn->error;
 }
 
 $conn->close();
-?>

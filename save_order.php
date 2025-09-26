@@ -1,43 +1,38 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-session_start();
+header('Content-Type: application/json');
+$data = json_decode(file_get_contents("php://input"), true);
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "fastfood";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli("localhost", "root", "", "fastfood");
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(["success" => false, "message" => "DB connection failed"]);
+    exit;
 }
 
-// Collect form input
-$input_username = $_POST['username'];
-$input_password = $_POST['password'];
+$user_id = $data['user_id'];
+$total_price = $data['total_price'];
+$items = $data['items'];
+$payment_method = $data['payment_method']; // <-- NEW
 
-// Check user by username
-$sql = "SELECT * FROM clients WHERE Username = '$input_username'";
-$result = $conn->query($sql);
+// Insert into orders
+$stmt = $conn->prepare("INSERT INTO orders (client_id, total_price, payment_method) VALUES (?, ?, ?)");
+$stmt->bind_param("ids", $user_id, $total_price, $payment_method);
+$stmt->execute();
+$order_id = $stmt->insert_id;
+$stmt->close();
 
-if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
-
-    // Verify password
-    if (password_verify($input_password, $user['Password'])) {
-        $_SESSION['username'] = $user['Username'];
-
-        // Redirect to dashboard.html after login
-        header("Location: dashboard.html");
-        exit();
-    } else {
-        echo "<script>alert('Incorrect password.'); window.history.back();</script>";
-    }
-} else {
-    echo "<script>alert('Username not found.'); window.history.back();</script>";
+// Insert items
+foreach ($items as $item) {
+    $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_name, price, quantity) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("isdi", $order_id, $item['name'], $item['price'], $item['quantity']);
+    $stmt->execute();
+    $stmt->close();
 }
 
+echo json_encode([
+    "success" => true,
+    "order_id" => $order_id,
+    "payment_method" => $payment_method
+]);
 $conn->close();
 ?>
+// Returns order ID and payment method for confirmation
