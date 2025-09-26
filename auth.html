@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Auth - Sign In / Sign Up</title>
   <link rel="stylesheet" href="auth.css">
+  <style>
+    /* minimal inline helpers so it's usable even if CSS missing */
+    .hint { font-size: 0.9rem; color: #666; margin-top: 8px; }
+  </style>
 </head>
 <body class="auth">
 
@@ -17,6 +21,7 @@
         <input type="password" id="signinPassword" placeholder="Password" required>
         <a href="#">Forgot your password?</a><br><br>
         <button type="submit">SIGN IN</button>
+        <p class="hint">Don't have an account? <button type="button" id="gotoSignup">Create one</button></p>
       </form>
 
       <!-- Sign Up -->
@@ -29,7 +34,17 @@
         <input type="tel" id="phone" placeholder="Phone Number" required>
         <input type="password" id="password" placeholder="Password" required>
         <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+
+        <!-- ROLE selection -->
+        <label for="role">Register as</label>
+        <select id="role" required>
+          <option value="customer">Customer</option>
+          <option value="staff">Staff</option>
+          <option value="admin">Admin</option>
+        </select>
+
         <button type="submit">SIGN UP</button>
+        <p class="hint">Already have an account? <button type="button" id="gotoSignin">Sign in</button></p>
       </form>
     </div>
 
@@ -37,55 +52,112 @@
     <div class="panel">
       <h2 id="panelTitle">Hello, Friend!</h2>
       <p id="panelText">Enter your personal details and start your journey with us</p>
-      <button class="btn-outline" onclick="toggleForms()">SIGN UP</button>
+      <button class="btn-outline" id="toggleBtn">SIGN UP</button>
     </div>
   </div>
 
   <script>
+    // Elements
     const signinForm = document.getElementById("signinForm");
     const signupForm = document.getElementById("signupForm");
-    const panelTitle = document.getElementById("panelTitle");
-    const panelText = document.getElementById("panelText");
-    const panelBtn = document.querySelector(".btn-outline");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const gotoSignup = document.getElementById("gotoSignup");
+    const gotoSignin = document.getElementById("gotoSignin");
 
-    // Toggle forms
-    function toggleForms() {
-      if (signinForm.style.display === "none") {
-        signinForm.style.display = "block";
-        signupForm.style.display = "none";
-        panelTitle.textContent = "Hello, Friend!";
-        panelText.textContent = "Enter your personal details and start your journey with us";
-        panelBtn.textContent = "SIGN UP";
-      } else {
+    // Toggle function
+    function showSignup(show) {
+      if (show) {
         signinForm.style.display = "none";
         signupForm.style.display = "block";
-        panelTitle.textContent = "Welcome Back!";
-        panelText.textContent = "If you already have an account, sign in to continue your journey with us.";
-        panelBtn.textContent = "SIGN IN";
+        toggleBtn.textContent = "SIGN IN";
+        document.getElementById("panelTitle").textContent = "Welcome Back!";
+        document.getElementById("panelText").textContent = "Create your account and choose your role.";
+      } else {
+        signinForm.style.display = "block";
+        signupForm.style.display = "none";
+        toggleBtn.textContent = "SIGN UP";
+        document.getElementById("panelTitle").textContent = "Hello, Friend!";
+        document.getElementById("panelText").textContent = "Enter your personal details and start your journey with us";
       }
     }
 
-    // Handle signup
+    // Initial state: sign in visible
+    showSignup(false);
+
+    // UI toggles
+    toggleBtn.addEventListener("click", () => showSignup(signinForm.style.display !== "none"));
+    gotoSignup.addEventListener("click", () => showSignup(true));
+    gotoSignin.addEventListener("click", () => showSignup(false));
+
+    // Helper: redirect to dashboard (single dashboard adapts by role)
+    function redirectToDashboard() {
+      window.location.href = "dashboard.html";
+    }
+
+    // --- SIGNUP handler ---
     signupForm.addEventListener("submit", function(e) {
       e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      // Load users map from localStorage (object keyed by username)
+      const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
+
+      if (users[username]) {
+        alert("Username already taken. Pick another username.");
+        return;
+      }
+
+      // Create user object
       const user = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        username: document.getElementById("username").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        password: document.getElementById("password").value
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        username: username,
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        password: password,             // NOTE: plain text for demo only. Hash in production.
+        role: document.getElementById("role").value
       };
-      localStorage.setItem("fastfoodUser", JSON.stringify(user));
-      window.location.href = "dashboard.html";
+
+      // Save user
+      users[username] = user;
+      localStorage.setItem("fastfood_users", JSON.stringify(users));
+
+      // Mark this user as currently signed-in
+      localStorage.setItem("fastfood_current", username);
+
+      // Redirect to dashboard (dashboard will show role-specific UI)
+      redirectToDashboard();
     });
 
-    // Handle signin
+    // --- SIGNIN handler ---
     signinForm.addEventListener("submit", function(e) {
       e.preventDefault();
-      // For now, skip validation and go to dashboard
-      window.location.href = "dashboard.html";
+      const username = document.getElementById("signinUsername").value.trim();
+      const password = document.getElementById("signinPassword").value;
+
+      const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
+      const user = users[username];
+
+      if (!user || user.password !== password) {
+        alert("Invalid username or password.");
+        return;
+      }
+
+      // Set currently signed-in user
+      localStorage.setItem("fastfood_current", username);
+
+      // Redirect to dashboard (dashboard will determine role and show correct UI)
+      redirectToDashboard();
     });
+
   </script>
 
 </body>
