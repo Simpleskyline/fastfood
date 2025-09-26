@@ -1,6 +1,19 @@
 <?php
 header("Content-Type: application/json");
 
+// Always return JSON, even on fatal errors
+set_exception_handler(function($e) {
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "Server error: " . $e->getMessage()]);
+    exit;
+});
+
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "PHP error: $errstr in $errfile:$errline"]);
+    exit;
+});
+
 // DB connection
 $conn = new mysqli("localhost", "root", "", "fastfood_db");
 

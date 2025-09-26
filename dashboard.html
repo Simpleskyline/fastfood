@@ -164,46 +164,59 @@
   const toggle = document.getElementById('toggle');
   const nav = document.getElementById('nav');
 
-  let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+  // Load cart from localStorage (fall back to empty array)
+  let cartItems = [];
+  try {
+    cartItems = JSON.parse(localStorage.getItem('ronz_cart') || '[]');
+  } catch (e) {
+    console.error('Failed to parse ronz_cart from localStorage', e);
+    cartItems = [];
+  }
 
-  // Load cart items into UI
+  // Render initial state
   renderCartItems();
 
+  // Nav toggle
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
     nav.classList.toggle('active');
   });
-
   document.addEventListener('click', (e) => {
     if (!nav.contains(e.target) && !toggle.contains(e.target)) {
       nav.classList.remove('active');
     }
   });
 
-  cartIcon.addEventListener('click', () => {
-    cartContainer.classList.toggle('active');
-  });
+  // Cart open/close
+  cartIcon.addEventListener('click', () => cartContainer.classList.toggle('active'));
+  closeCartBtn.addEventListener('click', () => cartContainer.classList.remove('active'));
 
-  closeCartBtn.addEventListener('click', () => {
-    cartContainer.classList.remove('active');
-  });
-
+  // Add item to cart (used by inline onclick buttons)
   function addToCart(item) {
-    const existingItem = cartItems.find(i => i.id === item.id);
-    if (existingItem) {
-      existingItem.quantity++;
+    console.log('addToCart called:', item);
+    // Ensure incoming item has an id and price
+    if (typeof item.id === 'undefined' || typeof item.price === 'undefined') {
+      console.error('Invalid item passed to addToCart', item);
+      return;
+    }
+
+    const existing = cartItems.find(i => i.id === item.id);
+    if (existing) {
+      existing.quantity = (existing.quantity || 1) + 1;
     } else {
       cartItems.push({ ...item, quantity: 1 });
     }
+
     localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
     renderCartItems();
     cartContainer.classList.add('active');
   }
 
+  // Render cart contents into DOM
   function renderCartItems() {
     cartItemsContainer.innerHTML = '';
 
-    if (cartItems.length === 0) {
+    if (!cartItems || cartItems.length === 0) {
       cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
       checkoutBtn.style.display = 'none';
     } else {
@@ -217,17 +230,18 @@
         itemDiv.innerHTML = `
           <div class="cart-item-details">
             <h4>${item.name}</h4>
-            <p>Price: Ksh.${item.price.toFixed(2)}</p>
+            <p>Price: Ksh.${Number(item.price).toFixed(2)}</p>
             ${item.details ? `<p>${item.details}</p>` : ''}
           </div>
           <div class="quantity-controls">
             <button class="decrease-btn">−</button>
-            <span>${item.quantity}</span>
+            <span class="qty">${item.quantity}</span>
             <button class="increase-btn">+</button>
           </div>
           <button class="remove-btn">×</button>
         `;
 
+        // decrease
         itemDiv.querySelector('.decrease-btn').addEventListener('click', () => {
           if (item.quantity > 1) {
             item.quantity--;
@@ -238,12 +252,14 @@
           renderCartItems();
         });
 
+        // increase
         itemDiv.querySelector('.increase-btn').addEventListener('click', () => {
           item.quantity++;
           localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
           renderCartItems();
         });
 
+        // remove
         itemDiv.querySelector('.remove-btn').addEventListener('click', () => {
           if (confirm(`Remove ${item.name} from cart?`)) {
             cartItems = cartItems.filter(i => i.id !== item.id);
@@ -253,7 +269,7 @@
         });
 
         cartItemsContainer.appendChild(itemDiv);
-        totalCost += item.price * item.quantity;
+        totalCost += Number(item.price) * Number(item.quantity);
       });
 
       const totalDiv = document.createElement('div');
@@ -262,18 +278,21 @@
       cartItemsContainer.appendChild(totalDiv);
     }
 
-    const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    const totalQuantity = cartItems.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0);
     cartCount.textContent = totalQuantity;
   }
 
+  // Checkout - improved JSON handling and logging
   checkoutBtn.addEventListener('click', () => {
     if (cartItems.length === 0) {
       alert('Your cart is empty!');
       return;
     }
 
-    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const user_id = 1;
+    const total = cartItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
+    const user_id = 1; // adjust as needed
+
+    console.log('Sending order:', { user_id, items: cartItems, total: total.toFixed(2) });
 
     fetch('save_order.php', {
       method: 'POST',
@@ -281,11 +300,21 @@
       body: JSON.stringify({
         user_id: user_id,
         items: cartItems,
-        total_price: total.toFixed(2)
+        total: total.toFixed(2) // matches PHP expecting "total"
       })
     })
-    .then(res => res.json())
+    .then(async res => {
+      const text = await res.text();
+      console.log('Raw server response:', text);
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        // Throw an error that will be caught below and shown to user
+        throw new Error("Invalid JSON response from server: " + text);
+      }
+    })
     .then(data => {
+      console.log('Parsed server JSON:', data);
       if (data.success) {
         localStorage.setItem('last_order_total', total.toFixed(2));
         localStorage.removeItem('ronz_cart');
@@ -294,22 +323,26 @@
         cartContainer.classList.remove('active');
         window.location.href = 'thankyou.html';
       } else {
-        alert("Checkout failed: " + data.message);
+        alert("Checkout failed: " + (data.message || "Unknown error"));
       }
     })
     .catch(error => {
-      alert("Error placing order: " + error);
+      console.error('Checkout error:', error);
+      alert("Error placing order: " + error.message);
     });
   });
 
+  // close cart when clicking outside
   document.addEventListener('click', (e) => {
     if (!cartContainer.contains(e.target) && !cartIcon.contains(e.target)) {
       cartContainer.classList.remove('active');
     }
   });
 
+  // Expose function to global scope so inline onclick in HTML works
   window.addToCart = addToCart;
 </script>
+
  
 
   <footer class="footer">
