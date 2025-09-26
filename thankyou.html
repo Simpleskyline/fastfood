@@ -52,49 +52,55 @@
   </div>
 
   <script>
-    let orderId = localStorage.getItem("last_order_id"); // from save_order.php
-    let total = localStorage.getItem("last_order_total");
+  let orderId = localStorage.getItem("last_order_id"); // from save_order.php
+  let total = localStorage.getItem("last_order_total");
 
-    if (total) {
-      document.getElementById('order-total').textContent = `Total: Ksh.${total}`;
-    }
+  if (total) {
+    document.getElementById('order-total').textContent = `Total: Ksh.${total}`;
+  }
 
-    // Handle tab switching
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const contents = document.querySelectorAll('.tab-content');
+  // Handle tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
 
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        tabBtns.forEach(b => b.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-      });
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
     });
+  });
 
-    // Payment processor
-    function processPayment(method) {
-      fetch("save_payment.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          order_id: orderId,
-          payment_method: method,
-          amount: total,
-          status: "Completed"
-        })
-      })
-      .then(res => res.json())
-      .then(response => {
-        if (response.success) {
-          alert("✅ Payment saved successfully!");
-          localStorage.removeItem("last_order_id");
-          localStorage.removeItem("last_order_total");
-        } else {
-          alert("❌ Payment failed: " + response.message);
-        }
-      });
+  // Payment processor
+  function processPayment(method) {
+    // Ask client to confirm payment with total amount
+    if (!confirm(`Confirm payment of Ksh.${total} via ${method}?`)) {
+      return; // stop if user cancels
     }
-  </script>
+
+    fetch("save_payment.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: orderId,
+        payment_method: method,
+        amount: total,
+        status: "Completed"
+      })
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.success) {
+        alert(`Payment of Ksh.${total} via ${method} saved successfully!`);
+        localStorage.removeItem("last_order_id");
+        localStorage.removeItem("last_order_total");
+      } else {
+        alert("Payment failed: " + response.message);
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
