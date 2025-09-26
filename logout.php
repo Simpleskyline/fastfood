@@ -1,9 +1,10 @@
 <?php
 session_start();
-session_unset();     // Clear all session variables
-session_destroy();   // Destroy the session
 
-// Redirect to sign in page
-header("Location: signin.html");
-exit();
-?>
+// Destroy session
+session_unset();
+session_destroy();
+
+// Redirect back to login page
+header("Location: auth.html");
+exit;

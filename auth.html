@@ -38,7 +38,6 @@
         <label for="role">Register as</label>
         <select id="role" required>
           <option value="customer">Customer</option>
-          <option value="staff">Staff</option>
           <option value="admin">Admin</option>
         </select>
 
@@ -59,8 +58,6 @@
     const signinForm = document.getElementById("signinForm");
     const signupForm = document.getElementById("signupForm");
     const toggleBtn = document.getElementById("toggleBtn");
-    const gotoSignup = document.getElementById("gotoSignup");
-    const gotoSignin = document.getElementById("gotoSignin");
 
     // Toggle function
     function showSignup(show) {
@@ -82,14 +79,16 @@
     // Initial state: sign in visible
     showSignup(false);
 
-    // UI toggles
+    // UI toggle
     toggleBtn.addEventListener("click", () => showSignup(signinForm.style.display !== "none"));
-    gotoSignup.addEventListener("click", () => showSignup(true));
-    gotoSignin.addEventListener("click", () => showSignup(false));
 
-    // Helper: redirect to dashboard (single dashboard adapts by role)
-    function redirectToDashboard() {
-      window.location.href = "dashboard.html";
+    // Redirect based on role
+    function redirectToDashboard(user) {
+      if (user.role === "admin") {
+        window.location.href = "admin_dashboard.html";
+      } else {
+        window.location.href = "dashboard.html"; // customer dashboard
+      }
     }
 
     // --- SIGNUP handler ---
@@ -105,7 +104,6 @@
         return;
       }
 
-      // Load users map from localStorage (object keyed by username)
       const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
 
       if (users[username]) {
@@ -113,26 +111,21 @@
         return;
       }
 
-      // Create user object
       const user = {
         firstName: document.getElementById("firstName").value.trim(),
         lastName: document.getElementById("lastName").value.trim(),
         username: username,
         email: document.getElementById("email").value.trim(),
         phone: document.getElementById("phone").value.trim(),
-        password: password,             // NOTE: plain text for demo only. Hash in production.
+        password: password,
         role: document.getElementById("role").value
       };
 
-      // Save user
       users[username] = user;
       localStorage.setItem("fastfood_users", JSON.stringify(users));
-
-      // Mark this user as currently signed-in
       localStorage.setItem("fastfood_current", username);
 
-      // Redirect to dashboard (dashboard will show role-specific UI)
-      redirectToDashboard();
+      redirectToDashboard(user);
     });
 
     // --- SIGNIN handler ---
@@ -149,13 +142,9 @@
         return;
       }
 
-      // Set currently signed-in user
       localStorage.setItem("fastfood_current", username);
-
-      // Redirect to dashboard (dashboard will determine role and show correct UI)
-      redirectToDashboard();
+      redirectToDashboard(user);
     });
-
   </script>
 
 </body>
