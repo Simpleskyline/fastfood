@@ -16,13 +16,29 @@
       color: white;
       padding: 15px 25px;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       font-size: 16px;
       z-index: 1000;
       animation: fadein 0.5s, fadeout 0.5s 1.5s;
     }
-    @keyframes fadein { from {opacity:0;} to {opacity:1;} }
-    @keyframes fadeout { from {opacity:1;} to {opacity:0;} }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 
@@ -83,13 +99,15 @@
         signupForm.style.display = "block";
         toggleBtn.textContent = "SIGN IN";
         document.getElementById("panelTitle").textContent = "Welcome Back!";
-        document.getElementById("panelText").textContent = "To keep connected please sign in with your details.";
+        document.getElementById("panelText").textContent =
+          "To keep connected please sign in with your details.";
       } else {
         signinForm.style.display = "block";
         signupForm.style.display = "none";
         toggleBtn.textContent = "SIGN UP";
         document.getElementById("panelTitle").textContent = "Hello, Friend!";
-        document.getElementById("panelText").textContent = "Enter your personal details and start your journey with us";
+        document.getElementById("panelText").textContent =
+          "Enter your personal details and start your journey with us";
       }
     }
 
@@ -113,13 +131,25 @@
       e.preventDefault();
       const formData = new FormData(this);
 
-      let res = await fetch("../php/login.php", { method: "POST", body: formData });
-      let data = await res.json();
+      try {
+        let res = await fetch("../php/login.php", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (data.success) {
-        showPopupAndRedirect(data.redirect);
-      } else {
-        document.getElementById("signinError").innerText = data.message;
+        let text = await res.text();
+        console.log("Login raw response:", text);
+
+        let data = JSON.parse(text);
+        if (data.success) {
+          showPopupAndRedirect(data.redirect);
+        } else {
+          document.getElementById("signinError").innerText = data.message;
+        }
+      } catch (err) {
+        console.error("Login fetch error:", err);
+        document.getElementById("signinError").innerText =
+          "Login failed. Check console.";
       }
     });
 
@@ -128,16 +158,27 @@
       e.preventDefault();
       const formData = new FormData(this);
 
-      let res = await fetch("../php/submit_signup.php", { method: "POST", body: formData });
-      let data = await res.json();
+      try {
+        let res = await fetch("../php/submit_signup.php", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (data.success) {
-        showPopupAndRedirect(data.redirect);
-      } else {
-        document.getElementById("signupError").innerText = data.message;
+        let text = await res.text();
+        console.log("Signup raw response:", text);
+
+        let data = JSON.parse(text);
+        if (data.success) {
+          showPopupAndRedirect(data.redirect);
+        } else {
+          document.getElementById("signupError").innerText = data.message;
+        }
+      } catch (err) {
+        console.error("Signup fetch error:", err);
+        document.getElementById("signupError").innerText =
+          "Signup failed. Check console.";
       }
     });
   </script>
-
 </body>
 </html>
