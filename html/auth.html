@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Auth - Sign In / Sign Up</title>
+  <link rel="stylesheet" href="../css/auth.css">
+</head>
+
+<body class="auth">
+
+  <div class="container">
+    <div class="form-box">
+      <!-- Sign In -->
+      <form id="signinForm" action="../php/login.php" method="POST">
+        <h2>Sign In</h2>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <a href="#">Forgot your password?</a><br><br>
+        <button type="submit">SIGN IN</button>
+      </form>
+
+     
+      <form id="signupForm" action="../php/submit_signup.php" method="POST">
+        <h2>Create Account</h2>
+        <input type="text" name="firstName" placeholder="First Name" required>
+        <input type="text" name="lastName" placeholder="Last Name" required>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="tel" name="phone" placeholder="Phone Number" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+
+        <label for="role">Register as</label>
+        <select name="role" required>
+          <option value="customer">Customer</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit">SIGN UP</button>
+      </form>
+    </div>
+
+   
+    <div class="panel">
+      <h2 id="panelTitle">Hello, Friend!</h2>
+      <p id="panelText">Enter your personal details and start your journey with us</p>
+      <button class="btn-outline" id="toggleBtn">SIGN UP</button>
+    </div>
+  </div>
+
+  <script>
+    const signinForm = document.getElementById("signinForm");
+    const signupForm = document.getElementById("signupForm");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    function showSignup(show) {
+      if (show) {
+        signinForm.style.display = "none";
+        signupForm.style.display = "block";
+        toggleBtn.textContent = "SIGN IN";
+        document.getElementById("panelTitle").textContent = "Welcome Back!";
+        document.getElementById("panelText").textContent = "To keep connected please sign in with your details.";
+      } else {
+        signinForm.style.display = "block";
+        signupForm.style.display = "none";
+        toggleBtn.textContent = "SIGN UP";
+        document.getElementById("panelTitle").textContent = "Hello, Friend!";
+        document.getElementById("panelText").textContent = "Enter your personal details and start your journey with us";
+      }
+    }
+
+    // initial state
+    showSignup(false);
+
+    toggleBtn.addEventListener("click", () => {
+      const isSigninVisible = signinForm.style.display !== "none";
+      showSignup(isSigninVisible);
+    });
+  </script>
+
+</body>
+</html>
