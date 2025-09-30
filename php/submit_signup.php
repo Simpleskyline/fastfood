@@ -1,61 +1,51 @@
 <?php
-// Always start session first (for future login handling)
+header('Content-Type: application/json');
+require 'db.php';
 session_start();
 
-// Turn on error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $firstName = trim($_POST['firstName']);
+    $lastName = trim($_POST['lastName']);
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $password = trim($_POST['password']);
+    $confirmPassword = trim($_POST['confirmPassword']);
+    $role = strtolower(trim($_POST['role']));
 
-// Use central DB connection
-include("db.php");
-
-// Get form inputs safely
-$firstName = $_POST['FirstName'] ?? '';
-$lastName  = $_POST['LastName'] ?? '';
-$user      = $_POST['Username'] ?? '';
-$email     = $_POST['Email'] ?? '';
-$phone     = $_POST['Phone'] ?? '';
-$pass      = $_POST['Password'] ?? '';
-$confirm   = $_POST['ConfirmPassword'] ?? '';
-$role      = $_POST['role'] ?? 'user';
-
-// Validate password match
-if ($pass !== $confirm) {
-    die("❌ Passwords do not match.");
-}
-
-// Hash password
-$hashed = password_hash($pass, PASSWORD_DEFAULT);
-
-// Prepare SQL
-$stmt = $conn->prepare("INSERT INTO clients 
-    (first_name, last_name, username, email, phone, password, role) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-if (!$stmt) {
-    die("❌ Prepare failed: " . $conn->error);
-}
-
-$stmt->bind_param("sssssss", $firstName, $lastName, $user, $email, $phone, $hashed, $role);
-
-// Execute
-if ($stmt->execute()) {
-    // Store user info in session
-    $_SESSION['username'] = $user;
-    $_SESSION['role'] = $role;
-
-    // Redirect based on role
-    if ($role === 'admin') {
-        header("Location: ../html/admin_dashboard.html");
-    } else {
-        header("Location: ../html/dashboard.html");
+    if ($password !== $confirmPassword) {
+        echo json_encode(["success" => false, "message" => "Passwords do not match"]);
+        exit;
     }
-    exit();
-} else {
-    echo "❌ Error: " . $stmt->error;
-}
 
-$stmt->close();
-$conn->close();
+    // Check if username or email already exists
+    $checkUser = $conn->prepare("SELECT client_id FROM clients WHERE Username = ? OR Email = ?");
+    $checkUser->bind_param("ss", $username, $email);
+    $checkUser->execute();
+    $checkUser->store_result();
+
+    if ($checkUser->num_rows > 0) {
+        echo json_encode(["success" => false, "message" => "Username or Email already exists"]);
+        exit;
+    }
+    $checkUser->close();
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $conn->prepare("INSERT INTO clients (First_Name, Last_Name, Username, Email, Phone, Password, Role) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $phone, $hashedPassword, $role);
+
+    if ($stmt->execute()) {
+        $_SESSION['client_id'] = $stmt->insert_id;
+        $_SESSION['username'] = $username;
+        $_SESSION['role'] = $role;
+
+        echo json_encode(["success" => true, "role" => $role]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Error: " . $stmt->error]);
+    }
+
+    $stmt->close();
+    $conn->close();
+}
 ?>

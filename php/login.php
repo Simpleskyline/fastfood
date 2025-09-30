@@ -1,44 +1,40 @@
 <?php
-$servername = "localhost";
-$username = "root"; 
-$password = "";     
-$dbname = "fastfood";
+header('Content-Type: application/json');
+require 'db.php';
+session_start();
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-$user = $_POST['username'];
-$pass = $_POST['password'];
-
-$sql = "SELECT * FROM users WHERE username=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $user);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 1) {
-  $row = $result->fetch_assoc();
-
-  if (password_verify($pass, $row['password'])) {
-    session_start();
-    $_SESSION['username'] = $row['username'];
-    $_SESSION['role'] = $row['role'];
-
-    if ($row['role'] === 'admin') {
-      header("Location: ../pages/admin_dashboard.html");
-    } else {
-      header("Location: ../pages/dashboard.html");
+    if (empty($username) || empty($password)) {
+        echo json_encode(["success" => false, "message" => "All fields are required"]);
+        exit;
     }
-    exit();
-  } else {
-    echo "Invalid password.";
-  }
-} else {
-  echo "User not found.";
-}
 
-$stmt->close();
-$conn->close();
+    $stmt = $conn->prepare("SELECT client_id, Username, Password, Role FROM clients WHERE Username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows === 1) {
+        $stmt->bind_result($id, $dbUsername, $dbPassword, $role);
+        $stmt->fetch();
+
+        if (password_verify($password, $dbPassword)) {
+            $_SESSION['client_id'] = $id;
+            $_SESSION['username'] = $dbUsername;
+            $_SESSION['role'] = $role;
+
+            echo json_encode(["success" => true, "role" => strtolower($role)]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Invalid password"]);
+        }
+    } else {
+        echo json_encode(["success" => false, "message" => "User not found"]);
+    }
+
+    $stmt->close();
+    $conn->close();
+}
 ?>

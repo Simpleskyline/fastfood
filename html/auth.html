@@ -12,7 +12,7 @@
   <div class="container">
     <div class="form-box">
       <!-- Sign In -->
-      <form id="signinForm" action="../php/login.php" method="POST">
+      <form id="signinForm" method="POST">
         <h2>Sign In</h2>
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
@@ -20,8 +20,8 @@
         <button type="submit">SIGN IN</button>
       </form>
 
-     
-      <form id="signupForm" action="../php/submit_signup.php" method="POST">
+      <!-- Sign Up -->
+      <form id="signupForm" method="POST">
         <h2>Create Account</h2>
         <input type="text" name="firstName" placeholder="First Name" required>
         <input type="text" name="lastName" placeholder="Last Name" required>
@@ -31,7 +31,7 @@
         <input type="password" name="password" placeholder="Password" required>
         <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
 
-        <label for="role">Register as</label>
+        <label for="Role">Register as</label>
         <select name="role" required>
           <option value="customer">Customer</option>
           <option value="admin">Admin</option>
@@ -41,7 +41,6 @@
       </form>
     </div>
 
-   
     <div class="panel">
       <h2 id="panelTitle">Hello, Friend!</h2>
       <p id="panelText">Enter your personal details and start your journey with us</p>
@@ -54,6 +53,7 @@
     const signupForm = document.getElementById("signupForm");
     const toggleBtn = document.getElementById("toggleBtn");
 
+    // Toggle forms
     function showSignup(show) {
       if (show) {
         signinForm.style.display = "none";
@@ -76,6 +76,48 @@
     toggleBtn.addEventListener("click", () => {
       const isSigninVisible = signinForm.style.display !== "none";
       showSignup(isSigninVisible);
+    });
+
+    // Handle Sign In
+    signinForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(signinForm);
+      const response = await fetch("../php/login.php", {
+        method: "POST",
+        body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        if (result.role === "admin") {
+          window.location.href = "../pages/admin_dashboard.html";
+        } else {
+          window.location.href = "../pages/customer_dashboard.html";
+        }
+      } else {
+        alert(result.message || "Login failed");
+      }
+    });
+
+    // Handle Sign Up
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(signupForm);
+      const response = await fetch("../php/submit_signup.php", {
+        method: "POST",
+        body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        if (result.role === "admin") {
+          window.location.href = "../pages/admin_dashboard.html";
+        } else {
+          window.location.href = "../pages/customer_dashboard.html";
+        }
+      } else {
+        alert(result.message || "Signup failed");
+      }
     });
   </script>
 
