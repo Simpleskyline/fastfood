@@ -33,8 +33,13 @@ A **fast food restaurant** where **users** can browse the menu, create accounts,
 ## 📂 Project Structure
 
 fastfood/
+
 │── css/ # Stylesheets
+
 │── html/ # Frontend pages (user & admin)
+
 │── php/ # Backend PHP scripts
+
 │── fastfood.sql # Database schema
+
 │── README.md # Project documentation
