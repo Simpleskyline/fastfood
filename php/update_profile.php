@@ -1,54 +1,35 @@
 <?php
+// update_profile.php - updates client profile fields
 header('Content-Type: application/json');
 require 'db.php';
 session_start();
 
-// Ensure user is logged in
-if (!isset($_SESSION['client_id'])) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Not logged in']);
+$data = json_decode(file_get_contents('php://input'), true);
+if (!$data) {
+    echo json_encode(['success'=>false,'message'=>'No data received']);
     exit;
 }
 
-// Read JSON input
-$input = json_decode(file_get_contents('php://input'), true);
+$email = trim($data['email'] ?? '');
+$first = trim($data['first_name'] ?? '');
+$last = trim($data['last_name'] ?? '');
+$phone = trim($data['phone'] ?? '');
+$address = trim($data['address'] ?? '');
+$city = trim($data['city'] ?? '');
 
-// Use lowercase keys from the HTML form
-$firstName = trim($input['name'] ?? '');
-$lastName  = trim($input['lastname'] ?? '');
-$email     = trim($input['email'] ?? '');
-$phone     = trim($input['phone'] ?? '');
-
-if ($email === '') {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Email is required']);
+if (empty($email)) {
+    echo json_encode(['success'=>false,'message'=>'Email required']);
     exit;
 }
 
-$client_id = $_SESSION['client_id'];
-
-// Update query matches your DB schema (`First_Name`, `Last_Name`, `Email`, `Phone`)
-$stmt = $conn->prepare("
-    UPDATE clients 
-    SET First_Name = ?, Last_Name = ?, Email = ?, Phone = ? 
-    WHERE client_id = ?
-");
-
-if (!$stmt) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Prepare failed: ' . $conn->error]);
-    exit;
-}
-
-$stmt->bind_param('ssssi', $firstName, $lastName, $email, $phone, $client_id);
+$stmt = $conn->prepare('UPDATE clients SET first_name = ?, last_name = ?, phone = ?, address = ?, city = ? WHERE email = ?');
+$stmt->bind_param('ssssss', $first, $last, $phone, $address, $city, $email);
 
 if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Profile updated successfully']);
+    echo json_encode(['success'=>true,'message'=>'Profile updated']);
 } else {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $stmt->error]);
+    echo json_encode(['success'=>false,'message'=>$stmt->error]);
 }
-
 $stmt->close();
 $conn->close();
 ?>

@@ -1,40 +1,68 @@
 <?php
-header('Content-Type: application/json');
-require 'db.php';
 session_start();
+header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+$servername = "localhost";
+$username   = "root"; 
+$password   = "Root@1234";     
+$dbname     = "fastfood";
 
-    if (empty($username) || empty($password)) {
-        echo json_encode(["success" => false, "message" => "All fields are required"]);
-        exit;
-    }
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    $stmt = $conn->prepare("SELECT client_id, Username, Password, Role FROM clients WHERE Username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows === 1) {
-        $stmt->bind_result($id, $dbUsername, $dbPassword, $role);
-        $stmt->fetch();
-
-        if (password_verify($password, $dbPassword)) {
-            $_SESSION['client_id'] = $id;
-            $_SESSION['username'] = $dbUsername;
-            $_SESSION['role'] = $role;
-
-            echo json_encode(["success" => true, "role" => strtolower($role)]);
-        } else {
-            echo json_encode(["success" => false, "message" => "Invalid password"]);
-        }
-    } else {
-        echo json_encode(["success" => false, "message" => "User not found"]);
-    }
-
-    $stmt->close();
-    $conn->close();
+// Check connection
+if ($conn->connect_error) {
+  echo json_encode(["success" => false, "message" => "Database connection failed."]);
+  exit();
 }
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  $user = $_POST['username'] ?? '';
+  $pass = $_POST['password'] ?? '';
+
+  // Validate empty fields
+  if (empty($user) || empty($pass)) {
+    echo json_encode(["success" => false, "message" => "Username and password are required."]);
+    exit();
+  }
+
+  // Query the clients table
+  $sql = "SELECT * FROM clients WHERE Username=?";
+  $stmt = $conn->prepare($sql);
+  if (!$stmt) {
+    echo json_encode(["success" => false, "message" => "SQL error: " . $conn->error]);
+    exit();
+  }
+
+  $stmt->bind_param("s", $user);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result->num_rows === 1) {
+    $row = $result->fetch_assoc();
+
+    // Verify password
+    if (password_verify($pass, $row['Password'])) {
+      $_SESSION['client_id'] = $row['Client_ID'];
+      $_SESSION['username']  = $row['Username'];
+      $_SESSION['role']      = $row['Role'];
+
+      // Send success JSON with redirect URL
+      if ($row['Role'] === 'admin') {
+        echo json_encode(["success" => true, "redirect" => "../html/admin_dashboard.html"]);
+      } else {
+        echo json_encode(["success" => true, "redirect" => "../html/customer_dashboard.html"]);
+      }
+      exit();
+    } else {
+      echo json_encode(["success" => false, "message" => "Invalid password."]);
+    }
+  } else {
+    echo json_encode(["success" => false, "message" => "User not found."]);
+  }
+
+  $stmt->close();
+}
+
+$conn->close();
 ?>

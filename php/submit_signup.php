@@ -1,51 +1,60 @@
 <?php
-header('Content-Type: application/json');
-require 'db.php';
 session_start();
+header('Content-Type: application/json');
+include("db.php");
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstName = trim($_POST['firstName']);
-    $lastName = trim($_POST['lastName']);
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $phone = trim($_POST['phone']);
-    $password = trim($_POST['password']);
-    $confirmPassword = trim($_POST['confirmPassword']);
-    $role = strtolower(trim($_POST['role']));
+// Collect POST safely
+$firstName = $_POST['firstName'] ?? '';
+$lastName  = $_POST['lastName'] ?? '';
+$username  = $_POST['username'] ?? '';
+$email     = $_POST['email'] ?? '';
+$phone     = $_POST['phone'] ?? '';
+$password  = $_POST['password'] ?? '';
+$confirm   = $_POST['confirmPassword'] ?? '';
+$role      = $_POST['role'] ?? 'customer';
 
-    if ($password !== $confirmPassword) {
-        echo json_encode(["success" => false, "message" => "Passwords do not match"]);
-        exit;
-    }
+// Basic validation
+if (!$firstName || !$lastName || !$username || !$email || !$password || !$confirm) {
+    echo json_encode(["success" => false, "message" => "All fields are required."]);
+    exit();
+}
 
-    // Check if username or email already exists
-    $checkUser = $conn->prepare("SELECT client_id FROM clients WHERE Username = ? OR Email = ?");
-    $checkUser->bind_param("ss", $username, $email);
-    $checkUser->execute();
-    $checkUser->store_result();
+if ($password !== $confirm) {
+    echo json_encode(["success" => false, "message" => "Passwords do not match."]);
+    exit();
+}
 
-    if ($checkUser->num_rows > 0) {
-        echo json_encode(["success" => false, "message" => "Username or Email already exists"]);
-        exit;
-    }
-    $checkUser->close();
+// Hash password
+$hashed = password_hash($password, PASSWORD_DEFAULT);
 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+// Insert into DB
+$stmt = $conn->prepare("INSERT INTO clients 
+    (First_Name, Last_Name, Username, Email, Phone, Password, Role) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)");
+if (!$stmt) {
+    echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
+    exit();
+}
 
-    $stmt = $conn->prepare("INSERT INTO clients (First_Name, Last_Name, Username, Email, Phone, Password, Role) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $phone, $hashedPassword, $role);
+$stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $phone, $hashed, $role);
 
-    if ($stmt->execute()) {
-        $_SESSION['client_id'] = $stmt->insert_id;
-        $_SESSION['username'] = $username;
-        $_SESSION['role'] = $role;
+if ($stmt->execute()) {
+    // Auto-login user after signup
+    $_SESSION['client_id'] = $stmt->insert_id;
+    $_SESSION['username']  = $username;
+    $_SESSION['role']      = $role;
 
-        echo json_encode(["success" => true, "role" => $role]);
+    $redirect = ($role === 'admin') ? "../html/admin_dashboard.html" : "../html/customer_dashboard.html";
+
+    echo json_encode(["success" => true, "redirect" => $redirect]);
+} else {
+    if (strpos($stmt->error, "Duplicate") !== false) {
+        echo json_encode(["success" => false, "message" => "Username or Email already exists."]);
     } else {
         echo json_encode(["success" => false, "message" => "Error: " . $stmt->error]);
     }
-
-    $stmt->close();
-    $conn->close();
 }
+
+$stmt->close();
+$conn->close();
 ?>

@@ -5,23 +5,45 @@
   <meta charset="UTF-8">
   <title>Auth - Sign In / Sign Up</title>
   <link rel="stylesheet" href="../css/auth.css">
+  <style>
+    /* Popup style */
+    #successPopup {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-size: 16px;
+      z-index: 1000;
+      animation: fadein 0.5s, fadeout 0.5s 1.5s;
+    }
+    @keyframes fadein { from {opacity:0;} to {opacity:1;} }
+    @keyframes fadeout { from {opacity:1;} to {opacity:0;} }
+  </style>
 </head>
 
 <body class="auth">
 
+  <div id="successPopup">Success! Redirecting...</div>
+
   <div class="container">
     <div class="form-box">
       <!-- Sign In -->
-      <form id="signinForm" method="POST">
+      <form id="signinForm">
         <h2>Sign In</h2>
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
         <a href="#">Forgot your password?</a><br><br>
         <button type="submit">SIGN IN</button>
+        <p id="signinError" style="color:red;"></p>
       </form>
 
       <!-- Sign Up -->
-      <form id="signupForm" method="POST">
+      <form id="signupForm">
         <h2>Create Account</h2>
         <input type="text" name="firstName" placeholder="First Name" required>
         <input type="text" name="lastName" placeholder="Last Name" required>
@@ -31,13 +53,14 @@
         <input type="password" name="password" placeholder="Password" required>
         <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
 
-        <label for="Role">Register as</label>
+        <label for="role">Register as</label>
         <select name="role" required>
           <option value="customer">Customer</option>
           <option value="admin">Admin</option>
         </select>
 
         <button type="submit">SIGN UP</button>
+        <p id="signupError" style="color:red;"></p>
       </form>
     </div>
 
@@ -52,8 +75,8 @@
     const signinForm = document.getElementById("signinForm");
     const signupForm = document.getElementById("signupForm");
     const toggleBtn = document.getElementById("toggleBtn");
+    const popup = document.getElementById("successPopup");
 
-    // Toggle forms
     function showSignup(show) {
       if (show) {
         signinForm.style.display = "none";
@@ -78,45 +101,40 @@
       showSignup(isSigninVisible);
     });
 
-    // Handle Sign In
-    signinForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(signinForm);
-      const response = await fetch("../php/login.php", {
-        method: "POST",
-        body: formData
-      });
-      const result = await response.json();
+    function showPopupAndRedirect(redirectUrl) {
+      popup.style.display = "block";
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, 2000);
+    }
 
-      if (result.success) {
-        if (result.role === "admin") {
-          window.location.href = "../pages/admin_dashboard.html";
-        } else {
-          window.location.href = "../pages/customer_dashboard.html";
-        }
+    // AJAX for Sign In
+    signinForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      let res = await fetch("../php/login.php", { method: "POST", body: formData });
+      let data = await res.json();
+
+      if (data.success) {
+        showPopupAndRedirect(data.redirect);
       } else {
-        alert(result.message || "Login failed");
+        document.getElementById("signinError").innerText = data.message;
       }
     });
 
-    // Handle Sign Up
-    signupForm.addEventListener("submit", async (e) => {
+    // AJAX for Sign Up
+    signupForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-      const formData = new FormData(signupForm);
-      const response = await fetch("../php/submit_signup.php", {
-        method: "POST",
-        body: formData
-      });
-      const result = await response.json();
+      const formData = new FormData(this);
 
-      if (result.success) {
-        if (result.role === "admin") {
-          window.location.href = "../pages/admin_dashboard.html";
-        } else {
-          window.location.href = "../pages/customer_dashboard.html";
-        }
+      let res = await fetch("../php/submit_signup.php", { method: "POST", body: formData });
+      let data = await res.json();
+
+      if (data.success) {
+        showPopupAndRedirect(data.redirect);
       } else {
-        alert(result.message || "Signup failed");
+        document.getElementById("signupError").innerText = data.message;
       }
     });
   </script>
