@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Auth - Sign In / Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In / Sign Up - Ron'z Pizza</title>
   <link rel="stylesheet" href="auth.css">
   <style>
     /* minimal inline helpers so it's usable even if CSS missing */
     .hint { font-size: 0.9rem; color: #666; margin-top: 8px; }
+    .loading { opacity: 0.6; pointer-events: none; }
+    .error-text { color: #d32f2f; font-size: 0.9rem; margin-top: 5px; }
   </style>
 </head>
 <body class="auth">
@@ -17,22 +20,23 @@
       <!-- Sign In -->
       <form id="signinForm">
         <h2>Sign In</h2>
-        <input type="text" id="signinUsername" placeholder="Username" required>
-        <input type="password" id="signinPassword" placeholder="Password" required>
-        <a href="#">Forgot your password?</a><br><br>
-        <button type="submit">SIGN IN</button>
+        <div id="signinError" class="error-text" style="display:none;"></div>
+        <input type="email" id="signinEmail" placeholder="Email" required autocomplete="email">
+        <input type="password" id="signinPassword" placeholder="Password" required autocomplete="current-password">
+        <a href="#" style="font-size: 0.9rem;">Forgot your password?</a><br><br>
+        <button type="submit" id="signinBtn">SIGN IN</button>
       </form>
 
       <!-- Sign Up -->
       <form id="signupForm" style="display:none;">
         <h2>Create Account</h2>
-        <input type="text" id="firstName" placeholder="First Name" required>
-        <input type="text" id="lastName" placeholder="Last Name" required>
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="tel" id="phone" placeholder="Phone Number" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <div id="signupError" class="error-text" style="display:none;"></div>
+        <input type="text" id="firstName" placeholder="First Name" required autocomplete="given-name">
+        <input type="text" id="lastName" placeholder="Last Name" required autocomplete="family-name">
+        <input type="text" id="username" placeholder="Username" required autocomplete="username">
+        <input type="email" id="email" placeholder="Email" required autocomplete="email">
+        <input type="password" id="password" placeholder="Password" required autocomplete="new-password" minlength="6">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required autocomplete="new-password">
 
         <!-- ROLE selection -->
         <label for="role">Register as</label>
@@ -41,7 +45,7 @@
           <option value="admin">Admin</option>
         </select>
 
-        <button type="submit">SIGN UP</button>
+        <button type="submit" id="signupBtn">SIGN UP</button>
       </form>
     </div>
 
@@ -53,14 +57,29 @@
     </div>
   </div>
 
+  <script src="js/auth.js"></script>
   <script>
     // Elements
     const signinForm = document.getElementById("signinForm");
     const signupForm = document.getElementById("signupForm");
     const toggleBtn = document.getElementById("toggleBtn");
+    const signinBtn = document.getElementById("signinBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const signinError = document.getElementById("signinError");
+    const signupError = document.getElementById("signupError");
+
+    // Check if already logged in
+    if (Auth.isLoggedIn()) {
+      const user = Auth.getCurrentUser();
+      window.location.href = user.role === 'admin' ? 'admin_dashboard.html' : 'dashboard.html';
+    }
 
     // Toggle function
     function showSignup(show) {
+      // Clear errors
+      signinError.style.display = 'none';
+      signupError.style.display = 'none';
+
       if (show) {
         signinForm.style.display = "none";
         signupForm.style.display = "block";
@@ -82,68 +101,160 @@
     // UI toggle
     toggleBtn.addEventListener("click", () => showSignup(signinForm.style.display !== "none"));
 
+    // Show error message
+    function showError(element, message) {
+      element.textContent = message;
+      element.style.display = 'block';
+    }
+
     // Redirect based on role
     function redirectToDashboard(user) {
       if (user.role === "admin") {
         window.location.href = "admin_dashboard.html";
       } else {
-        window.location.href = "dashboard.html"; // customer dashboard
+        window.location.href = "dashboard.html";
       }
     }
 
     // --- SIGNUP handler ---
-    signupForm.addEventListener("submit", function(e) {
+    signupForm.addEventListener("submit", async function(e) {
       e.preventDefault();
+      signupError.style.display = 'none';
 
-      const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirmPassword").value;
 
       if (password !== confirmPassword) {
-        alert("Passwords do not match.");
+        showError(signupError, "Passwords do not match.");
         return;
       }
 
-      const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
-
-      if (users[username]) {
-        alert("Username already taken. Pick another username.");
+      if (password.length < 6) {
+        showError(signupError, "Password must be at least 6 characters.");
         return;
       }
 
-      const user = {
-        firstName: document.getElementById("firstName").value.trim(),
-        lastName: document.getElementById("lastName").value.trim(),
-        username: username,
-        email: document.getElementById("email").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        password: password,
-        role: document.getElementById("role").value
-      };
+      // Disable button during submission
+      signupBtn.disabled = true;
+      signupBtn.textContent = 'Creating account...';
 
-      users[username] = user;
-      localStorage.setItem("fastfood_users", JSON.stringify(users));
-      localStorage.setItem("fastfood_current", username);
+      const formData = new FormData();
+      formData.append('FirstName', document.getElementById("firstName").value.trim());
+      formData.append('LastName', document.getElementById("lastName").value.trim());
+      formData.append('Username', document.getElementById("username").value.trim());
+      formData.append('Email', document.getElementById("email").value.trim());
+      formData.append('Password', password);
+      formData.append('ConfirmPassword', confirmPassword);
+      formData.append('Role', document.getElementById("role").value);
 
-      redirectToDashboard(user);
+      try {
+        const response = await fetch('submit_signup.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers.get('content-type'));
+
+        if (!response.ok) {
+          throw new Error('Server returned ' + response.status);
+        }
+
+        // Get response text first to debug
+        const responseText = await response.text();
+        console.log('Response text:', responseText);
+
+        // Try to parse JSON
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (jsonError) {
+          console.error('JSON parse error:', jsonError);
+          console.error('Response was:', responseText);
+          throw new Error('Invalid response from server. Check console for details.');
+        }
+        
+        if (data.success) {
+          // Store user in localStorage for frontend auth
+          const user = data.user;
+          
+          const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
+          users[user.username] = user;
+          localStorage.setItem("fastfood_users", JSON.stringify(users));
+          localStorage.setItem("fastfood_current", user.username);
+
+          alert(data.message);
+          redirectToDashboard(user);
+        } else {
+          showError(signupError, data.message || 'Registration failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showError(signupError, error.message || 'Connection error. Please check if XAMPP is running and try again.');
+      } finally {
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'SIGN UP';
+      }
     });
 
     // --- SIGNIN handler ---
-    signinForm.addEventListener("submit", function(e) {
+    signinForm.addEventListener("submit", async function(e) {
       e.preventDefault();
-      const username = document.getElementById("signinUsername").value.trim();
+      signinError.style.display = 'none';
+
+      const email = document.getElementById("signinEmail").value.trim();
       const password = document.getElementById("signinPassword").value;
 
-      const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
-      const user = users[username];
+      // Disable button during submission
+      signinBtn.disabled = true;
+      signinBtn.textContent = 'Signing in...';
 
-      if (!user || user.password !== password) {
-        alert("Invalid username or password.");
-        return;
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
+
+      try {
+        const response = await fetch('login.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const text = await response.text();
+
+        // Check if login was successful (redirects to dashboard.html)
+        if (text.includes('dashboard.html') || response.redirected) {
+          // Also check localStorage auth for frontend
+          const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
+          let user = null;
+
+          // Find user by email
+          for (const username in users) {
+            if (users[username].email === email) {
+              user = users[username];
+              localStorage.setItem("fastfood_current", username);
+              break;
+            }
+          }
+
+          // If not in localStorage, create minimal user object
+          if (!user) {
+            user = { email, role: 'customer' };
+          }
+
+          redirectToDashboard(user);
+        } else {
+          // Extract error message
+          const match = text.match(/alert\('([^']+)'\)/);
+          const errorMsg = match ? match[1] : 'Invalid email or password.';
+          showError(signinError, errorMsg);
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showError(signinError, 'Network error. Please check your connection.');
+      } finally {
+        signinBtn.disabled = false;
+        signinBtn.textContent = 'SIGN IN';
       }
-
-      localStorage.setItem("fastfood_current", username);
-      redirectToDashboard(user);
     });
   </script>
 

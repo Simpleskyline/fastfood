@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Signup Fetch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    .error {
+      background: #ffebee;
+      border-color: #f44336;
+      color: #c62828;
+    }
+    .success {
+      background: #e8f5e9;
+      border-color: #4CAF50;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test Signup Endpoint</h1>
+  <p>This will test if the signup endpoint is working correctly.</p>
+  
+  <button onclick="testSignup()">Test Signup</button>
+  
+  <div id="result"></div>
+
+  <script>
+    async function testSignup() {
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = 'Testing...';
+      resultDiv.className = '';
+      
+      const formData = new FormData();
+      const timestamp = Date.now();
+      formData.append('FirstName', 'Test');
+      formData.append('LastName', 'User');
+      formData.append('Username', 'testuser' + timestamp);
+      formData.append('Email', 'test' + timestamp + '@example.com');
+      formData.append('Password', 'password123');
+      formData.append('ConfirmPassword', 'password123');
+      formData.append('Role', 'customer');
+
+      try {
+        console.log('Sending request to submit_signup.php...');
+        
+        const response = await fetch('submit_signup.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        console.log('Response received');
+        console.log('Status:', response.status);
+        console.log('Status Text:', response.statusText);
+        console.log('Content-Type:', response.headers.get('content-type'));
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseText = await response.text();
+        console.log('Response text:', responseText);
+
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (e) {
+          resultDiv.className = 'error';
+          resultDiv.textContent = 'JSON Parse Error:\n' + e.message + '\n\nResponse was:\n' + responseText;
+          return;
+        }
+
+        if (data.success) {
+          resultDiv.className = 'success';
+          resultDiv.textContent = '✅ SUCCESS!\n\n' + JSON.stringify(data, null, 2);
+        } else {
+          resultDiv.className = 'error';
+          resultDiv.textContent = '❌ FAILED\n\n' + JSON.stringify(data, null, 2);
+        }
+
+      } catch (error) {
+        console.error('Error:', error);
+        resultDiv.className = 'error';
+        resultDiv.textContent = '❌ ERROR:\n' + error.message + '\n\nCheck browser console for more details.';
+      }
+    }
+  </script>
+</body>
+</html>

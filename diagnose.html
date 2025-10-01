@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connection Diagnostics</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 { color: #333; margin-top: 0; }
+    h2 { color: #555; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+    .test-item {
+      padding: 10px;
+      margin: 10px 0;
+      border-left: 4px solid #ccc;
+      background: #f9f9f9;
+    }
+    .test-item.pending { border-color: #2196F3; }
+    .test-item.success { border-color: #4CAF50; background: #e8f5e9; }
+    .test-item.error { border-color: #f44336; background: #ffebee; }
+    .test-item.warning { border-color: #ff9800; background: #fff3e0; }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px 10px 0;
+    }
+    button:hover { background: #45a049; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 13px;
+    }
+    .icon { font-size: 20px; margin-right: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔍 FastFood Connection Diagnostics</h1>
+    <p>This tool will help diagnose why signup is failing.</p>
+  </div>
+
+  <div class="card">
+    <h2>Step 1: Environment Check</h2>
+    <div id="env-checks"></div>
+  </div>
+
+  <div class="card">
+    <h2>Step 2: Server Tests</h2>
+    <button onclick="runAllTests()">Run All Tests</button>
+    <div id="server-tests"></div>
+  </div>
+
+  <div class="card">
+    <h2>Step 3: Signup Test</h2>
+    <button onclick="testSignup()">Test Signup Flow</button>
+    <div id="signup-test"></div>
+  </div>
+
+  <script>
+    // Step 1: Environment checks
+    function checkEnvironment() {
+      const envDiv = document.getElementById('env-checks');
+      const checks = [];
+
+      // Check current URL
+      const currentUrl = window.location.href;
+      const isLocalhost = currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1');
+      checks.push({
+        name: 'Current URL',
+        status: isLocalhost ? 'success' : 'error',
+        message: currentUrl,
+        fix: isLocalhost ? null : 'Access via http://localhost/fastfood/diagnose.html'
+      });
+
+      // Check protocol
+      const isHttp = window.location.protocol === 'http:';
+      checks.push({
+        name: 'Protocol',
+        status: isHttp ? 'success' : 'warning',
+        message: window.location.protocol,
+        fix: isHttp ? null : 'Should use http:// not file:// or https://'
+      });
+
+      // Check fetch API
+      checks.push({
+        name: 'Fetch API',
+        status: typeof fetch !== 'undefined' ? 'success' : 'error',
+        message: typeof fetch !== 'undefined' ? 'Available' : 'Not available',
+        fix: typeof fetch !== 'undefined' ? null : 'Update your browser'
+      });
+
+      // Check localStorage
+      checks.push({
+        name: 'LocalStorage',
+        status: typeof localStorage !== 'undefined' ? 'success' : 'error',
+        message: typeof localStorage !== 'undefined' ? 'Available' : 'Not available',
+        fix: typeof localStorage !== 'undefined' ? null : 'Enable localStorage in browser settings'
+      });
+
+      // Render checks
+      envDiv.innerHTML = checks.map(check => `
+        <div class="test-item ${check.status}">
+          <strong>${check.status === 'success' ? '✅' : check.status === 'error' ? '❌' : '⚠️'} ${check.name}:</strong> ${check.message}
+          ${check.fix ? `<br><small>Fix: ${check.fix}</small>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // Step 2: Server tests
+    async function runAllTests() {
+      const testsDiv = document.getElementById('server-tests');
+      testsDiv.innerHTML = '<div class="test-item pending">Running tests...</div>';
+
+      const tests = [
+        { name: 'Test 1: Basic Connectivity', url: 'test_connection.php' },
+        { name: 'Test 2: Database Setup', url: 'setup_database.php' },
+        { name: 'Test 3: Signup Endpoint', url: 'submit_signup.php' }
+      ];
+
+      let results = [];
+
+      for (const test of tests) {
+        try {
+          const response = await fetch(test.url, {
+            method: 'GET',
+            cache: 'no-cache'
+          });
+
+          results.push({
+            name: test.name,
+            status: response.ok ? 'success' : 'error',
+            message: `Status: ${response.status} ${response.statusText}`,
+            url: test.url
+          });
+        } catch (error) {
+          results.push({
+            name: test.name,
+            status: 'error',
+            message: `Error: ${error.message}`,
+            url: test.url,
+            details: error.toString()
+          });
+        }
+      }
+
+      testsDiv.innerHTML = results.map(result => `
+        <div class="test-item ${result.status}">
+          <strong>${result.status === 'success' ? '✅' : '❌'} ${result.name}</strong><br>
+          <small>URL: <code>${result.url}</code></small><br>
+          ${result.message}
+          ${result.details ? `<br><small>${result.details}</small>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // Step 3: Signup test
+    async function testSignup() {
+      const signupDiv = document.getElementById('signup-test');
+      signupDiv.innerHTML = '<div class="test-item pending">Testing signup...</div>';
+
+      const formData = new FormData();
+      const timestamp = Date.now();
+      formData.append('FirstName', 'Test');
+      formData.append('LastName', 'User');
+      formData.append('Username', 'test' + timestamp);
+      formData.append('Email', 'test' + timestamp + '@example.com');
+      formData.append('Password', 'password123');
+      formData.append('ConfirmPassword', 'password123');
+      formData.append('Role', 'customer');
+
+      let log = [];
+      log.push(`Timestamp: ${new Date().toISOString()}`);
+      log.push(`Testing URL: ${window.location.origin}/fastfood/submit_signup.php`);
+      log.push(`Form data prepared`);
+
+      try {
+        log.push(`Sending fetch request...`);
+        const response = await fetch('submit_signup.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        log.push(`Response received`);
+        log.push(`Status: ${response.status} ${response.statusText}`);
+        log.push(`Content-Type: ${response.headers.get('content-type')}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const responseText = await response.text();
+        log.push(`Response length: ${responseText.length} bytes`);
+        log.push(`Response preview: ${responseText.substring(0, 200)}...`);
+
+        let data;
+        try {
+          data = JSON.parse(responseText);
+          log.push(`JSON parsed successfully`);
+        } catch (jsonError) {
+          log.push(`JSON parse failed: ${jsonError.message}`);
+          throw new Error('Invalid JSON response');
+        }
+
+        if (data.success) {
+          signupDiv.innerHTML = `
+            <div class="test-item success">
+              <h3>✅ SUCCESS!</h3>
+              <p>Signup is working correctly!</p>
+              <pre>${JSON.stringify(data, null, 2)}</pre>
+              <details>
+                <summary>View detailed log</summary>
+                <pre>${log.join('\n')}</pre>
+              </details>
+            </div>
+          `;
+        } else {
+          signupDiv.innerHTML = `
+            <div class="test-item error">
+              <h3>❌ Signup Failed</h3>
+              <p><strong>Error:</strong> ${data.message}</p>
+              <pre>${JSON.stringify(data, null, 2)}</pre>
+              <details>
+                <summary>View detailed log</summary>
+                <pre>${log.join('\n')}</pre>
+              </details>
+            </div>
+          `;
+        }
+
+      } catch (error) {
+        log.push(`ERROR: ${error.message}`);
+        log.push(`Error type: ${error.name}`);
+        log.push(`Stack: ${error.stack}`);
+
+        signupDiv.innerHTML = `
+          <div class="test-item error">
+            <h3>❌ Connection Failed</h3>
+            <p><strong>Error:</strong> ${error.message}</p>
+            
+            <h4>Common Causes:</h4>
+            <ul>
+              <li><strong>XAMPP Apache not running:</strong> Start Apache in XAMPP Control Panel</li>
+              <li><strong>Wrong URL:</strong> Access via http://localhost/fastfood/diagnose.html</li>
+              <li><strong>File doesn't exist:</strong> Check if submit_signup.php exists</li>
+              <li><strong>Browser blocking:</strong> Check browser console for CORS errors</li>
+            </ul>
+
+            <details>
+              <summary>View detailed log</summary>
+              <pre>${log.join('\n')}</pre>
+            </details>
+
+            <h4>Next Steps:</h4>
+            <ol>
+              <li>Open XAMPP Control Panel</li>
+              <li>Make sure Apache is running (green)</li>
+              <li>Refresh this page</li>
+              <li>Click "Test Signup Flow" again</li>
+            </ol>
+          </div>
+        `;
+      }
+    }
+
+    // Run environment checks on load
+    window.addEventListener('DOMContentLoaded', checkEnvironment);
+  </script>
+</body>
+</html>

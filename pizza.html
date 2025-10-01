@@ -2,28 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pizza Varieties</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizza - Ron'z Pizza</title>
   <link rel="stylesheet" href="dashboard.css" />
-
-<!-- This script manages a shopping cart by adding items to local storage, -->
-  <script>
-    function addToCart(item) {
-      let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
-      const existingItem = cartItems.find(i => i.id === item.id);
-      if (existingItem) {
-        existingItem.quantity++;
-      } else {
-        cartItems.push({ ...item, quantity: 1 });
-      }
-      localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-      alert(item.name + " added to cart!");
-    }
-  </script>
-
 </head>
 <body>
   <header>
     <h1>🍕 Pizza Varieties</h1>
+    <button onclick="window.location.href='dashboard.html'" style="margin: 10px;">← Back to Menu</button>
   </header>
   <main>
 
@@ -51,5 +37,18 @@
       <button onclick="addToCart({id: 24, name: 'Extra Large-size Pizza', price: 1500})">Add to Cart</button>
     </div>
   </main>
+
+  <script src="js/cart.js"></script>
+  <script src="js/ui-helpers.js"></script>
+  <script>
+    function addToCart(item) {
+      if (Cart.addItem(item)) {
+        UI.showToast(`${item.name} added to cart!`, 'success', 2000);
+      }
+    }
+
+    // Expose to global scope
+    window.addToCart = addToCart;
+  </script>
 </body>
 </html>
