@@ -1,116 +1,127 @@
-     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+/* Global Reset & Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-    body.auth {
-      background: #f0f2f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
+body.auth {
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
 
-    .container {
-      width: 800px;
-      height: 600px;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      display: flex;
-      overflow: hidden;
-      position: relative;
-    }
+/* Main Container */
+.container {
+  width: 800px;
+  height: 600px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
 
-    .form-box {
-      flex: 1;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      transition: 0.5s;
-    }
+/* Form Section */
+.form-box {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
 
-    .form-box h2 {
-      margin-bottom: 20px;
-      color: #333;
-    }
+.form-box h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.5rem;
+}
 
-    .form-box input {
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      outline: none;
-    }
+.form-box input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+}
 
-    .form-box button {
-      margin-top: 15px;
-      padding: 12px;
-      background: #ff5722;
-      border: none;
-      color: white;
-      font-weight: bold;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+.form-box button {
+  margin-top: 15px;
+  padding: 12px;
+  background: #ff5722;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-    .form-box button:hover {
-      background: #e64a19;
-    }
+.form-box button:hover {
+  background: #e64a19;
+}
 
-    .form-box a {
-      font-size: 14px;
-      color: #555;
-      text-decoration: none;
-    }
+.form-box a {
+  font-size: 14px;
+  color: #555;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+}
 
-    .form-box a:hover {
-      text-decoration: underline;
-    }
+.form-box a:hover {
+  text-decoration: underline;
+}
 
-    /* Toggle Panel */
-    .panel {
-      flex: 1;
-      background: linear-gradient(to right, #ff416c, #ff4b2b);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-    }
+/* Gradient Panel Section */
+.panel {
+  flex: 1;
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
 
-    .panel h2 {
-      margin-bottom: 10px;
-    }
+.panel h2 {
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
 
-    .panel p {
-      margin-bottom: 20px;
-    }
+.panel p {
+  margin-bottom: 20px;
+  font-size: 14px;
+}
 
-    .btn-outline {
-      padding: 10px 25px;
-      border: 2px solid white;
-      border-radius: 25px;
-      background: transparent;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.3s, color 0.3s;
-    }
+/* Outline Button (for switch between login/signup) */
+.btn-outline {
+  padding: 10px 25px;
+  border: 2px solid #fff;
+  border-radius: 25px;
+  background: transparent;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
 
-    .btn-outline:hover {
-      background: white;
-      color: #ff4b2b;
-    }
+.btn-outline:hover {
+  background: #fff;
+  color: #ff4b2b;
+}
 
-    /* Hide/Show Forms */
-    #signupForm {
-      display: none;
-    }
+/* Toggle Login/Signup Forms */
+#signupForm {
+  display: none;
+}
