@@ -88,97 +88,145 @@
   </div>
 
   <script>
-    const signinForm = document.getElementById("signinForm");
-    const signupForm = document.getElementById("signupForm");
-    const toggleBtn = document.getElementById("toggleBtn");
-    const popup = document.getElementById("successPopup");
+  // Simple CSRF token example (generate via PHP session and echo into a hidden input)
+  const signinForm = document.getElementById("signinForm");
+  const signupForm = document.getElementById("signupForm");
+  const toggleBtn = document.getElementById("toggleBtn");
+  const popup = document.getElementById("successPopup");
 
-    function showSignup(show) {
-      if (show) {
-        signinForm.style.display = "none";
-        signupForm.style.display = "block";
-        toggleBtn.textContent = "SIGN IN";
-        document.getElementById("panelTitle").textContent = "Welcome Back!";
-        document.getElementById("panelText").textContent =
-          "To keep connected please sign in with your details.";
+  // Utility: Disable form during submission
+  function setLoading(form, isLoading) {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = isLoading;
+    submitBtn.textContent = isLoading ? 'Processing...' : (form.id === 'signinForm' ? 'SIGN IN' : 'SIGN UP');
+  }
+
+  // Client-side validation for sign-up
+  function validateSignup(form) {
+    const password = form.querySelector('input[name="password"]').value;
+    const confirmPassword = form.querySelector('input[name="confirmPassword"]').value;
+    const email = form.querySelector('input[name="email"]').value;
+    const errorEl = document.getElementById("signupError");
+
+    if (password !== confirmPassword) {
+      errorEl.innerText = "Passwords do not match.";
+      return false;
+    }
+    if (password.length < 8) {
+      errorEl.innerText = "Password must be at least 8 characters.";
+      return false;
+    }
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      errorEl.innerText = "Invalid email format.";
+      return false;
+    }
+    errorEl.innerText = "";
+    return true;
+  }
+
+  function showSignup(show) {
+    if (show) {
+      signinForm.style.display = "none";
+      signupForm.style.display = "block";
+      toggleBtn.textContent = "SIGN IN";
+      document.getElementById("panelTitle").textContent = "Welcome Back!";
+      document.getElementById("panelText").textContent =
+        "To keep connected please sign in with your details.";
+    } else {
+      signinForm.style.display = "block";
+      signupForm.style.display = "none";
+      toggleBtn.textContent = "SIGN UP";
+      document.getElementById("panelTitle").textContent = "Hello, Friend!";
+      document.getElementById("panelText").textContent =
+        "Enter your personal details and start your journey with us";
+    }
+  }
+
+  // Initial state
+  showSignup(false);
+
+  toggleBtn.addEventListener("click", () => {
+    const isSigninVisible = signinForm.style.display !== "none";
+    showSignup(isSigninVisible);
+  });
+
+  function showPopupAndRedirect(redirectUrl) {
+    popup.style.display = "block";
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 2000);
+  }
+
+  // Helper to safely parse JSON
+  function safeJsonParse(text) {
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      console.error("Invalid JSON response:", text);
+      return { success: false, message: "Server error: Invalid response format." };
+    }
+  }
+
+  // AJAX for Sign In
+  signinForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    setLoading(this, true);
+    const formData = new FormData(this);
+    const errorEl = document.getElementById("signinError");
+
+    try {
+      let res = await fetch("../php/login.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      let text = await res.text();
+      console.log("Login raw response:", text);
+
+      let data = safeJsonParse(text);
+      if (data.success) {
+        showPopupAndRedirect(data.redirect || "/dashboard.html"); // Fallback redirect
       } else {
-        signinForm.style.display = "block";
-        signupForm.style.display = "none";
-        toggleBtn.textContent = "SIGN UP";
-        document.getElementById("panelTitle").textContent = "Hello, Friend!";
-        document.getElementById("panelText").textContent =
-          "Enter your personal details and start your journey with us";
+        errorEl.innerText = data.message || "Login failed.";
       }
+    } catch (err) {
+      console.error("Login fetch error:", err);
+      errorEl.innerText = "Network error. Please try again.";
+    } finally {
+      setLoading(this, false);
     }
+  });
 
-    // initial state
-    showSignup(false);
+  // AJAX for Sign Up
+  signupForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (!validateSignup(this)) return; // Client-side validation
+    setLoading(this, true);
+    const formData = new FormData(this);
+    const errorEl = document.getElementById("signupError");
 
-    toggleBtn.addEventListener("click", () => {
-      const isSigninVisible = signinForm.style.display !== "none";
-      showSignup(isSigninVisible);
-    });
+    try {
+      let res = await fetch("../php/submit_signup.php", {
+        method: "POST",
+        body: formData,
+      });
 
-    function showPopupAndRedirect(redirectUrl) {
-      popup.style.display = "block";
-      setTimeout(() => {
-        window.location.href = redirectUrl;
-      }, 2000);
+      let text = await res.text();
+      console.log("Signup raw response:", text);
+
+      let data = safeJsonParse(text);
+      if (data.success) {
+        showPopupAndRedirect(data.redirect || "/dashboard.html"); // Fallback redirect
+      } else {
+        errorEl.innerText = data.message || "Signup failed.";
+      }
+    } catch (err) {
+      console.error("Signup fetch error:", err);
+      errorEl.innerText = "Network error. Please try again.";
+    } finally {
+      setLoading(this, false);
     }
-
-    // AJAX for Sign In
-    signinForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-
-      try {
-        let res = await fetch("../php/login.php", {
-          method: "POST",
-          body: formData,
-        });
-
-        let text = await res.text();
-        console.log("Login raw response:", text);
-
-        let data = JSON.parse(text);
-        if (data.success) {
-          showPopupAndRedirect(data.redirect);
-        } else {
-          document.getElementById("signinError").innerText = data.message;
-        }
-      } catch (err) {
-        console.error("Login fetch error:", err);
-        document.getElementById("signinError").innerText =
-          "Login failed. Check console.";
-      }
-    });
-
-    // AJAX for Sign Up
-    signupForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-
-      try {
-        let res = await fetch("../php/submit_signup.php", {
-          method: "POST",
-          body: formData,
-        });
-
-        let text = await res.text();
-        console.log("Signup raw response:", text);
-
-        let data = JSON.parse(text);
-        if (data.success) {
-          showPopupAndRedirect(data.redirect);
-        } else {
-          document.getElementById("signupError").innerText = data.message;
-        }
-      } catch (err) {
-        console.error("Signup fetch error:", err);
-        document.getElementById("signupError").innerText =
-          "Signup failed. Check console.";
-      }
-    });
-  </script>
+  });
+</script>
 </body>
 </html>
