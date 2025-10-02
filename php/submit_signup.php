@@ -1,5 +1,7 @@
 <?php
+// Force JSON output
 header("Content-Type: application/json");
+error_reporting(0); // Hide warnings/notices from breaking JSON
 session_start();
 
 $servername = "localhost";
@@ -11,28 +13,24 @@ $dbname     = "fastfood";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    echo json_encode(["success" => false, "message" => "DB connection failed: " . $conn->connect_error]);
+    echo json_encode(["success" => false, "message" => "DB connection failed"]);
     exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get JSON input
-    $data = json_decode(file_get_contents("php://input"), true);
+    $firstName = trim($_POST['firstName'] ?? '');
+    $lastName  = trim($_POST['lastName'] ?? '');
+    $username  = trim($_POST['username'] ?? '');
+    $email     = trim($_POST['email'] ?? '');
+    $phone     = trim($_POST['phone'] ?? '');
+    $password  = $_POST['password'] ?? '';
+    $role      = $_POST['role'] ?? 'customer';
 
-    if (!$data) {
-        echo json_encode(["success" => false, "message" => "Invalid input."]);
+    if (empty($username) || empty($email) || empty($password)) {
+        echo json_encode(["success" => false, "message" => "Missing required fields"]);
         exit();
     }
 
-    $firstName = $data['firstName'] ?? '';
-    $lastName  = $data['lastName'] ?? '';
-    $username  = $data['username'] ?? '';
-    $email     = $data['email'] ?? '';
-    $phone     = $data['phone'] ?? '';
-    $password  = $data['password'] ?? '';
-    $role      = $data['role'] ?? 'customer';
-
-    // Hash password
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
     // Check if username/email exists
@@ -58,9 +56,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['username']  = $username;
         $_SESSION['role']      = $role;
 
-        echo json_encode(["success" => true, "message" => "Signup successful", "redirect" => "../html/customer_dashboard.html"]);
+        echo json_encode([
+            "success"  => true,
+            "message"  => "Signup successful",
+            "redirect" => "../html/customer_dashboard.html"
+        ]);
     } else {
-        echo json_encode(["success" => false, "message" => "Signup failed: " . $stmt->error]);
+        echo json_encode(["success" => false, "message" => "Signup failed."]);
     }
 
     $stmt->close();
