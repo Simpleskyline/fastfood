@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   }
 
   // Query the clients table
-  $sql = "SELECT * FROM clients WHERE Username=?";
+  $sql = "SELECT client_id, Username, Role, Password FROM clients WHERE Username=?"; // Select only necessary columns
   $stmt = $conn->prepare($sql);
   if (!$stmt) {
     echo json_encode(["success" => false, "message" => "SQL error: " . $conn->error]);
@@ -43,7 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Verify password
     if (password_verify($pass, $row['Password'])) {
-      $_SESSION['client_id'] = $row['Client_ID'];
+      // 🐛 FIX: Standardize session keys to lowercase for consistency
+      $_SESSION['client_id'] = $row['client_id'];
       $_SESSION['username']  = $row['Username'];
       $_SESSION['role']      = $row['Role'];
 
