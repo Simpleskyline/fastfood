@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       if ($row['Role'] === 'admin') {
         echo json_encode(["success" => true, "redirect" => "../html/admin_dashboard.html"]);
       } else {
-        echo json_encode(["success" => true, "redirect" => "../html/customer_dashboard.html"]);
+        echo json_encode(["success" => true, "redirect" => "../html/dashboard.html"]);
       }
       exit();
     } else {
