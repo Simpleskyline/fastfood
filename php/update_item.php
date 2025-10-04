@@ -1,52 +1,77 @@
 <?php
-session_start();
 header('Content-Type: application/json');
-require_once 'db.php';
+require 'db.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    http_response_code(405);
-    echo json_encode(["success" => false, "message" => "Method not allowed."]);
-    exit();
-}
+// Get JSON input
+$input = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($_SESSION['client_id']) || $_SESSION['role'] !== 'admin') {
-    http_response_code(403);
-    echo json_encode(["success" => false, "message" => "Access denied. Admin role required."]);
+if (!isset($input['order_id']) || !isset($input['status'])) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Missing order_id or status'
+    ]);
     $conn->close();
     exit();
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
-$id        = (int)($data['id'] ?? 0);
-$name      = trim($data['name'] ?? '');
-$price     = floatval($data['price'] ?? 0);
-$available = (int)($data['available'] ?? 0);
+$orderId = (int)$input['order_id'];
+$status = trim($input['status']);
 
-if ($id === 0 || empty($name) || $price <= 0) {
+// Validate status
+$validStatuses = ['Pending', 'Processing', 'Completed', 'Cancelled'];
+if (!in_array($status, $validStatuses)) {
     http_response_code(400);
-    echo json_encode(["success" => false, "message" => "Invalid item ID, name, or price provided."]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid status. Must be: Pending, Processing, Completed, or Cancelled'
+    ]);
     $conn->close();
     exit();
 }
 
 try {
-    $stmt = $conn->prepare("UPDATE items SET name = ?, price = ?, available = ? WHERE id = ?");
-    $stmt->bind_param("sdis", $name, $price, $available, $id);
+    // Check if order exists
+    $checkSql = "SELECT order_id FROM orders WHERE order_id = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->bind_param("i", $orderId);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
+    
+    if ($checkResult->num_rows === 0) {
+        http_response_code(404);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Order not found'
+        ]);
+        $checkStmt->close();
+        $conn->close();
+        exit();
+    }
+    $checkStmt->close();
+    
+    // Update order status
+    $sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $status, $orderId);
     
     if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0 || $stmt->warning_count > 0) {
-            echo json_encode(["success" => true, "message" => "Menu item updated."]);
-        } else {
-            echo json_encode(["success" => false, "message" => "Item found, but no changes were made."]);
-        }
+        echo json_encode([
+            'success' => true,
+            'message' => "Order #$orderId status updated to $status"
+        ]);
     } else {
-        http_response_code(500);
-        echo json_encode(["success" => false, "message" => "Failed to update item: " . $stmt->error]);
+        throw new Exception($stmt->error);
     }
+    
     $stmt->close();
+    
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Server error: " . $e->getMessage()]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error: ' . $e->getMessage()
+    ]);
 }
 
 $conn->close();
