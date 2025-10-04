@@ -27,7 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   }
 
   // Query the clients table
-  $sql = "SELECT client_id, Username, Role, Password FROM clients WHERE Username=?"; // Select only necessary columns
+  // Select the Role column to use for redirection
+  $sql = "SELECT client_id, Username, Role, Password FROM clients WHERE Username=?"; 
   $stmt = $conn->prepare($sql);
   if (!$stmt) {
     echo json_encode(["success" => false, "message" => "SQL error: " . $conn->error]);
@@ -43,12 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Verify password
     if (password_verify($pass, $row['Password'])) {
-      // 🐛 FIX: Standardize session keys to lowercase for consistency
+      // Set session variables
       $_SESSION['client_id'] = $row['client_id'];
       $_SESSION['username']  = $row['Username'];
       $_SESSION['role']      = $row['Role'];
 
-      // Send success JSON with redirect URL
+      // Send success JSON with redirect URL based on stored role
       if ($row['Role'] === 'admin') {
         echo json_encode(["success" => true, "redirect" => "../html/admin_dashboard.html"]);
       } else {
