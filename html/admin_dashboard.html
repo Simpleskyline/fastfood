@@ -3,31 +3,182 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - Ronz Pizza</title>
-  <link rel="stylesheet" href="../css/admin.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary: #EF4444; /* Red 500 */
+      --secondary: #FDE047; /* Yellow 200 */
+      --bg-light: #F9FAFB;
+      --text-dark: #1F2937;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    /* Basic Container and Typography */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    h1 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      font-weight: 800;
+    }
+
+    section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 0.5rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    thead th {
+      background-color: var(--primary);
+      color: white;
+      padding: 0.75rem 0.5rem;
+      text-align: left;
+      border: 1px solid #E5E7EB;
+    }
+    
+    tbody tr:nth-child(even) {
+      background-color: #F3F4F6;
+    }
+
+    tbody td {
+      padding: 0.75rem 0.5rem;
+      border: 1px solid #E5E7EB;
+    }
+    
+    /* Buttons */
+    button {
+      background-color: var(--primary);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background-color 0.2s;
+      margin-right: 0.5rem;
+    }
+
+    button:hover {
+      background-color: #DC2626; /* Red 600 */
+    }
+
+    .action-btn-group button {
+        margin: 0.25rem 0.25rem 0.25rem 0;
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .status-pending { color: orange; font-weight: bold; }
+    .status-processing { color: blue; font-weight: bold; }
+    .status-completed { color: green; font-weight: bold; }
+    .status-cancelled { color: red; font-weight: bold; }
+
+    /* Custom Alert/Prompt Styling */
+    .action-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .action-row select {
+        padding: 4px;
+        border-radius: 4px;
+        border: 1px solid #D1D5DB;
+    }
+
+    /* Message Box */
+    #messageBox {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      text-align: center;
+      min-width: 300px;
+    }
+    #messageBox button {
+      margin-top: 15px;
+      background-color: #4CAF50;
+    }
+  </style>
 </head>
 
-<body>
+<body class="container">
+
   <h1>🍕 Ronz Pizza Admin Dashboard</h1>
 
- 
+  <div id="messageBox">
+    <p id="messageText"></p>
+    <button onclick="hideMessage()">OK</button>
+  </div>
+
   <section>
-    <h2>Users</h2>
-    <table border="1"> 
+    <h2>Users (Customers only)</h2>
+    <table class="min-w-full"> 
       <thead>
-        <tr><th>ID</th><th>Name</th><th>Email</th><th>Created At</th><th>Actions</th></tr>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody id="usersTable"></tbody>
     </table>
-    <button onclick="showAddUser()">Add User</button>
+    <div class="mt-4">
+      <button onclick="showAddUser()">Add New User</button>
+    </div>
   </section>
 
   
   <section>
     <h2>Orders</h2>
-    <table border="1">
+    <table class="min-w-full">
       <thead>
-        <tr><th>ID</th><th>User</th><th>Total</th><th>Status</th><th>Created At</th></tr>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Total (Ksh)</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody id="ordersTable"></tbody>
     </table>
@@ -36,145 +187,296 @@
   
   <section>
     <h2>Menu Items</h2>
-    <table border="1">
+    <table class="min-w-full">
       <thead>
-        <tr><th>ID</th><th>Name</th><th>Price</th><th>Available</th><th>Actions</th></tr>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Price (Ksh)</th>
+          <th>Available</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody id="itemsTable"></tbody>
     </table>
-    <button onclick="showAddItem()">Add Item</button>
+    <div class="mt-4">
+      <button onclick="showAddItem()">Add New Item</button>
+    </div>
   </section>
 
   <script>
-    function loadUsers() {
-      fetch("get_users.php")
-        .then(res => res.json())
-        .then(data => {
-          const tbody = document.getElementById("usersTable");
-          tbody.innerHTML = "";
-          data.users.forEach(u => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${u.id}</td>
-              <td>${u.name}</td>
-              <td>${u.email}</td>
-              <td>${u.created_at}</td>
-              <td><button onclick="deleteUser(${u.id})">Delete</button></td>
-            `;
-            tbody.appendChild(tr);
-          });
+    const API_PATH = '../php/';
+
+    // Utility function for custom message box
+    function showMessage(text) {
+      document.getElementById('messageText').textContent = text;
+      document.getElementById('messageBox').style.display = 'block';
+    }
+
+    function hideMessage() {
+      document.getElementById('messageBox').style.display = 'none';
+    }
+
+    // Utility for Fetch API calls
+    async function apiCall(endpoint, method = 'GET', data = null) {
+      const url = API_PATH + endpoint;
+      const options = {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      if (data) {
+        options.body = JSON.stringify(data);
+      }
+
+      try {
+        const res = await fetch(url, options);
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const text = await res.text();
+        if (!text) return { success: true, message: 'Action successful' }; // Handle 204 No Content
+        return JSON.parse(text);
+      } catch (error) {
+        console.error("API Call Error:", error);
+        showMessage(`A network error occurred: ${error.message}. Check console for details.`);
+        return { success: false, message: `Network Error: ${error.message}` };
+      }
+    }
+    
+    // --- USER MANAGEMENT ---
+
+    async function loadUsers() {
+      const result = await apiCall("get_users.php");
+      const tbody = document.getElementById("usersTable");
+      tbody.innerHTML = "";
+      
+      if (result.success && result.users) {
+        result.users.forEach(u => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${u.client_id}</td>
+            <td>${u.First_Name} ${u.Last_Name}</td>
+            <td>${u.Email}</td>
+            <td>${u.Role}</td>
+            <td>${u.created_at.substring(0, 10)}</td>
+            <td>
+              <button onclick="deleteUser(${u.client_id})">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
         });
+      } else {
+        tbody.innerHTML = `<tr><td colspan="6">${result.message || 'Failed to load users.'}</td></tr>`;
+      }
     }
 
     function showAddUser() {
-      const name = prompt("Enter user name:");
-      const email = prompt("Enter user email:");
-      const password = prompt("Enter password:");
-      if (!name || !email || !password) return;
-      fetch("add_user.php", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ name, email, password })
-      }).then(() => loadUsers());
+      // FIX: Robust check for null (Cancel) or empty strings after every prompt
+      const firstName = prompt("Enter user's First Name:");
+      if (!firstName || firstName.trim() === '') {
+        if (firstName !== null) showMessage("First Name is required.");
+        return;
+      }
+      
+      const lastName = prompt("Enter user's Last Name:");
+      if (!lastName || lastName.trim() === '') {
+        if (lastName !== null) showMessage("Last Name is required.");
+        return;
+      }
+
+      const username = prompt("Enter username:");
+      if (!username || username.trim() === '') {
+        if (username !== null) showMessage("Username is required.");
+        return;
+      }
+
+      const email = prompt("Enter email:");
+      if (!email || email.trim() === '') {
+        if (email !== null) showMessage("Email is required.");
+        return;
+      }
+
+      const password = prompt("Enter password (min 8 chars):");
+      // Check for password length
+      if (!password || password.length < 8) {
+        if (password !== null) showMessage("Password must be at least 8 characters long.");
+        return;
+      }
+
+      const role = prompt("Enter role (customer or admin):", "customer");
+      // Default to customer if role is cancelled or left blank
+      const finalRole = role ? role.toLowerCase().trim() : 'customer';
+
+      
+      apiCall("add_user.php", "POST", { 
+          firstName, 
+          lastName, 
+          username, 
+          email, 
+          password, 
+          role: finalRole 
+      }).then(res => {
+        if (res.success) {
+          showMessage("User added successfully.");
+          loadUsers();
+        } else {
+          // Display the error message returned from the server (e.g., duplicate user, specific validation error)
+          showMessage(res.message);
+        }
+      });
     }
 
     function deleteUser(id) {
-      if (!confirm("Delete this user?")) return;
-      fetch("delete_user.php", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ id })
-      }).then(() => loadUsers());
+      if (!confirm("Are you sure you want to permanently delete this user?")) return;
+      apiCall("delete_user.php", "POST", { client_id: id }).then(res => {
+        if (res.success) {
+          showMessage(`User ID ${id} deleted.`);
+          loadUsers();
+        } else {
+          showMessage(res.message);
+        }
+      });
     }
 
+    // --- ORDER MANAGEMENT ---
+
+    async function updateOrderStatus(orderId, newStatus) {
+        const result = await apiCall("update_order_status.php", "POST", { order_id: orderId, status: newStatus });
+        if (result.success) {
+            showMessage(`Order ID ${orderId} status updated to ${newStatus}.`);
+            loadOrders();
+        } else {
+            showMessage(result.message);
+        }
+    }
     
-    function loadOrders() {
-      fetch("get_orders.php")
-        .then(res => res.json())
-        .then(data => {
-          const tbody = document.getElementById("ordersTable");
-          tbody.innerHTML = "";
-          data.orders.forEach(o => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${o.id}</td>
-              <td>${o.user}</td>
-              <td>Ksh.${o.total}</td>
-              <td>${o.status}</td>
-              <td>${o.created_at}</td>
-            `;
-            tbody.appendChild(tr);
-          });
+    async function loadOrders() {
+      const result = await apiCall("get_orders.php");
+      const tbody = document.getElementById("ordersTable");
+      tbody.innerHTML = "";
+      const statusOptions = ['Pending', 'Processing', 'Completed', 'Cancelled'];
+      
+      if (result.success && result.orders) {
+        result.orders.forEach(o => {
+          const tr = document.createElement("tr");
+          const statusClass = `status-${o.status.toLowerCase()}`;
+
+          // Create the dynamic status selector
+          const statusSelect = statusOptions.map(status => 
+            `<option value="${status}" ${o.status === status ? 'selected' : ''}>${status}</option>`
+          ).join('');
+
+          tr.innerHTML = `
+            <td>${o.order_id}</td>
+            <td>${o.Username || 'N/A'} (ID: ${o.client_id})</td>
+            <td>${Number(o.total).toFixed(2)}</td>
+            <td class="${statusClass}">${o.status}</td>
+            <td>${o.created_at.substring(0, 16)}</td>
+            <td>
+                <div class="action-row">
+                    <select id="status-${o.order_id}">
+                        ${statusSelect}
+                    </select>
+                    <button onclick="updateOrderStatus(${o.order_id}, document.getElementById('status-${o.order_id}').value)">Update</button>
+                </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
         });
+      } else {
+        tbody.innerHTML = `<tr><td colspan="6">${result.message || 'Failed to load orders.'}</td></tr>`;
+      }
     }
 
+    // --- ITEM MANAGEMENT ---
    
-    function loadItems() {
-      fetch("get_items.php")
-        .then(res => res.json())
-        .then(data => {
-          const tbody = document.getElementById("itemsTable");
-          tbody.innerHTML = "";
-          data.items.forEach(i => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${i.id}</td>
-              <td>${i.name}</td>
-              <td>Ksh.${i.price}</td>
-              <td>${i.available == 1 ? "Yes" : "No"}</td>
-              <td>
-                <button onclick="editItem(${i.id}, '${i.name}', ${i.price}, ${i.available})">Edit</button>
-                <button onclick="deleteItem(${i.id})">Delete</button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
+    async function loadItems() {
+      const result = await apiCall("get_items.php");
+      const tbody = document.getElementById("itemsTable");
+      tbody.innerHTML = "";
+      
+      if (result.success && result.items) {
+        result.items.forEach(i => {
+          const isAvailable = i.available == 1;
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${i.id}</td>
+            <td>${i.name}</td>
+            <td>${Number(i.price).toFixed(2)}</td>
+            <td>${isAvailable ? "Yes" : "No"}</td>
+            <td class="action-btn-group">
+              <button onclick="editItem(${i.id}, '${i.name}', ${i.price}, ${i.available})">Edit</button>
+              <button onclick="deleteItem(${i.id})">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
         });
+      } else {
+        tbody.innerHTML = `<tr><td colspan="5">${result.message || 'Failed to load menu items.'}</td></tr>`;
+      }
     }
 
     function showAddItem() {
       const name = prompt("Enter item name:");
-      const price = prompt("Enter item price:");
-      if (!name || !price) return;
-      fetch("add_item.php", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ name, price })
-      }).then(() => loadItems());
+      if (!name) return;
+      const price = prompt("Enter item price (e.g., 350.00):");
+      if (!price || isNaN(price)) return showMessage("Invalid price entered.");
+
+      apiCall("add_item.php", "POST", { name, price: parseFloat(price) }).then(res => {
+        if (res.success) {
+          showMessage("Item added successfully.");
+          loadItems();
+        } else {
+          showMessage(res.message);
+        }
+      });
     }
 
-    function editItem(id, name, price, available) {
-      const newName = prompt(`Edit name for item ${id}:`, name);
+    function editItem(id, currentName, currentPrice, currentAvailable) {
+      const newName = prompt(`Edit name for item ID ${id}:`, currentName);
       if (newName === null) return;
-      const newPrice = prompt(`Edit price for ${newName}:`, price);
-      if (newPrice === null) return;
-      const newAvailable = confirm(`Make ${newName} available? (OK = Yes, Cancel = No)`);
+      const newPrice = prompt(`Edit price for ${newName}:`, currentPrice);
+      if (newPrice === null || isNaN(newPrice)) return showMessage("Invalid price entered.");
+      
+      const newAvailable = confirm(`Is ${newName} currently available? (OK = Yes, Cancel = No)`);
 
-      fetch("update_item.php", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          id,
-          name: newName,
-          price: newPrice,
-          available: newAvailable ? 1 : 0
-        })
-      }).then(() => loadItems());
+      apiCall("update_item.php", "POST", {
+        id,
+        name: newName,
+        price: parseFloat(newPrice),
+        available: newAvailable ? 1 : 0
+      }).then(res => {
+        if (res.success) {
+          showMessage(`${newName} updated.`);
+          loadItems();
+        } else {
+          showMessage(res.message);
+        }
+      });
     }
 
     function deleteItem(id) {
-      if (!confirm("Delete this item?")) return;
-      fetch("delete_item.php", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ id })
-      }).then(() => loadItems());
+      if (!confirm("Are you sure you want to delete this menu item?")) return;
+      apiCall("delete_item.php", "POST", { id }).then(res => {
+        if (res.success) {
+          showMessage(`Item ID ${id} deleted.`);
+          loadItems();
+        } else {
+          showMessage(res.message);
+        }
+      });
     }
 
     
-    loadUsers();
-    loadOrders();
-    loadItems();
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', () => {
+        loadUsers();
+        loadOrders();
+        loadItems();
+    });
   </script>
 </body>
 </html>
