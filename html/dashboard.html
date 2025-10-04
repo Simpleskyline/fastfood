@@ -33,7 +33,7 @@
 </header>
 
   <main>
-
+    <!-- Food Items remain unchanged -->
     <div class="food-item">
       <img src="https://www.kitchensanctuary.com/wp-content/uploads/2021/05/Double-Cheeseburger-square-FS-42.jpg" alt="Burger" />
       <h3><a href="burger.html" class="food-link">Burger</a></h3>
@@ -282,7 +282,7 @@
     cartCount.textContent = totalQuantity;
   }
 
-  // Checkout - improved JSON handling and logging
+  // Checkout - MODIFIED to rely on server session for user_id
   checkoutBtn.addEventListener('click', () => {
     if (cartItems.length === 0) {
       alert('Your cart is empty!');
@@ -290,17 +290,16 @@
     }
 
     const total = cartItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
-    const user_id = 1; // adjust as needed
 
-    console.log('Sending order:', { user_id, items: cartItems, total: total.toFixed(2) });
+    console.log('Sending order:', { items: cartItems, total: total.toFixed(2) });
 
-    fetch('save_order.php', {
+    fetch('../php/save_order.php', { // Ensure the path is correct
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: user_id,
+        // user_id REMOVED: Server will read client_id from session securely
         items: cartItems,
-        total: total.toFixed(2) // matches PHP expecting "total"
+        total: total.toFixed(2) 
       })
     })
     .then(async res => {
@@ -309,7 +308,6 @@
       try {
         return JSON.parse(text);
       } catch (err) {
-        // Throw an error that will be caught below and shown to user
         throw new Error("Invalid JSON response from server: " + text);
       }
     })
@@ -321,7 +319,8 @@
         cartItems = [];
         renderCartItems();
         cartContainer.classList.remove('active');
-        window.location.href = 'thankyou.html';
+        // You should have a thankyou.html file for a proper experience
+        window.location.href = 'thankyou.html'; 
       } else {
         alert("Checkout failed: " + (data.message || "Unknown error"));
       }
@@ -334,7 +333,8 @@
 
   // close cart when clicking outside
   document.addEventListener('click', (e) => {
-    if (!cartContainer.contains(e.target) && !cartIcon.contains(e.target)) {
+    // Only close if click is not inside the cart container AND not on the cart icon
+    if (!cartContainer.contains(e.target) && !cartIcon.contains(e.target) && cartContainer.classList.contains('active')) {
       cartContainer.classList.remove('active');
     }
   });
