@@ -33,7 +33,7 @@
 </header>
 
   <main>
-    <!-- Food Items remain unchanged -->
+
     <div class="food-item">
       <img src="https://www.kitchensanctuary.com/wp-content/uploads/2021/05/Double-Cheeseburger-square-FS-42.jpg" alt="Burger" />
       <h3><a href="burger.html" class="food-link">Burger</a></h3>
@@ -164,7 +164,7 @@
   const toggle = document.getElementById('toggle');
   const nav = document.getElementById('nav');
 
-  // Load cart from localStorage (fall back to empty array)
+  // Load cart from localStorage
   let cartItems = [];
   try {
     cartItems = JSON.parse(localStorage.getItem('ronz_cart') || '[]');
@@ -191,9 +191,10 @@
   cartIcon.addEventListener('click', () => cartContainer.classList.toggle('active'));
   closeCartBtn.addEventListener('click', () => cartContainer.classList.remove('active'));
 
-  // Add item to cart (used by inline onclick buttons)
+  // Add item to cart
   function addToCart(item) {
     console.log('addToCart called:', item);
+
     // Ensure incoming item has an id and price
     if (typeof item.id === 'undefined' || typeof item.price === 'undefined') {
       console.error('Invalid item passed to addToCart', item);
@@ -282,7 +283,7 @@
     cartCount.textContent = totalQuantity;
   }
 
-  // Checkout - MODIFIED to rely on server session for user_id
+  // Checkout
   checkoutBtn.addEventListener('click', () => {
     if (cartItems.length === 0) {
       alert('Your cart is empty!');
