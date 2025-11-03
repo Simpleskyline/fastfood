@@ -492,3 +492,40 @@
 )
 
 [03-Nov-2025 12:54:07 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 13:22:06 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 13:22:06 ===
+[03-Nov-2025 13:22:06 Europe/Berlin] POST data: Array
+(
+    [FirstName] => julius
+    [LastName] => kombo
+    [Username] => kombo
+    [Email] => kombo@gmail.coom
+    [Password] => kombo123
+    [ConfirmPassword] => kombo123
+    [Role] => admin
+)
+
+[03-Nov-2025 13:22:06 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 13:22:06 Europe/Berlin] Database connection successful
+[03-Nov-2025 13:22:38 Europe/Berlin] Raw input received: {"email":"joy@gmail.com","password":"joy123"}
+[03-Nov-2025 13:22:38 Europe/Berlin] Decoded input data: Array
+(
+    [email] => joy@gmail.com
+    [password] => joy123
+)
+
+[03-Nov-2025 13:22:38 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 13:36:51 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 13:36:51 ===
+[03-Nov-2025 13:36:51 Europe/Berlin] POST data: Array
+(
+)
+
+[03-Nov-2025 13:36:51 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 13:36:51 Europe/Berlin] Database connection successful
+[03-Nov-2025 13:37:22 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 13:37:22 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 13:37:22 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'

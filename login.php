@@ -38,7 +38,9 @@ try {
 
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
-        throw new Exception("Database connection failed: " . $conn->connect_error);
+        throw new Exception("Database connectio
+        
+        n failed: " . $conn->connect_error);
     }
 
     // Log the raw input for debugging
