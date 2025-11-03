@@ -103,7 +103,7 @@
 
     // Show error message
     function showError(element, message) {
-      element.textContent = message;
+      element.innerHTML = message;
       element.style.display = 'block';
     }
 
@@ -134,6 +134,13 @@
         return;
       }
 
+      // Basic email validation
+      const email = document.getElementById("email").value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError(signupError, "Please enter a valid email address.");
+        return;
+      }
+
       // Disable button during submission
       signupBtn.disabled = true;
       signupBtn.textContent = 'Creating account...';
@@ -148,16 +155,23 @@
       formData.append('Role', document.getElementById("role").value);
 
       try {
-        const response = await fetch('submit_signup.php', {
+        console.log('Sending request to server...');
+        const response = await fetch('http://localhost:8080/fastfood/submit_signup.php', {
           method: 'POST',
-          body: formData
+          body: formData,
+          credentials: 'same-origin',
+          headers: {
+            'Accept': 'application/json'
+          }
         });
 
         console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers.get('content-type'));
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
-          throw new Error('Server returned ' + response.status);
+          const errorText = await response.text();
+          console.error('Server error response:', errorText);
+          throw new Error(`Server returned ${response.status}: ${errorText}`);
         }
 
         // Get response text first to debug
@@ -190,7 +204,31 @@
         }
       } catch (error) {
         console.error('Signup error:', error);
-        showError(signupError, error.message || 'Connection error. Please check if XAMPP is running and try again.');
+        let errorMessage = 'An error occurred. Please try again.';
+        
+        try {
+          // Try to parse the error response if it's JSON
+          const errorData = JSON.parse(error.message.split(':').slice(1).join(':').trim());
+          if (errorData.errors && Array.isArray(errorData.errors)) {
+            // Show all validation errors
+            errorMessage = errorData.errors.join('<br>');
+          } else if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        } catch (e) {
+          // If we can't parse as JSON, use the original error message
+          if (error.message.includes('Failed to fetch')) {
+            errorMessage = 'Cannot connect to server. Please ensure XAMPP is running with Apache and MySQL started.';
+          } else if (error.message.includes('NetworkError')) {
+            errorMessage = 'Network error. Please check your internet connection.';
+          } else if (error.message.includes('500')) {
+            errorMessage = 'Server error. Please check the server logs for more details.';
+          } else {
+            errorMessage = error.message || errorMessage;
+          }
+        }
+        
+        signupError.innerHTML = errorMessage; // Use innerHTML to render <br> tags
       } finally {
         signupBtn.disabled = false;
         signupBtn.textContent = 'SIGN UP';
@@ -198,62 +236,118 @@
     });
 
     // --- SIGNIN handler ---
-    signinForm.addEventListener("submit", async function(e) {
+    signinForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      
+      // Get form elements with proper null checks
+      const emailInput = document.getElementById('signinEmail');
+      const passwordInput = document.getElementById('signinPassword');
+      
+      if (!emailInput || !passwordInput) {
+        console.error('Could not find email or password input fields');
+        if (signinError) {
+          signinError.textContent = 'Form fields not found. Please refresh the page.';
+          signinError.style.display = 'block';
+        }
+        return;
+      }
+      
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      
+      // Show loading state
+      const submitBtn = signinForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Signing in...';
+      
+      // Clear any previous errors
       signinError.style.display = 'none';
-
-      const email = document.getElementById("signinEmail").value.trim();
-      const password = document.getElementById("signinPassword").value;
-
-      // Disable button during submission
-      signinBtn.disabled = true;
-      signinBtn.textContent = 'Signing in...';
-
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('password', password);
-
+      
       try {
-        const response = await fetch('login.php', {
+        console.log('Sending login request...');
+        const response = await fetch('http://localhost:8080/fastfood/login.php', {
           method: 'POST',
-          body: formData
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          }),
+          credentials: 'same-origin'  // Important for session cookies
         });
-
-        const text = await response.text();
-
-        // Check if login was successful (redirects to dashboard.html)
-        if (text.includes('dashboard.html') || response.redirected) {
-          // Also check localStorage auth for frontend
-          const users = JSON.parse(localStorage.getItem("fastfood_users") || "{}");
-          let user = null;
-
-          // Find user by email
-          for (const username in users) {
-            if (users[username].email === email) {
-              user = users[username];
-              localStorage.setItem("fastfood_current", username);
-              break;
-            }
+        
+        console.log('Response status:', response.status);
+        const responseText = await response.text();
+        console.log('Raw response:', responseText);
+        
+        let data;
+        try {
+          data = JSON.parse(responseText);
+          console.log('Parsed response data:', data);
+        } catch (e) {
+          console.error('Failed to parse JSON:', e);
+          console.error('Response headers:', Object.fromEntries(response.headers.entries()));
+          throw new Error('Invalid JSON response from server: ' + responseText.substring(0, 200));
+        }
+        
+        console.log('Parsed response:', data);
+        
+        if (data.success) {
+          let userData = data.user || (data.data && data.data.user) || null;
+          
+          if (!userData) {
+            console.error('No user data in response:', data);
+            throw new Error('Invalid user data received from server');
           }
-
-          // If not in localStorage, create minimal user object
-          if (!user) {
-            user = { email, role: 'customer' };
+          
+          // Ensure required fields exist
+          if (!userData.Username || !userData.Role) {
+            console.error('Missing required user fields:', userData);
+            throw new Error('Incomplete user data received');
           }
-
-          redirectToDashboard(user);
+          
+          // Store user data in localStorage
+          const userToStore = {
+            id: userData.ID,
+            username: userData.Username,
+            email: userData.Email,
+            role: userData.Role,
+            firstName: userData.FirstName || '',
+            lastName: userData.LastName || ''
+          };
+          
+          localStorage.setItem('user', JSON.stringify(userToStore));
+          
+          // For backward compatibility
+          const users = JSON.parse(localStorage.getItem('fastfood_users') || '{}');
+          users[userToStore.username] = userToStore;
+          localStorage.setItem('fastfood_users', JSON.stringify(users));
+          localStorage.setItem('fastfood_current', userToStore.username);
+          
+          console.log('User data stored:', userToStore);
+          
+          // Determine redirect URL
+          const redirectUrl = data.redirect || 
+                            (data.data && data.data.redirect) || 
+                            (userToStore.role === 'admin' ? 'admin_dashboard.html' : 'dashboard.html');
+          
+          console.log('Redirecting to:', redirectUrl);
+          window.location.href = redirectUrl;
         } else {
-          // Extract error message
-          const match = text.match(/alert\('([^']+)'\)/);
-          const errorMsg = match ? match[1] : 'Invalid email or password.';
-          showError(signinError, errorMsg);
+          const errorMessage = data.message || data.error || 'Login failed. Please check your credentials.';
+          showError(signinError, errorMessage);
         }
       } catch (error) {
         console.error('Login error:', error);
-        showError(signinError, 'Network error. Please check your connection.');
+        const errorMessage = error.message || 'An error occurred. Please check your connection and try again.';
+        showError(signinError, errorMessage);
       } finally {
-        signinBtn.disabled = false;
-        signinBtn.textContent = 'SIGN IN';
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
       }
     });
   </script>

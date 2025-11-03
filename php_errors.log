@@ -1,0 +1,494 @@
+[03-Nov-2025 11:29:26 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:29:26 ===
+[03-Nov-2025 11:29:26 Europe/Berlin] POST data: Array
+(
+    [FirstName] => mitchel
+    [LastName] => wawira
+    [Username] => wmaria
+    [Email] => wmaria@gmail.coom
+    [Password] => 123456
+    [ConfirmPassword] => 123456
+    [Role] => customer
+)
+
+[03-Nov-2025 11:29:26 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:29:26 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:29:27 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:29:27 ===
+[03-Nov-2025 11:29:27 Europe/Berlin] POST data: Array
+(
+    [FirstName] => mitchel
+    [LastName] => wawira
+    [Username] => wmaria
+    [Email] => wmaria@gmail.coom
+    [Password] => 123456
+    [ConfirmPassword] => 123456
+    [Role] => customer
+)
+
+[03-Nov-2025 11:29:27 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:29:27 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:29:28 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:29:28 ===
+[03-Nov-2025 11:29:28 Europe/Berlin] POST data: Array
+(
+    [FirstName] => mitchel
+    [LastName] => wawira
+    [Username] => wmaria
+    [Email] => wmaria@gmail.coom
+    [Password] => 123456
+    [ConfirmPassword] => 123456
+    [Role] => customer
+)
+
+[03-Nov-2025 11:29:28 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:29:28 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:32:18 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:32:18 ===
+[03-Nov-2025 11:32:18 Europe/Berlin] POST data: Array
+(
+    [FirstName] => chichi
+    [LastName] => maria
+    [Username] => host
+    [Email] => host@gmail.com
+    [Password] => 123456
+    [ConfirmPassword] => 123456
+    [Role] => customer
+)
+
+[03-Nov-2025 11:32:18 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:32:18 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:34:39 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:34:39 ===
+[03-Nov-2025 11:34:39 Europe/Berlin] POST data: Array
+(
+    [FirstName] => mitchy
+    [LastName] => jane
+    [Username] => mike
+    [Email] => mike@gmail.com
+    [Password] => 123456
+    [ConfirmPassword] => 123456
+    [Role] => customer
+)
+
+[03-Nov-2025 11:34:39 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:34:39 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:45:28 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:45:28 ===
+[03-Nov-2025 11:45:28 Europe/Berlin] POST data: Array
+(
+    [FirstName] => anto
+    [LastName] => mwai
+    [Username] => mwai
+    [Email] => mwai@gmail.com
+    [Password] => mwai12
+    [ConfirmPassword] => mwai12
+    [Role] => customer
+)
+
+[03-Nov-2025 11:45:28 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:45:28 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:49:22 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 11:50:03 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:50:03 ===
+[03-Nov-2025 11:50:03 Europe/Berlin] POST data: Array
+(
+    [FirstName] => mike
+    [LastName] => kombo
+    [Username] => mickey
+    [Email] => mike@gmail.com
+    [Password] => mike123
+    [ConfirmPassword] => mike123
+    [Role] => customer
+)
+
+[03-Nov-2025 11:50:03 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:50:03 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:50:10 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:50:10 ===
+[03-Nov-2025 11:50:10 Europe/Berlin] POST data: Array
+(
+    [FirstName] => mike
+    [LastName] => kombo
+    [Username] => mickey
+    [Email] => mike1@gmail.com
+    [Password] => mike123
+    [ConfirmPassword] => mike123
+    [Role] => customer
+)
+
+[03-Nov-2025 11:50:10 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:50:10 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:50:30 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 11:55:17 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:55:17 ===
+[03-Nov-2025 11:55:17 Europe/Berlin] POST data: Array
+(
+    [FirstName] => Wawira
+    [LastName] => kombo
+    [Username] => admin
+    [Email] => admin@example.com
+    [Password] => password
+    [ConfirmPassword] => password
+    [Role] => customer
+)
+
+[03-Nov-2025 11:55:17 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:55:17 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:56:11 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 11:56:11 ===
+[03-Nov-2025 11:56:11 Europe/Berlin] POST data: Array
+(
+    [FirstName] => john
+    [LastName] => mwangi
+    [Username] => mwangi
+    [Email] => john@gmail.com
+    [Password] => john123
+    [ConfirmPassword] => john123
+    [Role] => customer
+)
+
+[03-Nov-2025 11:56:11 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 11:56:11 Europe/Berlin] Database connection successful
+[03-Nov-2025 11:56:41 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 11:56:41
+    [error] => Account not found
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 83
+    [trace] => #0 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+        )
+
+)
+
+[03-Nov-2025 11:56:51 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 11:56:51 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 11:56:51
+    [error] => Unknown column 'LastLogin' in 'field list'
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 61
+    [trace] => #0 C:\xampp\htdocs\fastfood\login.php(61): mysqli->prepare('UPDATE clients ...')
+#1 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => mwangi
+            [email] => john@gmail.com
+            [role] => customer
+            [first_name] => john
+            [last_name] => mwangi
+        )
+
+)
+
+[03-Nov-2025 12:05:41 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 12:05:41 ===
+[03-Nov-2025 12:05:41 Europe/Berlin] POST data: Array
+(
+    [FirstName] => karanja
+    [LastName] => maina
+    [Username] => maina
+    [Email] => maina@gmail.com
+    [Password] => maina123
+    [ConfirmPassword] => maina123
+    [Role] => customer
+)
+
+[03-Nov-2025 12:05:41 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 12:05:41 Europe/Berlin] Database connection successful
+[03-Nov-2025 12:06:47 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:06:47
+    [error] => Incorrect password
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 83
+    [trace] => #0 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+        )
+
+)
+
+[03-Nov-2025 12:07:01 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 12:07:01 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 74
+[03-Nov-2025 12:08:29 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:08:29
+    [error] => Account not found
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 86
+    [trace] => #0 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => maina
+            [email] => maina@gmail.com
+            [role] => customer
+            [first_name] => karanja
+            [last_name] => maina
+        )
+
+)
+
+[03-Nov-2025 12:08:42 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:08:42
+    [error] => Incorrect password
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 83
+    [trace] => #0 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => maina
+            [email] => maina@gmail.com
+            [role] => customer
+            [first_name] => karanja
+            [last_name] => maina
+        )
+
+)
+
+[03-Nov-2025 12:08:44 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:08:44
+    [error] => Incorrect password
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 83
+    [trace] => #0 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => maina
+            [email] => maina@gmail.com
+            [role] => customer
+            [first_name] => karanja
+            [last_name] => maina
+        )
+
+)
+
+[03-Nov-2025 12:08:45 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:08:45
+    [error] => Incorrect password
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 83
+    [trace] => #0 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => maina
+            [email] => maina@gmail.com
+            [role] => customer
+            [first_name] => karanja
+            [last_name] => maina
+        )
+
+)
+
+[03-Nov-2025 12:08:52 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 12:08:52 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 74
+[03-Nov-2025 12:11:45 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 12:11:45 ===
+[03-Nov-2025 12:11:45 Europe/Berlin] POST data: Array
+(
+    [FirstName] => Test
+    [LastName] => user
+    [Username] => testuser
+    [Email] => test@example.com
+    [Password] => Test123!
+    [ConfirmPassword] => Test123!
+    [Role] => customer
+)
+
+[03-Nov-2025 12:11:45 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 12:11:45 Europe/Berlin] Database connection successful
+[03-Nov-2025 12:12:10 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 12:12:10 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 74
+[03-Nov-2025 12:33:03 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 12:33:03 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 12:33:03 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 78
+[03-Nov-2025 12:37:43 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 12:37:43 ===
+[03-Nov-2025 12:37:43 Europe/Berlin] POST data: Array
+(
+    [FirstName] => joy
+    [LastName] => ngesa
+    [Username] => joyngesa
+    [Email] => joy@gmail.com
+    [Password] => joy123
+    [ConfirmPassword] => joy123
+    [Role] => customer
+)
+
+[03-Nov-2025 12:37:43 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 12:37:43 Europe/Berlin] Database connection successful
+[03-Nov-2025 12:38:07 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 53
+[03-Nov-2025 12:38:07 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 12:38:07 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 78
+[03-Nov-2025 12:43:12 Europe/Berlin] === Starting submit_signup.php at 2025-11-03 12:43:12 ===
+[03-Nov-2025 12:43:12 Europe/Berlin] POST data: Array
+(
+    [FirstName] => madam
+    [LastName] => boss
+    [Username] => madamboss
+    [Email] => boss@gmail.com
+    [Password] => boss123
+    [ConfirmPassword] => boss123
+    [Role] => customer
+)
+
+[03-Nov-2025 12:43:12 Europe/Berlin] Attempting to connect to database: fastfood on localhost
+[03-Nov-2025 12:43:12 Europe/Berlin] Database connection successful
+[03-Nov-2025 12:46:24 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 86
+[03-Nov-2025 12:46:24 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 12:46:24 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 108
+[03-Nov-2025 12:46:55 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 86
+[03-Nov-2025 12:46:55 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 12:46:55 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 108
+[03-Nov-2025 12:48:12 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 12:48:12 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 12:48:12 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 93
+[03-Nov-2025 12:48:12 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 12:48:12 Europe/Berlin] PHP Warning:  Undefined array key "ID" in C:\xampp\htdocs\fastfood\login.php on line 115
+[03-Nov-2025 12:49:47 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 12:49:47 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 12:49:47 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:49:47
+    [error] => Unknown column 'first_name' in 'field list'
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 84
+    [trace] => #0 C:\xampp\htdocs\fastfood\login.php(84): mysqli->prepare('SELECT \n       ...')
+#1 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => madamboss
+            [email] => boss@gmail.com
+            [role] => customer
+            [first_name] => madam
+            [last_name] => boss
+        )
+
+)
+
+[03-Nov-2025 12:51:05 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 12:51:05 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 12:51:05 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:51:05
+    [error] => Unknown column 'first_name' in 'field list'
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 84
+    [trace] => #0 C:\xampp\htdocs\fastfood\login.php(84): mysqli->prepare('SELECT \n       ...')
+#1 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => madamboss
+            [email] => boss@gmail.com
+            [role] => customer
+            [first_name] => madam
+            [last_name] => boss
+        )
+
+)
+
+[03-Nov-2025 12:51:19 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 12:51:19 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 12:51:19 Europe/Berlin] Login Error: Array
+(
+    [time] => 2025-11-03 12:51:19
+    [error] => Unknown column 'first_name' in 'field list'
+    [file] => C:\xampp\htdocs\fastfood\login.php
+    [line] => 84
+    [trace] => #0 C:\xampp\htdocs\fastfood\login.php(84): mysqli->prepare('SELECT \n       ...')
+#1 {main}
+    [post_data] => Array
+        (
+        )
+
+    [session] => Array
+        (
+            [user_id] => 
+            [username] => madamboss
+            [email] => boss@gmail.com
+            [role] => customer
+            [first_name] => madam
+            [last_name] => boss
+        )
+
+)
+
+[03-Nov-2025 12:52:20 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 12:52:20 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 12:52:20 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 12:53:39 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 12:53:39 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 12:53:39 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
+[03-Nov-2025 12:54:07 Europe/Berlin] Raw input received: {"email":"boss@gmail.com","password":"boss123"}
+[03-Nov-2025 12:54:07 Europe/Berlin] Decoded input data: Array
+(
+    [email] => boss@gmail.com
+    [password] => boss123
+)
+
+[03-Nov-2025 12:54:07 Europe/Berlin] Note: Could not update LastLogin - Unknown column 'LastLogin' in 'field list'
