@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Our Chicken</title>
+  <link rel="stylesheet" href="dashboard.css" />
+
+  <style>
+    .popup-message {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-weight: bold;
+    }
+  </style>
+  </head>
+
+<body>
+    
+  <header>
+    <h1>🍗 Chicken Varieties</h1>
+  </header>
+
+  <div class="popup-message" id="popup-message">✔️ Added to cart</div>
+
+  <main>
+
+    <div class="food-item">
+      <h3>Quarter-sized Chicken</h3>
+      <p class="price">Ksh.250</p>
+      <button onclick="addToCart({id: 21, name: 'Quarter-sized Chicken', price: 250})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <h3>Half-sized Chicken</h3>
+      <p class="price">Ksh.500</p>
+      <button onclick="addToCart({id: 22, name: 'Half-sized Chicken', price: 500})">Add to Cart</button>
+    </div>
+
+    <div class="food-item">
+      <h3>Full-sized Chicken</h3>
+      <p class="price">Ksh.1000</p>
+      <button onclick="addToCart({id: 23, name: 'Full-sized Chicken', price: 1000})">Add to Cart</button>
+    </div>
+  </main>
+
+  <!-- This script manages a shopping cart by adding items to local storage
+    incrementing the quantity if an item already exists
+    and then alerting the user before redirecting them to a dashboard. -->
+  <script>
+    function addToCart(item) {
+      let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+      const existingItem = cartItems.find(i => i.id === item.id);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cartItems.push({ ...item, quantity: 1 });
+      }
+      localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+      alert(item.name + " added to cart!");
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

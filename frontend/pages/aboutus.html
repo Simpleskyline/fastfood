@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | Ron'z Pizza</title>
+  <link rel="stylesheet" href="aboutus.css" />
+</head>
+<body>
+
+  
+  <header class="header">
+    <h1>🍔 Ron'z Pizza</h1>
+    <div class="menu-toggle" id="toggle">
+      <div class="bar"></div>         
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+
+    <nav class="nav-links" id="nav">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="faq.html">FAQ</a>
+      <a href="logout.php" class="signout">Sign Out</a>
+    </nav>
+  </header>
+
+  <main class="about-container">
+    <section class="intro">
+      <h2>Welcome to Ron'z Pizza</h2>
+      <p>At Ron'z Pizza, we believe that great food brings people together. Whether you're craving a cheesy pizza, crispy fries, a juicy burger, or a refreshing soda, we have something delicious for everyone!</p>
+    </section>
+
+    <section class="offerings">
+      <h3>Our Specialties</h3>
+      <ul>
+        <li><strong>Pizza:</strong> Choose from small, medium, large, or extra-large hot & cheesy pizzas made with love.</li>
+        <li><strong>Burgers:</strong> Single, double, and veggie burgers loaded with flavor.</li>
+        <li><strong>Fries:</strong> Regular, masala, or cheese fries – crispy and golden every time.</li>
+        <li><strong>Soda:</strong> Quench your thirst with 300ml, 500ml, or 1L cold sodas.</li>
+        <li><strong>Extras:</strong> Enjoy our tasty chapati, grilled chicken, and spicy sausages!</li>
+      </ul>
+    </section>
+
+    <section class="delivery">
+      <h3>Fast & Reliable Delivery</h3>
+      <p>We are located in Utawala near V-Mall</p>
+      <p>Our delivery service is quick, safe, and efficient. Once you place an order, our team gets to work immediately to make sure your food arrives hot and fresh, right at your doorstep.</p>
+      <p>We deliver within major towns and neighborhoods, with flexible payment options including cash on delivery and mobile payment.</p>
+    </section>
+
+    <section class="promise">
+      <h3>Our Promise</h3>
+      <p>We are committed to quality, hygiene, and excellent customer service. At Ron'z Pizza, your satisfaction is our priority. Try us today and become part of our growing food family!</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Ron'z Pizza. All rights reserved.</p>
+  </footer>
+
+  <!-- This script provides interactive control for a navigation menu -->
+  <script>
+    const toggle = document.getElementById('toggle');
+    const nav = document.getElementById('nav');
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nav.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

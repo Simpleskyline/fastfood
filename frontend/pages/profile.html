@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile | Ron'z Pizza</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:600,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="profile.css"/>   
+</head>
+
+<body>
+    <div class="profile-container">
+        <h2>My Profile</h2>
+        <div id="loading" style="text-align: center; padding: 20px;">Loading profile...</div>
+        <form id="profileForm" autocomplete="off" style="display: none;">
+            <label for="name">First Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your First Name">
+
+            <label for="lastname">Last Name</label>
+            <input type="text" id="lastname" name="lastname" required placeholder="Your Last Name">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="Email address" readonly>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. 0712345678">
+
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" placeholder="Delivery address">
+
+            <div class="profile-actions">
+                <button type="button" onclick="window.location.href='dashboard.html'">← Back to Menu</button>
+                <button type="submit" id="updateBtn">Update Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/ui-helpers.js"></script>
+    <script>
+        // Check authentication
+        Auth.requireAuth();
+
+        const loadingDiv = document.getElementById('loading');
+        const profileForm = document.getElementById('profileForm');
+        const updateBtn = document.getElementById('updateBtn');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchUserProfile();
+        });
+
+        function fetchUserProfile() {
+            // Get user from localStorage
+            const user = Auth.getCurrentUser();
+            
+            if (!user) {
+                loadingDiv.textContent = 'Error: User not found';
+                return;
+            }
+
+            // Populate form with user data
+            document.getElementById('name').value = user.firstName || '';
+            document.getElementById('lastname').value = user.lastName || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('address').value = user.address || '';
+
+            // Show form, hide loading
+            loadingDiv.style.display = 'none';
+            profileForm.style.display = 'block';
+        }
+
+        profileForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const data = {
+                name: document.getElementById('name').value.trim(),
+                lastname: document.getElementById('lastname').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim()
+            };
+
+            // Disable button during submission
+            updateBtn.disabled = true;
+            updateBtn.textContent = 'Updating...';
+
+            try {
+                const response = await fetch('update_profile.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const json = await response.json();
+                
+                if (json.success) {
+                    // Update localStorage with new data
+                    Auth.updateProfile({
+                        firstName: data.name,
+                        lastName: data.lastname,
+                        phone: data.phone,
+                        address: data.address
+                    });
+
+                    UI.showToast('Profile updated successfully!', 'success');
+                    
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1500);
+                } else {
+                    UI.showToast(json.message || 'Update failed', 'error');
+                }
+            } catch (err) {
+                console.error('Profile update error:', err);
+                UI.showToast("An error occurred while updating. Please try again.", 'error');
+            } finally {
+                updateBtn.disabled = false;
+                updateBtn.textContent = 'Update Profile';
+            }
+        });
+    </script>
+</body>
+</html>

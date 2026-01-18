@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You!</title>
+  <link rel="stylesheet" href="thankyou.css" />
+  
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>🎉 Thank You for Your Order!</h1>
+    <p>Your order was placed successfully.</p>
+    <p><strong id="order-total"></strong></p>
+    <a href="dashboard.html">← Back to Menu</a>
+
+    <!-- Payment Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="mpesa">Mpesa</button>
+      <button class="tab-btn" data-tab="visa">Visa/MasterCard</button>
+      <button class="tab-btn" data-tab="crypto">Crypto</button>
+    </div>
+
+    <!-- Mpesa Tab -->
+    <div class="tab-content active" id="mpesa">
+      <h3>Mpesa Payment</h3>
+      <input type="text" id="mpesa-phone" placeholder="Mpesa Phone Number" />
+      <button class="pay-btn" onclick="processPayment('Mpesa')">Pay with Mpesa</button>
+    </div>
+
+    <!-- Visa/MasterCard Tab -->
+    <div class="tab-content" id="visa">
+      <h3>Card Payment</h3>
+      <input type="text" id="card-number" placeholder="Card Number" />
+      <input type="text" id="expiry" placeholder="Expiry Date (MM/YY)" />
+      <input type="text" id="cvv" placeholder="CVV" />
+      <button class="pay-btn" onclick="processPayment('Card')">Pay with Card</button>
+    </div>
+
+    <!-- Crypto Tab -->
+    <div class="tab-content" id="crypto">
+      <h3>Crypto Payment</h3>
+      <select id="crypto-type">
+        <option>Bitcoin (BTC)</option>
+        <option>Ethereum (ETH)</option>
+        <option>Tether (USDT)</option>
+      </select>
+      <input type="text" id="wallet" placeholder="Wallet Address" />
+      <button class="pay-btn" onclick="processPayment('Crypto')">Pay with Crypto</button>
+    </div>
+  </div>
+
+  <script>
+  let orderId = localStorage.getItem("last_order_id"); // from save_order.php
+  let total = localStorage.getItem("last_order_total");
+
+  if (total) {
+    document.getElementById('order-total').textContent = `Total: Ksh.${total}`;
+  }
+
+  // Handle tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Payment processor
+  function processPayment(method) {
+    // Ask client to confirm payment with total amount
+    if (!confirm(`Confirm payment of Ksh.${total} via ${method}?`)) {
+      return; // stop if user cancels
+    }
+
+    fetch("save_payment.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: orderId,
+        payment_method: method,
+        amount: total,
+        status: "Completed"
+      })
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.success) {
+        alert(`Payment of Ksh.${total} via ${method} saved successfully!`);
+        localStorage.removeItem("last_order_id");
+        localStorage.removeItem("last_order_total");
+      } else {
+        alert("Payment failed: " + response.message);
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
