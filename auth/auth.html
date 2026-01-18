@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In / Sign Up - Ron'z Pizza</title>
   <link rel="stylesheet" href="auth.css">
   <style>
-    /* minimal inline helpers so it's usable even if CSS missing */
     .hint { font-size: 0.9rem; color: #666; margin-top: 8px; }
     .loading { opacity: 0.6; pointer-events: none; }
     .error-text { color: #d32f2f; font-size: 0.9rem; margin-top: 5px; }
   </style>
 </head>
+
 <body class="auth">
 
   <div class="container">
-    <!-- Left: Forms -->
     <div class="form-box">
+
       <!-- Sign In -->
       <form id="signinForm">
         <h2>Sign In</h2>
@@ -49,7 +50,6 @@
       </form>
     </div>
 
-    <!-- Right: Panel -->
     <div class="panel">
       <h2 id="panelTitle">Hello, Friend!</h2>
       <p id="panelText">Enter your personal details and start your journey with us</p>
