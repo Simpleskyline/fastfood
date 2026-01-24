@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Select Flavour</title>
+
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -76,8 +78,7 @@
   </div>
 
 <script>
-    // This function adds the selected flavour to the cart
-    // and redirects the user to the dashboard.
+    // This function adds the selected flavour to the cart and redirects the user to the dashboard.
   function addToCart(item) {
     let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
     const existingItem = cartItems.find(i => i.id === item.id);
@@ -106,7 +107,7 @@
 // Adds the soda item to the cart
     // and redirects the user to the dashboard.
     addToCart(sodaItem);
-    window.location.href = 'dashboard.html'; // redirect to dashboard
+    window.location.href = '../pages/dashboard.html'; // redirect to dashboard
   }
 </script>
 

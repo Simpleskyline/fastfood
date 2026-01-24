@@ -2,15 +2,18 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In / Sign Up - Ron'z Pizza</title>
-  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="../assets/css/auth.css">
+  
   <style>
     .hint { font-size: 0.9rem; color: #666; margin-top: 8px; }
     .loading { opacity: 0.6; pointer-events: none; }
     .error-text { color: #d32f2f; font-size: 0.9rem; margin-top: 5px; }
   </style>
+
 </head>
 
 <body class="auth">
@@ -42,22 +45,21 @@
         <!-- ROLE selection -->
         <label for="role">Register as</label>
         <select id="role" required>
-          <option value="customer">Customer</option>
+          <option value="customer">Client</option>
           <option value="admin">Admin</option>
         </select>
-
         <button type="submit" id="signupBtn">SIGN UP</button>
       </form>
     </div>
 
     <div class="panel">
-      <h2 id="panelTitle">Hello, Friend!</h2>
-      <p id="panelText">Enter your personal details and start your journey with us</p>
+      <h2 id="panelTitle">Hello Friend!</h2>
+      <p id="panelText">Enter your personal details and start your journey with us.</p>
       <button class="btn-outline" id="toggleBtn">SIGN UP</button>
     </div>
   </div>
 
-  <script src="js/auth.js"></script>
+  <script src="../assets/js/auth.js"></script>
   <script>
     // Elements
     const signinForm = document.getElementById("signinForm");

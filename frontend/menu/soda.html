@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Soda Options | Ron'z Pizza</title>
+  <title>Soda - Ron'z Pizza</title>
+</head>
+
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -64,8 +67,13 @@
       margin-bottom: 15px;
     }
   </style>
-</head>
+  
 <body>
+  <header>
+    <h1>Soda Flavours</h1>
+  </header>
+
+  <main>
 
   <h1>Choose Your Soda Size</h1>
   <div class="soda-container">
@@ -100,5 +108,28 @@
     </div>
   </div>
 
+  <script>
+  function addToCart(item) {
+    // Get existing cart or create new
+    let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+
+    // Check if item exists
+    const existingItem = cart.find(i => i.id === item.id);
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cart.push({ ...item, quantity: 1 });
+    }
+
+    // Save updated cart to localStorage
+    localStorage.setItem('ronz_cart', JSON.stringify(cart));
+
+    // Notify user
+    alert(`${item.name} added to cart!`);
+    window.location.href = '../pages/dashboard.html';
+  }
+</script>
+
+  </main>
 </body>
 </html>

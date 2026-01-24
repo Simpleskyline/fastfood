@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pizza - Ron'z Pizza</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="../../assets/css/dashboard.css" />
 </head>
+
 <body>
   <header>
     <h1>🍕 Pizza Varieties</h1>
-    <button onclick="window.location.href='dashboard.html'" style="margin: 10px;">← Back to Menu</button>
   </header>
+
   <main>
 
     <div class="food-item">
@@ -38,17 +40,26 @@
     </div>
   </main>
 
-  <script src="js/cart.js"></script>
-  <script src="js/ui-helpers.js"></script>
-  <script>
-    function addToCart(item) {
-      if (Cart.addItem(item)) {
-        UI.showToast(`${item.name} added to cart!`, 'success', 2000);
-      }
+ <script>
+  function addToCart(item) {
+    // Get existing cart or create new
+    let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+
+    // Check if item exists
+    const existingItem = cart.find(i => i.id === item.id);
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cart.push({ ...item, quantity: 1 });
     }
 
-    // Expose to global scope
-    window.addToCart = addToCart;
-  </script>
+    // Save updated cart to localStorage
+    localStorage.setItem('ronz_cart', JSON.stringify(cart));
+
+    // Notify user
+    alert(`${item.name} added to cart!`);
+    window.location.href = '../pages/dashboard.html';
+  }
+</script>
 </body>
 </html>

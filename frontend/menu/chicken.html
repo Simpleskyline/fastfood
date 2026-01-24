@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+  
 <head>
   <meta charset="UTF-8" />
   <title>Our Chicken</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="../../assets/css/dashboard.css" />
 
   <style>
     .popup-message {
@@ -52,22 +53,23 @@
     </div>
   </main>
 
-  <!-- This script manages a shopping cart by adding items to local storage
-    incrementing the quantity if an item already exists
-    and then alerting the user before redirecting them to a dashboard. -->
   <script>
     function addToCart(item) {
       let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+
       const existingItem = cartItems.find(i => i.id === item.id);
       if (existingItem) {
         existingItem.quantity++;
       } else {
         cartItems.push({ ...item, quantity: 1 });
       }
+
       localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
+
       alert(item.name + " added to cart!");
-      window.location.href = 'dashboard.html';
+      window.location.href = '../pages/dashboard.html';
     }
   </script>
+
 </body>
 </html>

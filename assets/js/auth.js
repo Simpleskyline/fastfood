@@ -1,15 +1,15 @@
-/**
- * Authentication & Session Management Utility
- * Handles user authentication state
- */
+/*
+ Authentication & Session Management Utility
+ Handles user authentication state
+*/
 
 const Auth = {
   STORAGE_KEY: 'fastfood_current',
   USERS_KEY: 'fastfood_users',
 
-  /**
-   * Get current logged-in user
-   */
+/*
+ Get current logged-in user
+*/
   getCurrentUser() {
     const username = localStorage.getItem(this.STORAGE_KEY);
     if (!username) return null;
@@ -18,9 +18,9 @@ const Auth = {
     return users[username] || null;
   },
 
-  /**
-   * Get all users (for localStorage-based auth)
-   */
+/**
+ Get all users (for localStorage-based auth)
+*/
   getAllUsers() {
     try {
       return JSON.parse(localStorage.getItem(this.USERS_KEY) || '{}');
@@ -30,24 +30,24 @@ const Auth = {
     }
   },
 
-  /**
-   * Check if user is logged in
-   */
+/*
+Check if user is logged in
+*/
   isLoggedIn() {
     return this.getCurrentUser() !== null;
   },
 
-  /**
-   * Check if user is admin
-   */
+/*
+Check if user is admin
+*/
   isAdmin() {
     const user = this.getCurrentUser();
     return user && user.role === 'admin';
   },
 
-  /**
-   * Require authentication - redirect if not logged in
-   */
+/*
+Require authentication - redirect if not logged in
+*/
   requireAuth(redirectUrl = 'auth.html') {
     if (!this.isLoggedIn()) {
       window.location.href = redirectUrl;

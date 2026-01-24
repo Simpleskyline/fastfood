@@ -79,6 +79,7 @@
 
     <button onclick="addSelectedFlavourToCart()">Add to Cart</button>
   </div>
+
 <script>
   function addToCart(item) {
     let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
@@ -137,8 +138,7 @@
 
     // Show the success popup and then redirect
     alert(sodaItem.name + " added to cart!");
-    window.location.href = 'dashboard.html';
-  }
+    window.location.href = '../pages/dashboard.html';  }
 
   // Script to display the selected size
   document.addEventListener('DOMContentLoaded', () => {

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <title>Milkshake Varieties</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <title>Water</title>
+  <link rel="stylesheet" href="../../assets/css/dashboard.css" />
 
-    <!-- This script manages a shopping cart by adding items to local storage -->
   <script>
     function addToCart(item) {
       let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
@@ -17,25 +17,30 @@
       }
       localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
       alert(item.name + " added to cart!");
+      window.location.href = '../pages/dashboard.html';
     }
   </script>
-  
 </head>
+
 <body>
   <header>
     <h1>Water Sizes</h1>
   </header>
+
   <main>
+
     <div class="food-item">
       <h3>500ml Water</h3>
       <p class="price">Ksh.30</p>
       <button onclick="addToCart({id: 31, name: '500ml Water', price: 30})">Add to Cart</button>
     </div>
+
     <div class="food-item">
       <h3>1 Litre Water</h3>
       <p class="price">Ksh.50</p>
       <button onclick="addToCart({id: 32, name: '1 Litre Water', price: 50})">Add to Cart</button>
     </div>
+    
   </main>
 </body>
 </html>
