@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact Us | Ron'z Pizza</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="../../assets/css/dashboard.css" />
 
   <style>
     .contact-container {
@@ -70,7 +70,6 @@
 
     <!-- Navigation menu -->
     <div class="header-controls">
-      <button id="cart-icon">🛒 Cart (<span id="cart-count">0</span>)</button>
       <div class="menu-toggle" id="toggle">
         <div class="bar"></div>
         <div class="bar"></div>
@@ -79,11 +78,10 @@
     </div>
 
     <nav class="nav-links" id="nav">
-      <a href="index.html">Home</a>
+      <a href="dashboard.html">Home</a>
       <a href="aboutus.html">About Us</a>
-      <a href="contactus.html">Contact Us</a>
       <a href="faq.html">FAQ</a>
-      <a href="logout.php" class="signout">Sign Out</a>
+      <a href="../../auth/logout.php" class="signout">Sign Out</a>
     </nav>
   </header>
 
@@ -111,8 +109,24 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Ron'z Pizza. All rights reserved.</p>
+    <p>&copy; 2026 Ron'z Pizza. All rights reserved.</p>
   </footer>
+
+   <script>
+    const toggle = document.getElementById('toggle');
+    const nav = document.getElementById('nav');
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nav.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('active');
+      }
+    });
+  </script>
 
 </body>
 </html>
