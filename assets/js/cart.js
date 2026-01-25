@@ -1,14 +1,6 @@
-/**
- * Shared Cart Management Utility
- * Centralizes all cart operations across the application
- */
-
 const Cart = {
   STORAGE_KEY: 'ronz_cart',
 
-  /**
-   * Get all items in cart
-   */
   getItems() {
     try {
       return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
@@ -18,16 +10,13 @@ const Cart = {
     }
   },
 
-  /**
-   * Save cart to localStorage
-   */
+  //Save cart to localStorage
   saveItems(items) {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
   },
 
-  /**
-   * Add item to cart
-   */
+  //Add item to cart
+
   addItem(item) {
     if (!item.id || !item.name || typeof item.price === 'undefined') {
       console.error('Invalid item passed to addItem', item);
@@ -48,9 +37,8 @@ const Cart = {
     return true;
   },
 
-  /**
-   * Update item quantity
-   */
+  //Update item quantity
+
   updateQuantity(itemId, quantity) {
     const items = this.getItems();
     const item = items.find(i => i.id === itemId);
@@ -66,42 +54,37 @@ const Cart = {
     }
   },
 
-  /**
-   * Remove item from cart
-   */
+  //Remove item from cart
+
   removeItem(itemId) {
     const items = this.getItems().filter(i => i.id !== itemId);
     this.saveItems(items);
     this.notifyUpdate();
   },
 
-  /**
-   * Clear entire cart
-   */
+  //Clear entire cart
+
   clear() {
     localStorage.removeItem(this.STORAGE_KEY);
     this.notifyUpdate();
   },
 
-  /**
-   * Get total quantity
-   */
+  //Get total quantity
+
   getTotalQuantity() {
     return this.getItems().reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
   },
 
-  /**
-   * Get total price
-   */
+  //Get total price
+
   getTotalPrice() {
     return this.getItems().reduce((sum, item) => {
       return sum + (Number(item.price) * Number(item.quantity));
     }, 0);
   },
 
-  /**
-   * Notify listeners of cart updates
-   */
+  //Notify listeners of cart updates
+
   notifyUpdate() {
     window.dispatchEvent(new CustomEvent('cartUpdated', {
       detail: {

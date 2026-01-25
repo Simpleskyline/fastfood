@@ -31,7 +31,17 @@ if (!$data || !isset($data["items"]) || !isset($data["total"])) {
     exit;
 }
 
-$total = $data["total"];
+$total = filter_var($data["total"], FILTER_VALIDATE_FLOAT);
+if ($total === false) {
+    echo json_encode(["success" => false, "message" => "Invalid total price"]);
+    exit;
+}
+
+if (empty($data["items"])) {
+    echo json_encode(["success" => false, "message" => "Cart is empty"]);
+    exit;
+}
+
 $items = json_encode($data["items"]);
 
 // Insert into database
@@ -47,8 +57,10 @@ if ($stmt->execute()) {
         "total" => $total
     ]);
 } else {
+    error_log("Database error: " . $stmt->error);  // Log the error for debugging
     echo json_encode(["success" => false, "message" => "Failed to save order"]);
 }
 
 $stmt->close();
 $conn->close();
+?>

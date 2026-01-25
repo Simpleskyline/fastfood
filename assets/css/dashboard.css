@@ -291,3 +291,239 @@ main {
 .signup-btn:hover {
   background: linear-gradient(to right, #ff4b2b, #ff416c);
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #fff8f01b;
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===============================
+   CONTACT US – MATCH ABOUT US BOX
+   =============================== */
+.contact-container {
+  max-width: 1200px;
+  width: 90%;
+  margin: -70px auto 60px;
+  padding: 50px 60px;
+
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.15);
+  animation: fadeSlideUp 0.8s ease-in-out;
+}
+
+/* Headings */
+.contact-container h2 {
+  font-size: 38px;
+  color: #ff4b2b;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.contact-container h3 {
+  font-size: 24px;
+  color: #ff416c;
+  margin: 35px 0 15px;
+}
+
+/* Text */
+.contact-container p,
+.contact-container label {
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+/* Form inputs */
+.contact-container input,
+.contact-container textarea {
+  font-size: 16px;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 30px 25px;
+    margin-top: -40px;
+  }
+
+  .contact-container h2 {
+    font-size: 28px;
+  }
+
+  .contact-container h3 {
+    font-size: 20px;
+  }
+}
+
+/* ===============================
+   HEADER (MATCHES DASHBOARD)
+   =============================== */
+.header {
+  background-image: url("https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1350&q=80");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 220px;
+}
+
+.header h1 {
+  font-size: 54px;
+  font-weight: bold;
+}
+
+/* ===============================
+   HAMBURGER MENU
+   =============================== */
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  width: 25px;
+  cursor: pointer;
+}
+
+.menu-toggle .bar {
+  background: white;
+  height: 3px;
+  margin: 3px 0;
+  border-radius: 2px;
+}
+
+/* ===============================
+   NAVIGATION MENU
+   =============================== */
+.nav-links {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  background: #ff4b2b;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.nav-links.active {
+  display: flex;
+}
+
+.nav-links a {
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Sign Out – same behavior as dashboard */
+.nav-links a.signout {
+  background: black;
+  color: #f5eeed;
+  padding: 8px 0;
+  margin: 10px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.about-container {
+  max-width: 1200px;
+  width: 90%;
+  margin: -70px auto 60px;
+  padding: 50px 60px;
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.15);
+  animation: fadeSlideUp 0.8s ease-in-out;
+}
+
+/* Headings */
+.about-container h2 {
+  font-size: 38px;
+  color: #ff4b2b;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.about-container h3 {
+  font-size: 24px;
+  color: #ff416c;
+  margin: 35px 0 15px;
+}
+
+/* Text styling */
+.about-container p {
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 18px;
+  max-width: 1000px;
+}
+
+.about-container ul {
+  padding-left: 25px;
+  margin-top: 10px;
+  max-width: 1000px;
+}
+
+.about-container li {
+  margin-bottom: 10px;
+  font-size: 17px;
+}
+
+/* Section spacing */
+.about-container section {
+  margin-bottom: 40px;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer {
+  text-align: center;
+  background: #0c0c0c;
+  color: white;
+  padding: 20px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 36px;
+  }
+
+  .about-container {
+    padding: 30px 25px;
+    margin-top: -40px;
+  }
+
+  .about-container h2 {
+    font-size: 28px;
+  }
+
+  .about-container h3 {
+    font-size: 20px;
+  }
+}
