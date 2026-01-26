@@ -33,6 +33,7 @@ h1 {
   font-weight: bold;
 }
 
+
 /* Cart and hamburger menu alignment */
 .header-controls {
   display: flex;
@@ -366,6 +367,7 @@ body {
   }
 }
 
+
 /* ===============================
    HEADER (MATCHES DASHBOARD)
    =============================== */
@@ -526,4 +528,17 @@ body {
   .about-container h3 {
     font-size: 20px;
   }
+}
+
+/* ===============================
+   CONTACT US IMAGE (SAFE ADDITION)
+   =============================== */
+.contact-image {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  display: block;
+  margin: 20px auto 35px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
