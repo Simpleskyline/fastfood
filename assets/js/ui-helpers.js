@@ -1,12 +1,9 @@
-/**
- * UI Helper Utilities
- * Common UI functions for loading states, notifications, etc.
- */
+//Common UI functions for loading states, notifications, etc.
 
 const UI = {
-  /**
-   * Show loading spinner
-   */
+
+//Show loading spinner
+
   showLoading(element, message = 'Loading...') {
     if (typeof element === 'string') {
       element = document.querySelector(element);
@@ -21,9 +18,8 @@ const UI = {
     }
   },
 
-  /**
-   * Show error message
-   */
+//Show error message
+
   showError(element, message) {
     if (typeof element === 'string') {
       element = document.querySelector(element);
@@ -37,9 +33,8 @@ const UI = {
     }
   },
 
-  /**
-   * Show success toast notification
-   */
+//Show success toast notification
+  
   showToast(message, type = 'success', duration = 3000) {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
@@ -57,9 +52,8 @@ const UI = {
     }, duration);
   },
 
-  /**
-   * Confirm dialog with promise
-   */
+//Confirm dialog with promise
+
   confirm(message) {
     return new Promise((resolve) => {
       const result = window.confirm(message);
@@ -67,9 +61,8 @@ const UI = {
     });
   },
 
-  /**
-   * Format currency
-   */
+//Format currency
+
   formatCurrency(amount) {
     return `Ksh.${Number(amount).toFixed(2)}`;
   },
@@ -89,9 +82,8 @@ const UI = {
     };
   },
 
-  /**
-   * Add lazy loading to images
-   */
+//Add lazy loading to images
+
   enableLazyLoading() {
     if ('loading' in HTMLImageElement.prototype) {
       // Native lazy loading
