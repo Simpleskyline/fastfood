@@ -1,5 +1,3 @@
--- Drop the database if it exists and create a new one
-DROP DATABASE IF EXISTS fastfood;
 CREATE DATABASE fastfood;
 USE fastfood;
 
@@ -17,11 +15,3 @@ CREATE TABLE IF NOT EXISTS clients (
     INDEX idx_email (Email),
     INDEX idx_username (Username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Insert a test admin user (password: admin123)
-INSERT INTO clients (FirstName, LastName, Username, Email, Password, Role) 
-VALUES ('Admin', 'User', 'admin', 'admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
-
--- Insert a test customer (password: customer123)
-INSERT INTO clients (FirstName, LastName, Username, Email, Password) 
-VALUES ('John', 'Doe', 'johndoe', 'john@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');

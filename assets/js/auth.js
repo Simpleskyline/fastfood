@@ -1,129 +1,175 @@
-/*
- Authentication & Session Management Utility
- Handles user authentication state
-*/
+// ===============================
+// Signup & Signin Handlers
+// ===============================
 
-const Auth = {
-  STORAGE_KEY: 'fastfood_current',
-  USERS_KEY: 'fastfood_users',
+// Elements
+const signinForm = document.getElementById("signinForm");
+const signupForm = document.getElementById("signupForm");
+const toggleBtn = document.getElementById("toggleBtn");
+const signinBtn = document.getElementById("signinBtn");
+const signupBtn = document.getElementById("signupBtn");
+const signinError = document.getElementById("signinError");
+const signupError = document.getElementById("signupError");
 
-/*
- Get current logged-in user
-*/
-  getCurrentUser() {
-    const username = localStorage.getItem(this.STORAGE_KEY);
-    if (!username) return null;
+// Toggle signup/signin UI
+function showSignup(show) {
+    signinError.style.display = 'none';
+    signupError.style.display = 'none';
 
-    const users = this.getAllUsers();
-    return users[username] || null;
-  },
+    if (show) {
+        signinForm.style.display = "none";
+        signupForm.style.display = "block";
+        toggleBtn.textContent = "SIGN IN";
+        document.getElementById("panelTitle").textContent = "Welcome Back!";
+        document.getElementById("panelText").textContent = "Create your account and choose your role.";
+    } else {
+        signinForm.style.display = "block";
+        signupForm.style.display = "none";
+        toggleBtn.textContent = "SIGN UP";
+        document.getElementById("panelTitle").textContent = "Hello, Friend!";
+        document.getElementById("panelText").textContent = "Enter your personal details and start your journey with us";
+    }
+}
+showSignup(false);
 
-/**
- Get all users (for localStorage-based auth)
-*/
-  getAllUsers() {
+// UI toggle button
+toggleBtn.addEventListener("click", () => showSignup(signinForm.style.display !== "none"));
+
+// Show error helper
+function showError(element, message) {
+    element.innerHTML = message;
+    element.style.display = 'block';
+}
+
+// Redirect based on role
+function redirectToDashboard(user) {
+    if (user.role === "admin") {
+        window.location.href = "admin_dashboard.html";
+    } else {
+        window.location.href = "dashboard.html";
+    }
+}
+
+// ===============================
+// SIGNUP
+// ===============================
+signupForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    signupError.style.display = 'none';
+
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+        showError(signupError, "Passwords do not match.");
+        return;
+    }
+
+    if (password.length < 6) {
+        showError(signupError, "Password must be at least 6 characters.");
+        return;
+    }
+
+    const email = document.getElementById("email").value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError(signupError, "Please enter a valid email address.");
+        return;
+    }
+
+    // Disable button
+    signupBtn.disabled = true;
+    signupBtn.textContent = 'Creating account...';
+
+    // Prepare FormData
+    const formData = new FormData();
+    formData.append('username', document.getElementById("username").value.trim());
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('role', document.getElementById("role").value);
+
     try {
-      return JSON.parse(localStorage.getItem(this.USERS_KEY) || '{}');
-    } catch (e) {
-      console.error('Failed to parse users', e);
-      return {};
+        const response = await fetch('http://localhost:8080/fastfood/register.php', {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        });
+
+        const responseText = await response.text();
+        let data;
+
+        try { data = JSON.parse(responseText); }
+        catch { throw new Error('Invalid response from server. Check PHP code.'); }
+
+        if (data.success) {
+            // Save user in local Auth
+            Auth.register({
+                username: data.user.username,
+                email: data.user.email,
+                role: data.user.role,
+                firstName: data.user.firstName || '',
+                lastName: data.user.lastName || ''
+            });
+
+            alert(data.message || 'Account created successfully!');
+            redirectToDashboard(data.user);
+        } else {
+            showError(signupError, data.message || 'Signup failed. Try again.');
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        showError(signupError, error.message || 'An error occurred.');
+    } finally {
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'SIGN UP';
     }
-  },
+});
 
-/*
-Check if user is logged in
-*/
-  isLoggedIn() {
-    return this.getCurrentUser() !== null;
-  },
+// ===============================
+// SIGNIN
+// ===============================
+signinForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    signinError.style.display = 'none';
 
-/*
-Check if user is admin
-*/
-  isAdmin() {
-    const user = this.getCurrentUser();
-    return user && user.role === 'admin';
-  },
+    const email = document.getElementById('signinEmail').value.trim();
+    const password = document.getElementById('signinPassword').value;
 
-/*
-Require authentication - redirect if not logged in
-*/
-  requireAuth(redirectUrl = 'auth.html') {
-    if (!this.isLoggedIn()) {
-      window.location.href = redirectUrl;
-      return false;
+    signinBtn.disabled = true;
+    signinBtn.textContent = 'Signing in...';
+
+    try {
+        const response = await fetch('http://localhost:8080/fastfood/login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const responseText = await response.text();
+        let data;
+        try { data = JSON.parse(responseText); }
+        catch { throw new Error('Invalid response from server. Check login.php'); }
+
+        if (data.success) {
+            const user = data.user;
+
+            // Save in Auth
+            Auth.register({
+                username: user.Username,
+                email: user.Email,
+                role: user.Role,
+                firstName: user.FirstName || '',
+                lastName: user.LastName || ''
+            });
+
+            redirectToDashboard(user);
+        } else {
+            showError(signinError, data.message || 'Login failed. Check credentials.');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showError(signinError, error.message || 'An error occurred.');
+    } finally {
+        signinBtn.disabled = false;
+        signinBtn.textContent = 'SIGN IN';
     }
-    return true;
-  },
-
-  /**
-   * Require admin role - redirect if not admin
-   */
-  requireAdmin(redirectUrl = 'dashboard.html') {
-    if (!this.isAdmin()) {
-      alert('Access denied. Admin privileges required.');
-      window.location.href = redirectUrl;
-      return false;
-    }
-    return true;
-  },
-
-  /**
-   * Login user
-   */
-  login(username, password) {
-    const users = this.getAllUsers();
-    const user = users[username];
-
-    if (!user || user.password !== password) {
-      return { success: false, message: 'Invalid username or password' };
-    }
-
-    localStorage.setItem(this.STORAGE_KEY, username);
-    return { success: true, user };
-  },
-
-  /**
-   * Register new user
-   */
-  register(userData) {
-    const users = this.getAllUsers();
-
-    if (users[userData.username]) {
-      return { success: false, message: 'Username already taken' };
-    }
-
-    users[userData.username] = userData;
-    localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
-    localStorage.setItem(this.STORAGE_KEY, userData.username);
-
-    return { success: true, user: userData };
-  },
-
-  /**
-   * Logout current user
-   */
-  logout() {
-    localStorage.removeItem(this.STORAGE_KEY);
-    window.location.href = 'auth.html';
-  },
-
-  /**
-   * Update user profile
-   */
-  updateProfile(updates) {
-    const username = localStorage.getItem(this.STORAGE_KEY);
-    if (!username) return { success: false, message: 'Not logged in' };
-
-    const users = this.getAllUsers();
-    if (!users[username]) return { success: false, message: 'User not found' };
-
-    users[username] = { ...users[username], ...updates };
-    localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
-
-    return { success: true, user: users[username] };
-  }
-};
-
-// Make Auth available globally
-window.Auth = Auth;
+});
