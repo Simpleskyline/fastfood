@@ -1,66 +1,43 @@
 <?php
+session_start();
 header("Content-Type: application/json");
 
-// Always return JSON, even on fatal errors
-set_exception_handler(function($e) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Server error: " . $e->getMessage()]);
-    exit;
-});
-
-set_error_handler(function($errno, $errstr, $errfile, $errline) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "PHP error: $errstr in $errfile:$errline"]);
-    exit;
-});
-
-// DB connection
-$conn = new mysqli("localhost", "root", "", "fastfood_db");
-
-// Check connection
-if ($conn->connect_error) {
-    echo json_encode(["success" => false, "message" => "DB Connection failed"]);
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["success" => false, "message" => "Login required"]);
     exit;
 }
 
-// Get raw POST data
+$conn = new mysqli("localhost", "root", "", "fastfood");
+if ($conn->connect_error) {
+    echo json_encode(["success" => false, "message" => "DB connection failed"]);
+    exit;
+}
+
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!$data || !isset($data["items"]) || !isset($data["total"])) {
-    echo json_encode(["success" => false, "message" => "Invalid request"]);
+if (empty($data['items']) || !isset($data['total'])) {
+    echo json_encode(["success" => false, "message" => "Invalid order data"]);
     exit;
 }
 
-$total = filter_var($data["total"], FILTER_VALIDATE_FLOAT);
-if ($total === false) {
-    echo json_encode(["success" => false, "message" => "Invalid total price"]);
-    exit;
-}
+$items = json_encode($data['items']);
+$total = (float)$data['total'];
+$user_id = $_SESSION['user_id'];
 
-if (empty($data["items"])) {
-    echo json_encode(["success" => false, "message" => "Cart is empty"]);
-    exit;
-}
+$stmt = $conn->prepare(
+    "INSERT INTO orders (user_id, items, total, created_at)
+     VALUES (?, ?, ?, NOW())"
+);
 
-$items = json_encode($data["items"]);
-
-// Insert into database
-$sql = "INSERT INTO orders (items, total, created_at) VALUES (?, ?, NOW())";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sd", $items, $total);
+$stmt->bind_param("isd", $user_id, $items, $total);
 
 if ($stmt->execute()) {
-    $order_id = $stmt->insert_id;
     echo json_encode([
         "success" => true,
-        "order_id" => $order_id,
-        "total" => $total
+        "order_id" => $stmt->insert_id
     ]);
 } else {
-    error_log("Database error: " . $stmt->error);  // Log the error for debugging
     echo json_encode(["success" => false, "message" => "Failed to save order"]);
 }
-
 $stmt->close();
-$conn->close();
-?>
+$conn->close(); 
