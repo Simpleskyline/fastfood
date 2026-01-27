@@ -73,7 +73,7 @@
     // Check if already logged in
     if (Auth.isLoggedIn()) {
       const user = Auth.getCurrentUser();
-      window.location.href = user.role === 'admin' ? 'admin_dashboard.html' : 'dashboard.html';
+      window.location.href = user.role === 'admin' ? 'admin/admin_dashboard.html' : 'frontend/pages/dashboard.html';
     }
 
     // Toggle function
@@ -112,9 +112,9 @@
     // Redirect based on role
     function redirectToDashboard(user) {
       if (user.role === "admin") {
-        window.location.href = "admin_dashboard.html";
+        window.location.href = "admin/admin_dashboard.html";
       } else {
-        window.location.href = "dashboard.html";
+        window.location.href = "frontend/pages/dashboard.html";
       }
     }
 
@@ -158,7 +158,7 @@
 
       try {
         console.log('Sending request to server...');
-        const response = await fetch('http://localhost:8080/fastfood/submit_signup.php', {
+        const response = await fetch('http://localhost:8080/FASTFOOD/auth/submit_signup.php', {
           method: 'POST',
           body: formData,
           credentials: 'same-origin',
@@ -268,7 +268,7 @@
       
       try {
         console.log('Sending login request...');
-        const response = await fetch('http://localhost:8080/fastfood/login.php', {
+        const response = await fetch('http://localhost:8080/fastfood/auth/login.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -334,7 +334,7 @@
           // Determine redirect URL
           const redirectUrl = data.redirect || 
                             (data.data && data.data.redirect) || 
-                            (userToStore.role === 'admin' ? 'admin_dashboard.html' : 'dashboard.html');
+                            (userToStore.role === 'admin' ? 'aadmin/admin_dashboard.html' : 'frontend/pages/dashboard.html');
           
           console.log('Redirecting to:', redirectUrl);
           window.location.href = redirectUrl;

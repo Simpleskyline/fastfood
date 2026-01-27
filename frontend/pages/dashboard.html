@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ron'z Pizza - Menu</title>
+  <title>Skyline Treats - Menu</title>
   <link rel="stylesheet" href="../../assets/css/dashboard.css" />
 </head>
 
 <body>
 
   <header>
-  <h1>🍔 Ron'z Pizza</h1>
+  <h1>🍔 Skyline Treats</h1>
   <div class="header-controls">
     <button id="cart-icon">🛒 Cart (<span id="cart-count">0</span>)</button>
 
@@ -299,7 +299,7 @@
 
     console.log('Sending order:', { user_id, items: cartItems, total: total.toFixed(2) });
 
-    fetch('save_order.php', {
+    fetch('../../backend/api/save_order.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -349,7 +349,7 @@
 </script>
 
   <footer class="footer">
-    <p>© 2026 Ron'z Pizza. All rights reserved.</p>
+    <p>© 2026 Skyline Treats. All rights reserved.</p>
   </footer>
   
 </body>
