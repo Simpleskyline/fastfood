@@ -62,7 +62,5 @@ sendResponse(true, "Login successful", [
     ],
     "redirect" => $user['Role'] === 'admin' ? "admin_dashboard.html" : "dashboard.html"
 ]);
-
-    sendResponse(false, "Failed to save order", null, 500);
 $stmt->close();
 $conn->close();

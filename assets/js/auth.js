@@ -88,7 +88,7 @@ signupForm.addEventListener("submit", async function(e) {
     formData.append('role', document.getElementById("role").value);
 
     try {
-        const response = await fetch('http://localhost:8080/fastfood/register.php', {
+        const response = await fetch('http://localhost:8080/fastfood/signup.php', {
             method: 'POST',
             body: formData,
             headers: { 'Accept': 'application/json' }
@@ -150,7 +150,7 @@ signinForm.addEventListener('submit', async function(e) {
         catch { throw new Error('Invalid response from server. Check login.php'); }
 
         if (data.success) {
-            const user = data.user;
+            const user = data.data.user;
 
             // Save in Auth
             Auth.register({

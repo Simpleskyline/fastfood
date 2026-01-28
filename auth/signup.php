@@ -1,35 +1,47 @@
 <?php
 session_start();
+header("Content-Type: application/json");
 
-// Database connection
 $conn = new mysqli("localhost", "root", "", "fastfood");
-
-// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(["success" => false, "message" => "DB error"]);
+    exit;
 }
 
-// Collect form inputs
-$name = $_POST['name'];
-$email = $_POST['email'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+$username = $_POST['username'] ?? '';
+$email = $_POST['email'] ?? '';
+$passwordRaw = $_POST['password'] ?? '';
+$role = $_POST['role'] ?? 'user';
 
-// Insert new user
-$stmt = $conn->prepare("INSERT INTO clients (name, email, password) VALUES (?, ?, ?)");
-$stmt->bind_param("sss", $name, $email, $password);
+if (!$username || !$email || !$passwordRaw) {
+    echo json_encode(["success" => false, "message" => "Missing fields"]);
+    exit;
+}
+
+$password = password_hash($passwordRaw, PASSWORD_DEFAULT);
+
+$stmt = $conn->prepare(
+    "INSERT INTO clients (Username, Email, Password, Role)
+     VALUES (?, ?, ?, ?)"
+);
+$stmt->bind_param("ssss", $username, $email, $password, $role);
 
 if ($stmt->execute()) {
-    // Automatically log in user
-    $_SESSION['email'] = $email;
-    $_SESSION['name'] = $name;
+    $_SESSION['user_id'] = $stmt->insert_id;
+    $_SESSION['role'] = $role;
 
-    // Redirect to dashboard
-    header("Location: dashboard.html");
-    exit();
+    echo json_encode([
+        "success" => true,
+        "message" => "Account created",
+        "user" => [
+            "id" => $stmt->insert_id,
+            "username" => $username,
+            "email" => $email,
+            "role" => $role
+        ]
+    ]);
 } else {
-    echo "Signup failed: " . $conn->error;
+    echo json_encode(["success" => false, "message" => "Insert failed"]);
 }
-
 $stmt->close();
 $conn->close();
-?>
