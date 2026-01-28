@@ -1,13 +1,14 @@
-🍔 FastFood Ordering Website
-📌 Project Overview
+🍔 **FastFood Ordering Website**
 
---
+📌 **Project Overview**
+
+---
 
 This is a web-based fast food ordering system that allows customers to browse food items, place orders online, make payments, request delivery, and leave feedback.
 
---
+---
 
-🛠️ Technology Stack
+🛠️ **Technology Stack**
 **Frontend**
 
 HTML – Structure
@@ -25,54 +26,33 @@ Python – Data analysis and reporting (sales, trends, statistics)
 **Database**
 
 MySQL – Stores users, orders, payments, food items, and feedback
+---
 
-🚀 Features
-👤 User Authentication
+🗂️ **Core Modules**
 
-User signup and signin
+Authentication Module
 
-Secure password handling
+Food Menu Module
 
-Session-based authentication
+Cart & Orders Module
 
---
+Payment Processing Module
 
-🍕 Food Ordering
+Delivery Management Module
 
-Browse available food items
+Feedback & Reviews Module
+---
 
-View food descriptions and prices
+⚙️ **Installation & Setup (Basic)**
 
-Add items to cart
+Clone or download the project
 
-Place orders online
+Upload files to your web server (e.g., public_html)
 
---
+Import the MySQL database
 
-💳 Online Payments
+Configure database credentials
 
-Support for online payment methods
+Ensure PHP and Python are enabled on the server
 
-Payment status tracking (Pending, Paid, Failed)
-
-Secure payment processing workflow
-
---
-
-🚚 Delivery Management
-
-Users can request food delivery
-
-Store delivery details (location, contact)
-
-Order status tracking (Preparing, Out for Delivery, Delivered)
-
---
-
-⭐ Feedback & Reviews
-
-Customers can submit feedback after ordering
-
-Rating system for food and service
-
-Feedback stored for analysis and improvement
+Access the site via your browser
