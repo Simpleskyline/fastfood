@@ -41,6 +41,8 @@ Payment Processing Module
 Delivery Management Module
 
 Feedback & Reviews Module
+
+Analytics Module
 ---
 
 ⚙️ **Installation & Setup (Basic)**
