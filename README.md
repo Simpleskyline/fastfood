@@ -9,6 +9,7 @@ This is a web-based fast food ordering system that allows customers to browse fo
 ---
 
 🛠️ **Technology Stack**
+
 **Frontend**
 
 HTML – Structure
@@ -24,8 +25,7 @@ PHP – Core backend logic and APIs
 Python – Data analysis and reporting (sales, trends, statistics)
 
 **Database**
-
-MySQL – Stores users, orders, payments, food items, and feedback
+MySQL - Stores users, orders, payments, food items and feedback
 ---
 
 🗂️ **Core Modules**
