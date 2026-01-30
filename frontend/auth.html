@@ -156,7 +156,7 @@
       formData.append('ConfirmPassword', confirmPassword);
       formData.append('Role', document.getElementById("role").value);
 
-      fetch('http://localhost/fastfood/auth/submit_signup.php', {
+     const response = await fetch('http://localhost/fastfood/php/auth/register.php', {
   method: 'POST',
   body: formData,
   credentials: 'same-origin',
@@ -164,6 +164,7 @@
     'Accept': 'application/json'
   }
 });
+
       try {
         console.log('Sending signup request...');
 
@@ -268,7 +269,7 @@
       
       try {
         console.log('Sending login request...');
-        const response = await fetch('http://localhost:8080/fastfood/auth/login.php', {
+        const response = await fetch('http://localhost/fastfood/php/auth/login.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
