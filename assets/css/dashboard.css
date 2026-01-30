@@ -308,7 +308,7 @@ body {
 }
 
 /* ===============================
-   CONTACT US – MATCH ABOUT US BOX
+   CONTACT US – VIBRANT & MODERN
    =============================== */
 .contact-container {
   max-width: 1200px;
@@ -316,39 +316,240 @@ body {
   margin: -70px auto 60px;
   padding: 50px 60px;
 
-  background: white;
+  background-image: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 240, 0.92) 100%),
+    url('https://media.istockphoto.com/id/938742222/photo/cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=D1z4xPCs-qQIZyUqRcHrnsJSJy_YbUD9udOrXpilNpI=');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 22px;
-  box-shadow: 0 14px 35px rgba(0,0,0,0.15);
+  box-shadow: 0 14px 35px rgba(255, 75, 43, 0.2), 0 0 0 1px rgba(255, 75, 43, 0.1);
   animation: fadeSlideUp 0.8s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Headings */
+/* Decorative corner accents */
+.contact-container::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+  border-radius: 50%;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+.contact-container::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: -30px;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  border-radius: 50%;
+  opacity: 0.12;
+  z-index: 0;
+}
+
+/* Ensure content is above decorative elements */
+.contact-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Headings - More vibrant gradient */
 .contact-container h2 {
-  font-size: 38px;
-  color: #ff4b2b;
-  margin-bottom: 25px;
+  font-size: 42px;
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
   text-align: center;
+  font-weight: bold;
+  letter-spacing: -0.5px;
+  animation: slideDown 0.6s ease-out;
 }
 
 .contact-container h3 {
-  font-size: 24px;
-  color: #ff416c;
+  font-size: 26px;
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 35px 0 15px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 /* Text */
-.contact-container p,
+.contact-container p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 15px;
+  text-align: center;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .contact-container label {
   font-size: 17px;
   line-height: 1.8;
+  color: #333;
+  font-weight: 600;
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+  text-align: left;
 }
 
-/* Form inputs */
+/* Form inputs - More vibrant with focus effects */
 .contact-container input,
 .contact-container textarea {
   font-size: 16px;
+  border-radius: 12px;
+  padding: 14px 18px;
+  width: 100%;
+  border: 2px solid #ffd4cc;
+  background: white;
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.contact-container input:focus,
+.contact-container textarea:focus {
+  outline: none;
+  border-color: #ff4b2b;
+  box-shadow: 0 0 0 4px rgba(255, 75, 43, 0.1), 0 4px 12px rgba(255, 75, 43, 0.15);
+  transform: translateY(-2px);
+}
+
+.contact-container input:focus + label,
+.contact-container textarea:focus + label {
+  color: #ff4b2b;
+}
+
+.contact-container textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Form styling */
+.contact-form {
+  margin: 30px auto;
+  padding: 35px;
+  max-width: 700px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 240, 0.9) 100%);
+  border-radius: 18px;
+  border: 2px dashed rgba(255, 75, 43, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 75, 43, 0.08);
+  transition: all 0.3s ease;
+}
+
+.contact-form:hover {
+  border-color: rgba(255, 75, 43, 0.5);
+  box-shadow: 0 6px 20px rgba(255, 75, 43, 0.12);
+}
+
+/* Submit button - Vibrant gradient with animation */
+.contact-form button[type="submit"] {
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  color: white;
+  padding: 15px 45px;
+  border: none;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 25px auto 0;
+  box-shadow: 0 6px 20px rgba(255, 75, 43, 0.35);
+  transition: all 0.3s ease;
+  display: block;
+  width: auto;
+  min-width: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-form button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.contact-form button[type="submit"]:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.contact-form button[type="submit"]:hover {
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 75, 43, 0.45);
+}
+
+.contact-form button[type="submit"]:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 75, 43, 0.35);
+}
+
+/* Contact info sections with icon-like styling */
+.contact-container h3 + p {
+  padding: 15px 20px;
+  background: linear-gradient(to right, rgba(255, 75, 43, 0.05), rgba(255, 65, 108, 0.05));
+  border-left: 4px solid #ff4b2b;
   border-radius: 8px;
-  padding: 12px;
+  margin: 0 auto 20px;
+  max-width: 700px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.contact-container h3 + p:hover {
+  background: linear-gradient(to right, rgba(255, 75, 43, 0.1), rgba(255, 65, 108, 0.1));
+  border-left-width: 6px;
+  padding-left: 24px;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive */
@@ -359,11 +560,20 @@ body {
   }
 
   .contact-container h2 {
-    font-size: 28px;
+    font-size: 32px;
   }
 
   .contact-container h3 {
-    font-size: 20px;
+    font-size: 22px;
+  }
+
+  .contact-form {
+    padding: 25px 20px;
+  }
+
+  .contact-form button[type="submit"] {
+    width: 100%;
+    padding: 14px 30px;
   }
 }
 
@@ -492,17 +702,6 @@ body {
   margin-bottom: 40px;
 }
 
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .footer {
   text-align: center;
   background: #0c0c0c;
@@ -531,14 +730,8 @@ body {
 }
 
 /* ===============================
-   CONTACT US IMAGE (SAFE ADDITION)
+   CONTACT US IMAGE (NOW BACKGROUND - HIDE INLINE)
    =============================== */
 .contact-image {
-  width: 100%;
-  max-width: 520px;
-  height: auto;
-  display: block;
-  margin: 20px auto 35px;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: none;
 }

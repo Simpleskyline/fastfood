@@ -15,10 +15,10 @@ try {
         throw new Exception("Connection failed: " . $conn->connect_error);
     }
 
-    // Get all users
+    // Get all clients
     $result = $conn->query("SELECT ID, Username, Email, Role, FirstName, LastName, CreatedAt FROM clients");
     
-    echo "<h2>Users in Database:</h2>";
+    echo "<h2>clients in Database:</h2>";
     
     if ($result->num_rows > 0) {
         echo "<table border='1' cellpadding='5' style='border-collapse: collapse;'>";
@@ -37,7 +37,7 @@ try {
         
         echo "</table>";
     } else {
-        echo "No users found in the database.";
+        echo "No clients found in the database.";
     }
     
     $conn->close();

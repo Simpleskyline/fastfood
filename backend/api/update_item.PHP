@@ -10,7 +10,7 @@ if (isset($data['id'], $data['name'], $data['price'], $data['available'])) {
     $price = floatval($data['price']);
     $available = intval($data['available']);
 
-    $stmt = $pdo->prepare("UPDATE items SET name = ?, price = ?, available = ? WHERE id = ?");
+    $conn = new mysqli("UPDATE items SET name = ?, price = ?, available = ? WHERE id = ?");
     $ok = $stmt->execute([$name, $price, $available, $id]);
 
     echo json_encode(["success" => $ok]);

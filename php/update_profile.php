@@ -30,7 +30,7 @@ if (
 }
 
 // Prepare statement to prevent SQL injection
-$stmt = $conn->prepare("UPDATE users SET FirstName=?, LastName=?, phonenumber=?, address=? WHERE Email=?");
+$stmt = $conn->prepare("UPDATE clients SET FirstName=?, LastName=?, phonenumber=?, address=? WHERE Email=?");
 if (!$stmt) {
     echo json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]);
     $conn->close();

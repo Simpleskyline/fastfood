@@ -43,12 +43,12 @@ try {
         echo "</table>";
         
         // Show sample data (first 5 rows)
-        $users = $conn->query("SELECT ID, Username, Email, Role, FirstName, LastName FROM clients LIMIT 5");
-        if ($users->num_rows > 0) {
-            echo "<h4>Sample Users (first 5):</h4>";
+        $clients = $conn->query("SELECT ID, Username, Email, Role, FirstName, LastName FROM clients LIMIT 5");
+        if ($clients->num_rows > 0) {
+            echo "<h4>Sample clients (first 5):</h4>";
             echo "<table border='1' cellpadding='5' style='border-collapse: collapse;'>";
             $first = true;
-            while($row = $users->fetch_assoc()) {
+            while($row = $clients->fetch_assoc()) {
                 if ($first) {
                     echo "<tr>";
                     foreach(array_keys($row) as $key) {
@@ -65,7 +65,7 @@ try {
             }
             echo "</table>";
         } else {
-            echo "<div style='color:red;'>No users found in the clients table.</div>";
+            echo "<div style='color:red;'>No clients found in the clients table.</div>";
         }
     }
     

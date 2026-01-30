@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-
+ 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In / Sign Up - Ron'z Pizza</title>
@@ -156,16 +156,16 @@
       formData.append('ConfirmPassword', confirmPassword);
       formData.append('Role', document.getElementById("role").value);
 
+      fetch('http://localhost/fastfood/auth/submit_signup.php', {
+  method: 'POST',
+  body: formData,
+  credentials: 'same-origin',
+  headers: {
+    'Accept': 'application/json'
+  }
+});
       try {
-        console.log('Sending request to server...');
-        const response = await fetch('http://localhost:8080/FASTFOOD/auth/submit_signup.php', {
-          method: 'POST',
-          body: formData,
-          credentials: 'same-origin',
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
+        console.log('Sending signup request...');
 
         console.log('Response status:', response.status);
         console.log('Response headers:', Object.fromEntries(response.headers.entries()));

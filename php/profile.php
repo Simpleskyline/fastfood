@@ -28,7 +28,7 @@ $address = $conn->real_escape_string($data['address']);
 $favFood = $conn->real_escape_string($data['favFood']);
 
 // Update query
-$sql = "UPDATE users SET FirstName='$name', Avatar='$avatar', phonenumber='$phone', Address='$address', fav_food='$favFood' WHERE Email='$email'";
+$sql = "UPDATE clients SET FirstName='$name', Avatar='$avatar', phonenumber='$phone', Address='$address', fav_food='$favFood' WHERE Email='$email'";
 
 if ($conn->query($sql) === TRUE) {
     echo json_encode(["success" => true, "message" => "Profile updated successfully!"]);
