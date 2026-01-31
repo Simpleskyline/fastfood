@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In / Sign Up - Ron'z Pizza</title>
-  <link rel="stylesheet" href="../assets/css/auth.css">
+  <link rel="stylesheet" href="auth.css">
   
   <style>
     .hint { font-size: 0.9rem; color: #666; margin-top: 8px; }
@@ -59,7 +59,7 @@
     </div>
   </div>
 
-  <script src="../assets/js/auth.js"></script>
+  <script src="auth.js"></script>
   <script>
     // Elements
     const signinForm = document.getElementById("signinForm");
@@ -114,7 +114,7 @@
       if (user.role === "admin") {
         window.location.href = "admin/admin_dashboard.html";
       } else {
-        window.location.href = "frontend/pages/dashboard.html";
+        window.location.href = "dashboard.html";
       }
     }
 
@@ -156,7 +156,7 @@
       formData.append('ConfirmPassword', confirmPassword);
       formData.append('Role', document.getElementById("role").value);
 
-     const response = await fetch('http://localhost/fastfood/php/auth/register.php', {
+     const response = await fetch('http://localhost/FASTFOOD/php/auth/register.php', {
   method: 'POST',
   body: formData,
   credentials: 'same-origin',
@@ -269,7 +269,7 @@
       
       try {
         console.log('Sending login request...');
-        const response = await fetch('http://localhost/fastfood/php/auth/login.php', {
+        const response = await fetch('http://localhost/FASTFOOD/php/auth/login.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -335,7 +335,7 @@
           // Determine redirect URL
           const redirectUrl = data.redirect || 
                             (data.data && data.data.redirect) || 
-                            (userToStore.role === 'admin' ? 'aadmin/admin_dashboard.html' : 'frontend/pages/dashboard.html');
+                            (userToStore.role === 'admin' ? 'aadmin/admin_dashboard.html' : 'dashboard.html');
           
           console.log('Redirecting to:', redirectUrl);
           window.location.href = redirectUrl;
