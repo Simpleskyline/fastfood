@@ -28,8 +28,6 @@
       <button onclick="addToCart({id: 13, name: 'Cheese Fries', price: 250})">Add to Cart</button>
     </div>
 
-     <!-- This script manages a shopping cart by adding items to local storage, -->
-     <!-- incrementing the quantity if an item already exists, -->
     <script>
     function addToCart(item) {
       let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];

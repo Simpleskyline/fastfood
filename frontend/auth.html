@@ -45,7 +45,7 @@
         <!-- ROLE selection -->
         <label for="role">Register as</label>
         <select id="role" required>
-          <option value="customer">Client</option>
+          <option value="client">Client</option>
           <option value="admin">Admin</option>
         </select>
         <button type="submit" id="signupBtn">SIGN UP</button>
@@ -73,7 +73,7 @@
     // Check if already logged in
     if (Auth.isLoggedIn()) {
       const user = Auth.getCurrentUser();
-      window.location.href = user.role === 'admin' ? 'admin/admin_dashboard.html' : 'frontend/pages/dashboard.html';
+      window.location.href = user.role === 'admin' ? 'admin/admin_dashboard.html' : 'dashboard.html';
     }
 
     // Toggle function

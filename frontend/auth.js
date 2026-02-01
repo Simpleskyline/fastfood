@@ -45,7 +45,7 @@ function showError(element, message) {
 // Redirect based on role
 function redirectToDashboard(client) {
     if (client.role === "admin") {
-        window.location.href = "admin_dashboard.html";
+        window.location.href = "admin/admin_dashboard.html";
     } else {
         window.location.href = "dashboard.html";
     }
@@ -83,7 +83,7 @@ signupForm.addEventListener("submit", async function (e) {
 
     try {
         const response = await fetch(
-            "http://localhost/fastfood/php/auth/register.php",
+            "http://localhost/FASTFOOD/php/auth/register.php",
             {
                 method: "POST",
                 body: formData,
@@ -127,7 +127,7 @@ signinForm.addEventListener("submit", async function (e) {
 
     try {
         const response = await fetch(
-            "http://localhost/fastfood/php/auth/login.php",
+            "http://localhost/FASTFOOD/php/auth/login.php",
             {
                 method: "POST",
                 body: formData,
