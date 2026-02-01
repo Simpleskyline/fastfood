@@ -127,7 +127,7 @@ signinForm.addEventListener("submit", async function (e) {
 
     try {
         const response = await fetch(
-            "http://localhost/FASTFOOD/php/auth/login.php",
+            "../php/auth/login.php",
             {
                 method: "POST",
                 body: formData,

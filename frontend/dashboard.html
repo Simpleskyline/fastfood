@@ -299,7 +299,7 @@
 
     console.log('Sending order:', { user_id, items: cartItems, total: total.toFixed(2) });
 
-    fetch('../../backend/api/save_order.php', {
+    fetch('../backend/api/create_order.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

@@ -13,7 +13,7 @@
     .loading { opacity: 0.6; pointer-events: none; }
     .error-text { color: #d32f2f; font-size: 0.9rem; margin-top: 5px; }
   </style>
-
+ 
 </head>
 
 <body class="auth">
@@ -156,7 +156,7 @@
       formData.append('ConfirmPassword', confirmPassword);
       formData.append('Role', document.getElementById("role").value);
 
-     const response = await fetch('http://localhost/FASTFOOD/php/auth/register.php', {
+     const response = await fetch('../php/auth/register.php', {
   method: 'POST',
   body: formData,
   credentials: 'same-origin',
@@ -269,7 +269,7 @@
       
       try {
         console.log('Sending login request...');
-        const response = await fetch('http://localhost/FASTFOOD/php/auth/login.php', {
+        const response = await fetch('../php/auth/login.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

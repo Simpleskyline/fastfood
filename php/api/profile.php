@@ -1,12 +1,12 @@
 <?php
 require_once __DIR__ . '/../middleware/auth_check.php';
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/db.php';
 
 header('Content-Type: application/json');
 
 $stmt = $pdo->prepare(
     "SELECT id, FirstName, LastName, Username, Email, Role, created_at
-     FROM users WHERE id = ?"
+     FROM clients WHERE id = ?"
 );
 
 $stmt->execute([$_SESSION['user_id']]);

@@ -4,7 +4,7 @@ session_start();
 session_unset();
 session_destroy();
 
-echo json_encode([
-    "success" => true,
-    "message" => "Logged out successfully"
-]);
+// Redirect to login page
+header("Location:../../frontend/auth.html");
+exit;
+?>

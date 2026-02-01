@@ -1,40 +1,100 @@
 <?php
-require_once __DIR__ . "/../config/database.php";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-header("Content-Type: application/json");
+require_once __DIR__ . '/../config/db.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(["error" => "Method not allowed"]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Method not allowed'
+    ]);
     exit;
 }
 
-$name     = trim($_POST["name"] ?? "");
-$email    = trim($_POST["email"] ?? "");
-$password = $_POST["password"] ?? "";
+/**
+ * MATCH FRONTEND FormData KEYS (case-sensitive!)
+ */
+$firstName = trim($_POST["FirstName"] ?? "");
+$lastName  = trim($_POST["LastName"] ?? "");
+$username  = trim($_POST["Username"] ?? "");
+$email     = trim($_POST["Email"] ?? "");
+$password  = $_POST["Password"] ?? "";
+$role      = trim($_POST["Role"] ?? "");
 
-if ($name === "" || $email === "" || $password === "") {
+/**
+ * Backend validation
+ */
+$errors = [];
+
+if ($firstName === "" || $lastName === "" || $username === "" || $email === "" || $password === "") {
     http_response_code(400);
-    echo json_encode(["error" => "All fields are required"]);
+    echo json_encode(["success" => false, "message" => "All fields are required"]);
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = 'Invalid email format';
+}
+
+if (strlen($password) < 6) {
+    $errors[] = 'Password must be at least 6 characters';
+}
+
+if (!empty($errors)) {
     http_response_code(400);
-    echo json_encode(["error" => "Invalid email"]);
+    echo json_encode([
+        'success' => false,
+        'errors' => $errors
+    ]);
     exit;
 }
 
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 try {
-    $stmt = $pdo->prepare(
-        "INSERT INTO clients (name, email, password) VALUES (?, ?, ?)"
-    );
-    $stmt->execute([$name, $email, $hashedPassword]);
+    $stmt = $pdo->prepare("
+        INSERT INTO clients (first_name, last_name, username, email, password, role)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ");
 
-    echo json_encode(["status" => "success"]);
+        $stmt->execute([
+        $firstName,
+        $lastName,
+        $username,
+        $email,
+        password_hash($password, PASSWORD_DEFAULT),
+        $role
+    ]);
+
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Account created successfully',
+        'user' => [
+            'username' => $username,
+            'email' => $email,
+            'role' => $role
+        ]
+    ]);
+
 } catch (PDOException $e) {
     http_response_code(400);
-    echo json_encode(["error" => "Email already exists"]);
+
+    if ($e->getCode() === '23000') {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Username or email already exists'
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Registration failed',
+            'debug' => $e->getMessage() // remove in production
+        ]);
+    }
 }
