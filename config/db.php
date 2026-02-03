@@ -2,7 +2,7 @@
 // php/config/db.php
 
 $host = "localhost";
-$db   = "fastfood_db";
+$db   = "fastfood";
 $user = "root";
 $pass = ""; // Put your DB password here if you have one
 $charset = "utf8mb4";
