@@ -7,30 +7,27 @@ require_once __DIR__ . "/../../../config/role_check.php";
 
 requireAdmin();
 
-// Total orders + revenue
-$stmt = $pdo->query(
-    "SELECT 
-        COUNT(*) AS total_orders,
-        COALESCE(SUM(total_amount), 0) AS total_revenue
-     FROM orders"
-);
-$summary = $stmt->fetch();
+try {
+    $stats = [];
 
-// Top food items
-$stmt = $pdo->query(
-    "SELECT 
-        f.name,
-        SUM(oi.quantity) AS total_sold
-     FROM order_items oi
-     JOIN food_items f ON oi.food_item_id = f.id
-     GROUP BY f.id
-     ORDER BY total_sold DESC
-     LIMIT 5"
-);
-$topItems = $stmt->fetchAll();
+    $stats["total_orders"] = (int)$pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
+    $stats["total_revenue"] = (float)$pdo->query("SELECT COALESCE(SUM(total_price), 0) FROM orders")->fetchColumn();
 
-echo json_encode([
-    "status" => "success",
-    "summary" => $summary,
-    "top_items" => $topItems
-]);
+    $stmt = $pdo->query("
+        SELECT f.name, SUM(oi.quantity) AS sold
+        FROM order_items oi
+        JOIN food_items f ON oi.food_id = f.id
+        GROUP BY oi.food_id
+        ORDER BY sold DESC
+        LIMIT 5
+    ");
+
+    $stats["top_items"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($stats);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        "error" => "Failed to load admin stats"
+    ]);
+}
