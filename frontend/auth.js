@@ -76,6 +76,7 @@ signupForm.addEventListener("submit", async e => {
   username: document.getElementById("username").value.trim(),
   email: document.getElementById("email").value.trim(),
   password: password,
+  confirm_password: confirmPassword,
   role: document.getElementById("role").value
 };
 

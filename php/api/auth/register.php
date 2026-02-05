@@ -13,18 +13,18 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $data = json_decode(file_get_contents("php://input"), true);
 
 // Extract fields safely
-$firstName = trim($data["FirstName"] ?? "");
-$lastName  = trim($data["LastName"] ?? "");
-$username  = trim($data["Username"] ?? "");
-$email     = trim($data["Email"] ?? "");
-$password  = $data["Password"] ?? "";
-$confirm   = $data["ConfirmPassword"] ?? "";
-$roleName  = trim($data["Role"] ?? "");
+// Extract fields safely (match JS payload)
+$firstName = trim($data["first_name"] ?? "");
+$lastName  = trim($data["last_name"] ?? "");
+$username  = trim($data["username"] ?? "");
+$email     = trim($data["email"] ?? "");
+$password  = $data["password"] ?? "";
+$roleName  = trim($data["role"] ?? "");
 
 // =======================
 // VALIDATION
 // =======================
-if (!$firstName || !$lastName || !$username || !$email || !$password || !$confirm || !$roleName) {
+if (!$firstName || !$lastName || !$username || !$email || !$password || !$roleName) {
     http_response_code(400);
     echo json_encode(["success" => false, "message" => "All fields are required"]);
     exit;
