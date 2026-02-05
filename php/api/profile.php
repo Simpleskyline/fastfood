@@ -1,18 +1,16 @@
 <?php
-require_once __DIR__ . '/../middleware/auth_check.php';
-require_once __DIR__ . '/../config/db.php';
+session_start();
+header("Content-Type: application/json");
 
-header('Content-Type: application/json');
-
-$stmt = $pdo->prepare(
-    "SELECT id, FirstName, LastName, Username, Email, Role, created_at
-     FROM clients WHERE id = ?"
-);
-
-$stmt->execute([$_SESSION['user_id']]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!isset($_SESSION['user_id'])) {
+  echo json_encode(["error" => "Not authenticated"]);
+  exit;
+}
 
 echo json_encode([
-    "success" => true,
-    "user" => $user
+  "name" => $_SESSION['name'],
+  "email" => $_SESSION['email'],
+  "phone" => $_SESSION['phone'],
+  "location" => $_SESSION['location'],
+  "created_at" => date("F Y", strtotime($_SESSION['created_at']))
 ]);
