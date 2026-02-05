@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ | Skyline Treats</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="faq.css" />
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>🍔 Skyline Treats</h1>
+    <div class="menu-toggle" id="toggle">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+
+    <nav class="nav-links" id="nav">
+      <a href="profile.html">Profile</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="contactus.html">Contact Us</a>
+      <a href="faq.html">FAQ</a>
+      <a href="../php/auth/logout.php" class="signout">Sign Out</a>
+    </nav>
+  </header>
+
+  <main class="faq-container">
+
+    <section class="intro">
+      <h2>Frequently Asked Questions</h2>
+      <p>Everything you need to know about ordering from Skyline Treats.</p>
+    </section>
+
+    <section class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question">
+          🍔 What are your opening hours?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          We are open daily from <strong>8:00 AM to 10:00 PM</strong>, including weekends and public holidays.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          🚚 Do you offer home delivery?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Yes! We provide fast and reliable delivery within Utawala and nearby areas.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          ⏱ How long does delivery take?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Most orders arrive within <strong>30–45 minutes</strong> after confirmation.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          💳 What payment methods are accepted?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          We accept Cash on Delivery, M-Pesa, debit cards, and credit cards.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          🥗 Do you have vegetarian options?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Yes! We offer veggie burgers, fries, and other vegetarian-friendly meals.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          📞 How can I contact customer support?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Visit our Contact Us page or reach us during business hours.
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Skyline Treats. All rights reserved.</p>
+  </footer>
+
+  <script src="faq.js"></script>
+
+  <script>
+    const toggle = document.getElementById('toggle');
+    const nav = document.getElementById('nav');
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nav.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('active');
+      }
+    });
+  </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
