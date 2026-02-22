@@ -1,26 +1,7 @@
--- =========================
--- FASTFOOD ORDERING SYSTEM
--- DATABASE SCHEMA
--- =========================
-
 CREATE DATABASE IF NOT EXISTS fastfood_db;
 USE fastfood_db;
 
--- -------------------------
--- ROLES
--- -------------------------
-CREATE TABLE roles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-INSERT INTO roles (name) VALUES
-('admin'),
-('customer');
-
--- -------------------------
 -- USERS
--- -------------------------
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     role_id INT NOT NULL,
@@ -32,9 +13,7 @@ CREATE TABLE users (
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
--- -------------------------
 -- FOOD ITEMS
--- -------------------------
 CREATE TABLE food_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -43,9 +22,7 @@ CREATE TABLE food_items (
     active BOOLEAN DEFAULT TRUE
 );
 
--- -------------------------
 -- ORDERS
--- -------------------------
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -56,9 +33,7 @@ CREATE TABLE orders (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- -------------------------
 -- ORDER ITEMS
--- -------------------------
 CREATE TABLE order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
@@ -70,9 +45,7 @@ CREATE TABLE order_items (
     FOREIGN KEY (food_item_id) REFERENCES food_items(id)
 );
 
--- -------------------------
 -- INDEXES FOR PERFORMANCE
--- -------------------------
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_orders_user ON orders(user_id);
 CREATE INDEX idx_order_items_order ON order_items(order_id);

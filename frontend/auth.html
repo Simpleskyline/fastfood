@@ -2,18 +2,9 @@
 <html lang="en">
 
 <head>
- 
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In / Sign Up - Ron'z Pizza</title>
-  <link rel="stylesheet" href="auth.css">
-  
-  <style>
-    .hint { font-size: 0.9rem; color: #666; margin-top: 8px; }
-    .loading { opacity: 0.6; pointer-events: none; }
-    .error-text { color: #d32f2f; font-size: 0.9rem; margin-top: 5px; }
-  </style>
- 
+  <link rel="stylesheet" href="auth.css"> 
 </head>
 
 <body class="auth">
@@ -41,13 +32,6 @@
         <input type="email" id="email" placeholder="Email" required autocomplete="email">
         <input type="password" id="password" placeholder="Password" required autocomplete="new-password" minlength="6">
         <input type="password" id="confirmPassword" placeholder="Confirm Password" required autocomplete="new-password">
-
-        <!-- ROLE selection -->
-        <label for="role">Register as</label>
-        <select id="role" required>
-          <option value="Client">Client</option>
-          <option value="admin">Admin</option>
-        </select>
         <button type="submit" id="signupBtn">SIGN UP</button>
       </form>
     </div>
