@@ -1,107 +1,606 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
 <head>
-  <meta charset="UTF-8">
-  <title>Thank You!</title>
-  <link rel="stylesheet" href="thankyou.css" />
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Confirmed – Skyline Treats</title>
+  <link rel="stylesheet" href="main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── PAGE WRAPPER ───────────────────────── */
+    .ty-page {
+      min-height: 100vh;
+      background: var(--bg);
+      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── CONFIRMATION HERO ──────────────────── */
+    .ty-hero {
+      background: var(--dark);
+      padding: 64px 40px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ty-hero::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(245,197,24,0.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .checkmark-circle {
+      width: 72px;
+      height: 72px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+      position: relative;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.4); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .ty-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: var(--white);
+      margin-bottom: 10px;
+      animation: fadeUp 0.5s 0.15s ease both;
+      position: relative;
+    }
+
+    .ty-hero p {
+      color: #999;
+      font-size: 1rem;
+      animation: fadeUp 0.5s 0.25s ease both;
+      position: relative;
+    }
+
+    .ty-total-badge {
+      display: inline-block;
+      background: rgba(245,197,24,0.15);
+      border: 1px solid rgba(245,197,24,0.35);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 10px 28px;
+      border-radius: 30px;
+      margin-top: 18px;
+      animation: fadeUp 0.5s 0.35s ease both;
+      position: relative;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MAIN CONTENT ───────────────────────── */
+    .ty-body {
+      flex: 1;
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+
+    /* ── SECTION CARD ───────────────────────── */
+    .ty-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .ty-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── PAYMENT TABS ───────────────────────── */
+    .pay-tabs {
+      display: flex;
+      background: #f0f0ee;
+      border-radius: 10px;
+      padding: 4px;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+
+    .pay-tab {
+      flex: 1;
+      padding: 11px 10px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pay-tab.active {
+      background: var(--white);
+      color: var(--dark);
+      box-shadow: 0 1px 5px rgba(0,0,0,0.10);
+    }
+
+    /* ── TAB PANELS ─────────────────────────── */
+    .pay-panel { display: none; }
+    .pay-panel.active { display: block; }
+
+    /* ── FORM ELEMENTS ──────────────────────── */
+    .form-group { margin-bottom: 16px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input::placeholder { color: #ccc; }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245,197,24,0.15);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    /* Card number visual grouping */
+    .card-brand {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .card-brand span {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Crypto wallet info */
+    .crypto-note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #92400e;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── PAY BUTTON ─────────────────────────── */
+    .pay-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--dark);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .pay-btn:hover { background: var(--mid); transform: translateY(-1px); }
+    .pay-btn:active { transform: translateY(0); }
+    .pay-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .pay-btn.accent {
+      background: var(--accent);
+      color: var(--dark);
+    }
+
+    .pay-btn.accent:hover { background: var(--accent-dark); }
+
+    /* ── SUCCESS / ERROR MESSAGES ───────────── */
+    .pay-result {
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: 14px;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .pay-result.success {
+      background: #f0fff4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+
+    .pay-result.error {
+      background: #fff0f0;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+
+    /* ── BACK LINK ──────────────────────────── */
+    .back-row {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 10px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 30px;
+      background: var(--white);
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      border-color: var(--dark);
+      color: var(--dark);
+    }
+
+    /* ── FOOTER ─────────────────────────────── */
+    .footer {
+      background: var(--dark2);
+      padding: 32px 40px;
+      margin-top: auto;
+    }
+
+    .footer-bottom {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-bottom p { color: #444; font-size: 0.85rem; }
+    .footer-bottom a { color: #555; font-size: 0.85rem; text-decoration: none; margin-left: 16px; }
+    .footer-bottom a:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 600px) {
+      .ty-hero { padding: 48px 20px 44px; }
+      .ty-body { padding: 32px 16px 48px; }
+      .ty-card { padding: 24px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .pay-tab span.tab-label { display: none; }
+    }
+  </style>
 </head>
 
 <body>
 
-  <div class="container">
-    <h1>🎉 Thank You for Your Order!</h1>
-    <p>Your order was placed successfully.</p>
-    <p><strong id="order-total"></strong></p>
-    <a href="dashboard.html">← Back to Menu</a>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="nav">
+      <a href="home.html">Home</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="profile.html">Profile</a>
+      <a href="../php/auth/logout.php" class="signout">Sign Out</a>
+    </nav>
+    <div class="nav-right">
+      <div class="menu-toggle" id="toggle">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+    </div>
+  </header>
 
-    <!-- Payment Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="mpesa">Mpesa</button>
-      <button class="tab-btn" data-tab="visa">Visa/MasterCard</button>
-      <button class="tab-btn" data-tab="crypto">Crypto</button>
+  <div class="ty-page">
+
+    <!-- CONFIRMATION HERO -->
+    <div class="ty-hero">
+      <div class="checkmark-circle">✓</div>
+      <h1>Order Confirmed!</h1>
+      <p>Thank you for ordering with Skyline Treats. Please complete your payment below.</p>
+      <div class="ty-total-badge" id="total-badge">Loading total…</div>
     </div>
 
-    <!-- Mpesa Tab -->
-    <div class="tab-content active" id="mpesa">
-      <h3>Mpesa Payment</h3>
-      <input type="text" id="mpesa-phone" placeholder="Mpesa Phone Number" />
-      <button class="pay-btn" onclick="processPayment('Mpesa')">Pay with Mpesa</button>
+    <!-- BODY -->
+    <div class="ty-body">
+
+      <!-- PAYMENT CARD -->
+      <div class="ty-card">
+        <div class="ty-card-title">💳 Complete Payment</div>
+
+        <!-- TABS -->
+        <div class="pay-tabs">
+          <button class="pay-tab active" data-tab="mpesa">
+            📱 <span class="tab-label">M-Pesa</span>
+          </button>
+          <button class="pay-tab" data-tab="visa">
+            💳 <span class="tab-label">Card</span>
+          </button>
+          <button class="pay-tab" data-tab="crypto">
+            ₿ <span class="tab-label">Crypto</span>
+          </button>
+        </div>
+
+        <!-- M-PESA PANEL -->
+        <div class="pay-panel active" id="panel-mpesa">
+          <div class="form-group">
+            <label for="mpesa-phone">M-Pesa Phone Number</label>
+            <input type="tel" id="mpesa-phone" placeholder="e.g. 0712 345 678" maxlength="13" />
+          </div>
+          <button class="pay-btn accent" onclick="processPayment('M-Pesa')">
+            ✓ &nbsp;Pay with M-Pesa
+          </button>
+          <div class="pay-result" id="result-mpesa"></div>
+        </div>
+
+        <!-- CARD PANEL -->
+        <div class="pay-panel" id="panel-visa">
+          <div class="card-brand">
+            <span>VISA</span>
+            <span>Mastercard</span>
+          </div>
+          <div class="form-group">
+            <label for="card-number">Card Number</label>
+            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expiry">Expiry Date</label>
+              <input type="text" id="expiry" placeholder="MM / YY" maxlength="7" />
+            </div>
+            <div class="form-group">
+              <label for="cvv">CVV</label>
+              <input type="text" id="cvv" placeholder="•••" maxlength="4" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cardholder">Cardholder Name</label>
+            <input type="text" id="cardholder" placeholder="As it appears on card" />
+          </div>
+          <button class="pay-btn" onclick="processPayment('Card')">
+            🔒 &nbsp;Pay Securely
+          </button>
+          <div class="pay-result" id="result-visa"></div>
+        </div>
+
+        <!-- CRYPTO PANEL -->
+        <div class="pay-panel" id="panel-crypto">
+          <div class="crypto-note">
+            ⚠️ Send the exact amount in the selected cryptocurrency. Payments are non-refundable once confirmed on the blockchain.
+          </div>
+          <div class="form-group">
+            <label for="crypto-type">Cryptocurrency</label>
+            <select id="crypto-type">
+              <option value="BTC">Bitcoin (BTC)</option>
+              <option value="ETH">Ethereum (ETH)</option>
+              <option value="USDT">Tether (USDT)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="wallet">Your Wallet Address</label>
+            <input type="text" id="wallet" placeholder="Paste your wallet address here" />
+          </div>
+          <button class="pay-btn" onclick="processPayment('Crypto')">
+            ₿ &nbsp;Pay with Crypto
+          </button>
+          <div class="pay-result" id="result-crypto"></div>
+        </div>
+      </div>
+
+      <!-- BACK BUTTON -->
+      <div class="back-row">
+        <a href="dashboard.html" class="back-link">← Back to Menu</a>
+      </div>
+
     </div>
 
-    <!-- Visa/MasterCard Tab -->
-    <div class="tab-content" id="visa">
-      <h3>Card Payment</h3>
-      <input type="text" id="card-number" placeholder="Card Number" />
-      <input type="text" id="expiry" placeholder="Expiry Date (MM/YY)" />
-      <input type="text" id="cvv" placeholder="CVV" />
-      <button class="pay-btn" onclick="processPayment('Card')">Pay with Card</button>
-    </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-bottom">
+        <p>© 2026 Skyline Treats. All rights reserved.</p>
+        <div>
+          <a href="faq.html">FAQ</a>
+          <a href="contactus.html">Contact</a>
+        </div>
+      </div>
+    </footer>
 
-    <!-- Crypto Tab -->
-    <div class="tab-content" id="crypto">
-      <h3>Crypto Payment</h3>
-      <select id="crypto-type">
-        <option>Bitcoin (BTC)</option>
-        <option>Ethereum (ETH)</option>
-        <option>Tether (USDT)</option>
-      </select>
-      <input type="text" id="wallet" placeholder="Wallet Address" />
-      <button class="pay-btn" onclick="processPayment('Crypto')">Pay with Crypto</button>
-    </div>
-  </div>
+  </div><!-- /ty-page -->
 
   <script>
-  let orderId = localStorage.getItem("last_order_id"); // from save_order.php
-  let total = localStorage.getItem("last_order_total");
+    // ── Load order total ────────────────────────────────
+    const total = localStorage.getItem('last_order_total');
+    const orderId = localStorage.getItem('last_order_id');
+    const badge = document.getElementById('total-badge');
 
-  if (total) {
-    document.getElementById('order-total').textContent = `Total: Ksh.${total}`;
-  }
-
-  // Handle tab switching
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const contents = document.querySelectorAll('.tab-content');
-
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach(b => b.classList.remove('active'));
-      contents.forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  // Payment processor
-  function processPayment(method) {
-    // Ask client to confirm payment with total amount
-    if (!confirm(`Confirm payment of Ksh.${total} via ${method}?`)) {
-      return; // stop if user cancels
+    if (total) {
+      badge.textContent = `Order Total: KSH ${parseFloat(total).toFixed(2)}`;
+    } else {
+      badge.textContent = 'Order Placed';
     }
 
-    fetch("save_payment.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_id: orderId,
-        payment_method: method,
-        amount: total,
-        status: "Completed"
-      })
-    })
-    .then(res => res.json())
-    .then(response => {
-      if (response.success) {
-        alert(`Payment of Ksh.${total} via ${method} saved successfully!`);
-        localStorage.removeItem("last_order_id");
-        localStorage.removeItem("last_order_total");
-      } else {
-        alert("Payment failed: " + response.message);
+    // ── Tab switching ───────────────────────────────────
+    const tabs = document.querySelectorAll('.pay-tab');
+    const panels = document.querySelectorAll('.pay-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ── Navbar mobile toggle ────────────────────────────
+    const toggle = document.getElementById('toggle');
+    const nav = document.getElementById('nav');
+    toggle.addEventListener('click', e => {
+      e.stopPropagation();
+      nav.classList.toggle('active');
+    });
+    document.addEventListener('click', e => {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('active');
       }
     });
-  }
-</script>
+
+    // ── Card number formatting ──────────────────────────
+    document.getElementById('card-number').addEventListener('input', function () {
+      let val = this.value.replace(/\D/g, '').substring(0, 16);
+      this.value = val.replace(/(.{4})/g, '$1 ').trim();
+    });
+
+    document.getElementById('expiry').addEventListener('input', function () {
+      let val = this.value.replace(/\D/g, '').substring(0, 4);
+      if (val.length >= 3) val = val.slice(0, 2) + ' / ' + val.slice(2);
+      this.value = val;
+    });
+
+    // ── Payment processor ───────────────────────────────
+    function processPayment(method) {
+      if (!total) { showResult(method, 'error', 'No order total found. Please place an order first.'); return; }
+      if (!confirm(`Confirm payment of KSH ${parseFloat(total).toFixed(2)} via ${method}?`)) return;
+
+      // Validate inputs
+      if (method === 'M-Pesa') {
+        const phone = document.getElementById('mpesa-phone').value.trim();
+        if (!phone) { showResult(method, 'error', 'Please enter your M-Pesa phone number.'); return; }
+      } else if (method === 'Card') {
+        const num = document.getElementById('card-number').value.trim();
+        const exp = document.getElementById('expiry').value.trim();
+        const cvv = document.getElementById('cvv').value.trim();
+        if (!num || !exp || !cvv) { showResult(method, 'error', 'Please fill in all card details.'); return; }
+      } else if (method === 'Crypto') {
+        const wallet = document.getElementById('wallet').value.trim();
+        if (!wallet) { showResult(method, 'error', 'Please enter your wallet address.'); return; }
+      }
+
+      // Disable button during processing
+      const btn = event.currentTarget;
+      btn.disabled = true;
+      btn.textContent = 'Processing…';
+
+      fetch('save_payment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_id: orderId,
+          payment_method: method,
+          amount: total,
+          status: 'Completed'
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showResult(method, 'success', `✓ Payment of KSH ${parseFloat(total).toFixed(2)} via ${method} confirmed! Thank you.`);
+          localStorage.removeItem('last_order_id');
+          localStorage.removeItem('last_order_total');
+          badge.textContent = '✓ Payment Complete';
+        } else {
+          showResult(method, 'error', data.message || 'Payment failed. Please try again.');
+          btn.disabled = false;
+          btn.textContent = `Pay with ${method}`;
+        }
+      })
+      .catch(() => {
+        showResult(method, 'error', 'Could not connect to payment server. Please try again.');
+        btn.disabled = false;
+        btn.textContent = `Pay with ${method}`;
+      });
+    }
+
+    function showResult(method, type, msg) {
+      const map = { 'M-Pesa': 'mpesa', 'Card': 'visa', 'Crypto': 'crypto' };
+      const el = document.getElementById('result-' + map[method]);
+      if (!el) return;
+      el.className = 'pay-result ' + type;
+      el.textContent = msg;
+      el.style.display = 'block';
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
 
 </body>
 </html>

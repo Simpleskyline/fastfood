@@ -76,7 +76,6 @@
         <h3><a href="burger.html" class="food-link">Burger</a></h3>
         <p class="card-desc">Juicy double-patty burger with fresh lettuce, cheese and our signature sauce.</p>
         <p class="price">KSH 350.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:1, name:'Burger', price:350})">🛒 Add to Cart</button>
       </div>
     </div>
 
@@ -88,19 +87,17 @@
         <h3><a href="pizza.html" class="food-link">Pizza</a></h3>
         <p class="card-desc">Wood-fired pizza loaded with toppings and melted mozzarella cheese.</p>
         <p class="price">KSH 500.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:2, name:'Pizza', price:500})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="sides" data-name="Fries" data-price="150">
       <a href="fries.html" class="card-img-wrap">
-        <img src="https://images.themodernproper.com/production/posts/2022/Homemade-French-Fries_8.jpg?w=1200&h=1200&q=60&fm=jpg&fit=crop" alt="Fries" />
+        <img src="https://www.allrecipes.com/thmb/8_B6OD1w6h1V0zPi8KAGzD41Kzs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/50223-homemade-crispy-seasoned-french-fries-VAT-Beauty-4x3-789ecb2eaed34d6e879b9a93dd56a50a.jpg" alt="Fries" />
       </a>
       <div class="card-body">
         <h3><a href="fries.html" class="food-link">Fries</a></h3>
         <p class="card-desc">Crispy golden fries seasoned with our special house spice blend.</p>
         <p class="price">KSH 150.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:3, name:'Fries', price:150})">🛒 Add to Cart</button>
       </div>
     </div>
 
@@ -124,7 +121,6 @@
         <h3><a href="soda.html" class="food-link">Soda</a></h3>
         <p class="card-desc">Chilled soda in a variety of flavours — Fanta, Coke, Sprite & more.</p>
         <p class="price">KSH 80.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:5, name:'Soda', price:80})">🛒 Add to Cart</button>
       </div>
     </div>
 
@@ -148,7 +144,6 @@
         <h3><a href="chicken.html" class="food-link">Chicken</a></h3>
         <p class="card-desc">Tender roasted chicken with herbs and a crispy golden skin.</p>
         <p class="price">KSH 400.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:7, name:'Chicken', price:400})">🛒 Add to Cart</button>
       </div>
     </div>
 
@@ -160,7 +155,6 @@
         <h3><a href="cheese_wraps.html" class="food-link">Cheese Wraps</a></h3>
         <p class="card-desc">Grilled cheese-filled wraps packed with flavour and crunch.</p>
         <p class="price">KSH 280.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:8, name:'Cheese Wraps', price:280})">🛒 Add to Cart</button>
       </div>
     </div>
 
@@ -244,7 +238,6 @@
         <h3><a href="fresh_juice.html" class="food-link">Fresh Juice</a></h3>
         <p class="card-desc">Freshly squeezed fruit juice — mango, passion, watermelon & more.</p>
         <p class="price">KSH 120.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:15, name:'Fresh Juice', price:120})">🛒 Add to Cart</button>
       </div>
     </div>
 
@@ -262,7 +255,7 @@
 
     <div class="food-card" data-cat="drinks" data-name="African Tea" data-price="50">
       <div class="card-img-wrap">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd1PF7mNqD4YwcTQalztUvYoI7tPD-4bqu8A&s" alt="African Tea" />
+        <img src="https://www.teaforturmeric.com/wp-content/uploads/2021/11/Masala-Chai-Tea-Recipe-Card.jpg" alt="African Tea" />
       </div>
       <div class="card-body">
         <h3>African Tea</h3>
@@ -280,7 +273,6 @@
         <h3><a href="water.html" class="food-link">Water</a></h3>
         <p class="card-desc">Cold mineral water — the perfect companion to any meal.</p>
         <p class="price">KSH 50.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:18, name:'Water', price:50})">🛒 Add to Cart</button>
       </div>
     </div>
 
@@ -338,8 +330,6 @@
     </div>
   </footer>
 
-  <script src="auth.js"></script>
-  <script src="cart.js"></script>
   <script src="ui-helpers.js"></script>
   <script>
     const cartIcon = document.getElementById('cart-icon');
@@ -351,13 +341,8 @@
     const toggle = document.getElementById('toggle');
     const nav = document.getElementById('nav');
 
-    let cartItems = Cart.getItems();
+    let cartItems = JSON.parse(localStorage.getItem('ronz_cart') || '[]');
     renderCartItems();
-
-    window.addEventListener('cartUpdated', (e) => {
-      cartItems = e.detail.items;
-      renderCartItems();
-    });
 
     // Nav toggle
     toggle.addEventListener('click', (e) => {

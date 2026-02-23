@@ -2,48 +2,623 @@
 <html lang="en">
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In / Sign Up - Ron'z Pizza</title>
-  <link rel="stylesheet" href="auth.css"> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In / Sign Up – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #f5c518;
+      --accent-dark: #d4a800;
+      --dark: #111111;
+      --dark2: #1a1a1a;
+      --mid: #2a2a2a;
+      --text: #1c1c1c;
+      --text-muted: #6b6b6b;
+      --border: #e5e5e5;
+      --white: #ffffff;
+      --bg: #f7f7f5;
+      --radius: 10px;
+    }
+
+    body {
+      font-family: 'DM Sans', 'Segoe UI', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAVBAR ─────────────────────────────── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      border-bottom: 1px solid #222;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    /* ── PAGE LAYOUT ─────────────────────────── */
+    .auth-page {
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+      min-height: 100vh;
+      padding-top: 64px;
+    }
+
+    /* LEFT – Branding panel */
+    .brand-panel {
+      flex: 1;
+      background: var(--dark2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 64px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative grain / glow */
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: -120px;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(245,197,24,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(245,197,24,0.10) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .brand-tagline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .brand-tagline span {
+      color: var(--accent);
+    }
+
+    .brand-sub {
+      color: #aaa;
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 360px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,197,24,0.12);
+      border: 1px solid rgba(245,197,24,0.3);
+      border-radius: 30px;
+      padding: 8px 18px;
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      position: relative;
+    }
+
+    .brand-food-icons {
+      display: flex;
+      gap: 16px;
+      margin-top: 48px;
+      position: relative;
+    }
+
+    .food-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--mid);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      border: 1px solid #333;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .food-icon:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    /* RIGHT – Form panel */
+    .form-panel {
+      width: 480px;
+      min-width: 380px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 48px;
+    }
+
+    .form-header {
+      margin-bottom: 36px;
+    }
+
+    .form-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .form-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Tabs */
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      background: #ebebea;
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+
+    .tab-btn.active {
+      background: var(--white);
+      color: var(--dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    }
+
+    /* Forms */
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input::placeholder { color: #bbb; }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245,197,24,0.15);
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-top: -8px;
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+
+    .forgot-link:hover { color: var(--dark); }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--dark);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: var(--mid);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active { transform: translateY(0); }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: #ccc;
+      font-size: 0.82rem;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .error-text {
+      background: #fff0f0;
+      border: 1px solid #fcc;
+      color: #c0392b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .success-text {
+      background: #f0fff4;
+      border: 1px solid #b7f0c8;
+      color: #217a3c;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 860px) {
+      .brand-panel { display: none; }
+      .form-panel { width: 100%; min-width: unset; padding: 48px 28px; }
+    }
+
+    @media (max-width: 480px) {
+      .navbar { padding: 0 20px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── ANIMATIONS ─────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-panel { animation: fadeUp 0.45s ease both; }
+    .brand-tagline { animation: fadeUp 0.5s 0.1s ease both; }
+    .brand-sub { animation: fadeUp 0.5s 0.2s ease both; }
+    .brand-badge { animation: fadeUp 0.5s 0.3s ease both; }
+    .brand-food-icons { animation: fadeUp 0.5s 0.4s ease both; }
+  </style>
 </head>
 
-<body class="auth">
+<body>
 
-  <div class="container">
-    <div class="form-box">
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+  </header>
 
-        <!-- Sign In -->
-        <form id="signinForm" class="auth-form signin">
-        <h2>Sign In</h2>
-        <div id="signinError" class="error-text" style="display:none;"></div>
-        <input type="email" id="signinEmail" placeholder="Email" required autocomplete="email">
-        <input type="password" id="signinPassword" placeholder="Password" required autocomplete="current-password">
-        <a href="#" style="font-size: 0.9rem;">Forgot your password?</a><br><br>
-        <button type="submit" id="signinBtn">SIGN IN</button>
-      </form>
+  <div class="auth-page">
 
-        <!-- Sign Up -->
-        <form id="signupForm" class="auth-form signup" style="display:none;">
-        <h2>Create Account</h2>
-        <div id="signupError" class="error-text" style="display:none;"></div>
-        <input type="text" id="firstName" placeholder="First Name" required autocomplete="given-name">
-        <input type="text" id="lastName" placeholder="Last Name" required autocomplete="family-name">
-        <input type="text" id="username" placeholder="Username" required autocomplete="username">
-        <input type="email" id="email" placeholder="Email" required autocomplete="email">
-        <input type="password" id="password" placeholder="Password" required autocomplete="new-password" minlength="6">
-        <input type="password" id="confirmPassword" placeholder="Confirm Password" required autocomplete="new-password">
-        <button type="submit" id="signupBtn">SIGN UP</button>
-      </form>
+    <!-- LEFT PANEL -->
+    <div class="brand-panel">
+      <div class="brand-tagline">
+        Food that<br>fuels your <span>vibe.</span>
+      </div>
+      <p class="brand-sub">
+        Join thousands of happy customers who order fresh, premium street food and fast bites — crafted for every craving.
+      </p>
+      <div class="brand-badge">
+        🏆 &nbsp;Nairobi's favourite fast food spot
+      </div>
+      <div class="brand-food-icons">
+        <div class="food-icon">🍔</div>
+        <div class="food-icon">🍕</div>
+        <div class="food-icon">🍟</div>
+        <div class="food-icon">🥤</div>
+        <div class="food-icon">🍗</div>
+      </div>
     </div>
 
-    <div class="panel">
-      <h2 id="panelTitle">Hello Friend!</h2>
-      <p id="panelText">Enter your personal details and start your journey with us.</p>
-      <button class="btn-outline" id="toggleBtn">SIGN UP</button>
+    <!-- RIGHT PANEL -->
+    <div class="form-panel">
+      <div class="form-header">
+        <h2 id="formTitle">Welcome back</h2>
+        <p id="formSub">Sign in to your Skyline Treats account.</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="tab-btn active" id="tabSignin" onclick="switchTab('signin')">Sign In</button>
+        <button class="tab-btn" id="tabSignup" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <!-- SIGN IN FORM -->
+      <form id="signinForm" class="auth-form active" onsubmit="handleSignin(event)">
+        <div id="signinError" class="error-text"></div>
+        <div id="signinSuccess" class="success-text"></div>
+
+        <div class="form-group">
+          <label for="signinEmail">Email</label>
+          <input type="email" id="signinEmail" placeholder="you@example.com" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="signinPassword">Password</label>
+          <input type="password" id="signinPassword" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+
+        <a href="#" class="forgot-link">Forgot password?</a>
+
+        <button type="submit" class="submit-btn" id="signinBtn">SIGN IN</button>
+      </form>
+
+      <!-- SIGN UP FORM -->
+      <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+        <div id="signupError" class="error-text"></div>
+        <div id="signupSuccess" class="success-text"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="Jane" required autocomplete="given-name" />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="Doe" required autocomplete="family-name" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="janedoe123" required autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••••" required autocomplete="new-password" minlength="6" />
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm</label>
+            <input type="password" id="confirmPassword" placeholder="••••••••" required autocomplete="new-password" />
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="signupBtn">CREATE ACCOUNT</button>
+      </form>
     </div>
   </div>
 
-  <script src="auth.js"></script>
-  
+  <script>
+    function switchTab(tab) {
+      const signinForm = document.getElementById('signinForm');
+      const signupForm = document.getElementById('signupForm');
+      const tabSignin  = document.getElementById('tabSignin');
+      const tabSignup  = document.getElementById('tabSignup');
+      const title      = document.getElementById('formTitle');
+      const sub        = document.getElementById('formSub');
+
+      // hide errors
+      ['signinError','signinSuccess','signupError','signupSuccess'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+
+      if (tab === 'signin') {
+        signinForm.classList.add('active');
+        signupForm.classList.remove('active');
+        tabSignin.classList.add('active');
+        tabSignup.classList.remove('active');
+        title.textContent = 'Welcome back';
+        sub.textContent   = 'Sign in to your Skyline Treats account.';
+      } else {
+        signupForm.classList.add('active');
+        signinForm.classList.remove('active');
+        tabSignup.classList.add('active');
+        tabSignin.classList.remove('active');
+        title.textContent = 'Join Skyline Treats';
+        sub.textContent   = 'Create an account and start ordering today.';
+      }
+    }
+
+    function showMsg(id, msg, type) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    async function handleSignin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('signinBtn');
+      const errEl = document.getElementById('signinError');
+      errEl.style.display = 'none';
+
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      try {
+        const res = await fetch('/FASTFOOD/php/api/auth/login.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            email: document.getElementById('signinEmail').value.trim(),
+            password: document.getElementById('signinPassword').value
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = data.user.role === 'admin' ? 'admin/admin_dashboard.html' : 'dashboard.html';
+        } else {
+          showMsg('signinError', data.message || 'Sign in failed.');
+        }
+      } catch (err) {
+        showMsg('signinError', 'Server error. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'SIGN IN';
+      }
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const btn = document.getElementById('signupBtn');
+      const errEl = document.getElementById('signupError');
+      errEl.style.display = 'none';
+
+      const password = document.getElementById('password').value;
+      const confirm  = document.getElementById('confirmPassword').value;
+      if (password !== confirm) { showMsg('signupError', 'Passwords do not match.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+
+      try {
+        const res = await fetch('/FASTFOOD/php/api/auth/register.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            first_name: document.getElementById('firstName').value.trim(),
+            last_name:  document.getElementById('lastName').value.trim(),
+            username:   document.getElementById('username').value.trim(),
+            email:      document.getElementById('email').value.trim(),
+            password,
+            confirm_password: confirm,
+            role: document.getElementById('role').value
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = data.user.role === 'admin' ? 'admin/admin_dashboard.html' : 'dashboard.html';
+        } else {
+          showMsg('signupError', data.message || 'Registration failed.');
+        }
+      } catch (err) {
+        showMsg('signupError', 'Server error. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'CREATE ACCOUNT';
+      }
+    }
+  </script>
 </body>
 </html>

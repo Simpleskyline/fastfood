@@ -2,170 +2,254 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>FastFood Web - Home</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skyline Treats – Home</title>
+    <link rel="stylesheet" href="home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
 </head>
+
 <body>
 
-    <!-- NAVBAR -->
-    <nav>
-        <h1 class="logo">FastBite</h1>
-        <ul class="nav-links">
-            <li><a href="#">Login</a></li>
-            <li><a href="#">Sign In</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact Us</a></li>
-        </ul>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="home.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="home.html">Home</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="auth.html" class="signin-btn">Sign In</a>
     </nav>
+    <div class="menu-toggle" id="toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+  </header>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Juicy Burgers Made Fresh</h2>
-            <p>Experience bold flavors and delicious meals prepared just for you.</p>
-            <button class="btn">Order Now</button>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="section-label">Nairobi's Favourite Fast Food</p>
+        <h1>Bold flavours,<br>crafted <span>fresh</span> for you.</h1>
+        <p>From juicy burgers and crispy fries to stone-baked pizzas and chilled drinks — Skyline Treats brings premium street food straight to your table.</p>
+        <a href="auth.html" class="hero-cta">🍔 &nbsp;Sign In to Order</a>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num">50+</div>
+            <div class="stat-label">Menu Items</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">5★</div>
+            <div class="stat-label">Customer Rating</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">Fast</div>
+            <div class="stat-label">Delivery</div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- FEATURED ITEMS SECTION -->
-    <section class="featured">
-        <h2 class="section-title">Featured Meals</h2>
-
-        <div class="grid">
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349" alt="Classic Burger">
-                </div>
-                <div class="card-info">
-                    <h3>Classic Beef Burger</h3>
-                    <p>KSH 450</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://www.moulinex-me.com/medias/?context=bWFzdGVyfHJvb3R8MTQzNTExfGltYWdlL2pwZWd8YUdObEwyaG1aQzh4TlRrMk9EWXlOVGM0TmpreE1DNXFjR2N8MmYwYzQ4YTg0MTgzNmVjYTZkMWZkZWZmMDdlMWFlMjRhOGIxMTQ2MTZkNDk4ZDU3ZjlkNDk2MzMzNDA5OWY3OA" alt="Pepperoni Pizza">
-                </div>
-                <div class="card-info">
-                    <h3>Pepperoni Pizza</h3>
-                    <p>KSH 950</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd" alt="Cheese Burger">
-                </div>
-                <div class="card-info">
-                    <h3>Double Cheese Burger</h3>
-                    <p>KSH 550</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1576107232684-1279f390859f" alt="Fries">
-                </div>
-                <div class="card-info">
-                    <h3>Crispy Fries</h3>
-                    <p>KSH 300</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e" alt="BBQ Pizza">
-                </div>
-                <div class="card-info">
-                    <h3>BBQ Chicken Pizza</h3>
-                    <p>KSH 1100</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87" alt="Soda">
-                </div>
-                <div class="card-info">
-                    <h3>Cold Soda</h3>
-                    <p>KSH 150</p>
-                </div>
-            </div>
-
+      <div class="hero-visual">
+        <div class="hero-img-card">
+          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=800" alt="Burger" />
+          <span class="img-label">🍔 Burgers</span>
         </div>
-    </section>
-
-    <!-- FOOTER SECTION -->
-    <footer class="footer">
-        <div class="footer-content">
-            
-            <!-- Shop Section -->
-            <div class="footer-section">
-                <h3>Shop</h3>
-                <ul>
-                    <li><a href="dashboard.html">All Meals</a></li>
-                    <li><a href="burger.html">Burgers</a></li>
-                    <li><a href="pizza.html">Pizzas</a></li>
-                    <li><a href="soda.html">Drinks</a></li>
-                    <li><a href="fries.html">Fries</a></li>
-                </ul>
-            </div>
-
-            <!-- Customer Service -->
-            <div class="footer-section">
-                <h3>Customer Service</h3>
-                <ul>
-                    <li><a href="contactus.html">Contact Us</a></li>
-                    <li><a href="profile.html">My Account</a></li>
-                    <li><a href="#">Order History</a></li>
-                    <li><a href="#">Shopping Cart</a></li>
-                    <li><a href="#">Wishlist</a></li>
-                </ul>
-            </div>
-
-            <!-- Company -->
-            <div class="footer-section">
-                <h3>Company</h3>
-                <ul>
-                    <li><a href="aboutus.html">About Us</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                </ul>
-            </div>
-
-            <!-- Follow Us -->
-            <div class="footer-section">
-                <h3>Follow Us</h3>
-                <div class="social-links">
-                    <a href="#">📷 Instagram</a>
-                </div>
-                <div class="social-links">
-                    <a href="#">🎵 TikTok</a>
-                </div>
-                <div class="social-links">
-                    <a href="#">📞 Call Support</a>
-                </div>
-            </div>
-
+        <div class="hero-img-card">
+          <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400" alt="Pizza" />
+          <span class="img-label">🍕 Pizza</span>
         </div>
-
-        <!-- Footer Bottom -->
-        <div class="footer-bottom">
-            <p>© 2025 FastBite. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">Terms</a>
-                <a href="#">Privacy</a>
-                <a href="contactus.html">Contact</a>
-            </div>
+        <div class="hero-img-card">
+          <img src="https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400" alt="Fries" />
+          <span class="img-label">🍟 Fries</span>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories-section">
+    <div class="container">
+      <p class="section-label">What We Serve</p>
+      <h2 class="section-title">Something for every craving</h2>
+      <p class="section-sub">Browse our full range of categories — all made fresh to order. Sign in to start building your cart.</p>
+      <div class="cat-grid">
+        <div class="cat-card">
+          <div class="cat-icon">🍔</div>
+          <div class="cat-name">Burgers</div>
+          <div class="cat-count">6 options</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon">🍕</div>
+          <div class="cat-name">Pizzas</div>
+          <div class="cat-count">5 options</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon">🍟</div>
+          <div class="cat-name">Fries</div>
+          <div class="cat-count">4 options</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon">🍗</div>
+          <div class="cat-name">Chicken</div>
+          <div class="cat-count">5 options</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon">🌯</div>
+          <div class="cat-name">Wraps</div>
+          <div class="cat-count">3 options</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon">🥤</div>
+          <div class="cat-name">Drinks</div>
+          <div class="cat-count">8 options</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon">🥛</div>
+          <div class="cat-name">Milkshakes</div>
+          <div class="cat-count">4 options</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon">🍹</div>
+          <div class="cat-name">Fresh Juice</div>
+          <div class="cat-count">6 options</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED MEALS -->
+  <section class="featured-section">
+    <div class="container">
+      <p class="section-label">Staff Picks</p>
+      <h2 class="section-title">Most loved meals</h2>
+      <p class="section-sub">A taste of what's waiting for you inside. Sign in to see the full menu and place your order.</p>
+      <div class="meals-grid">
+        <div class="meal-card">
+          <img class="meal-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" alt="Classic Beef Burger" />
+          <div class="meal-body">
+            <div class="meal-name">Classic Beef Burger</div>
+            <div class="meal-desc">Double-patty beef burger with fresh lettuce, tomato, pickles and our signature sauce.</div>
+            <div class="meal-footer">
+              <span class="meal-price">KSH 450</span>
+              <span class="meal-tag">🔥 Bestseller</span>
+            </div>
+          </div>
+        </div>
+        <div class="meal-card">
+          <img class="meal-img" src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=600" alt="BBQ Chicken Pizza" />
+          <div class="meal-body">
+            <div class="meal-name">BBQ Chicken Pizza</div>
+            <div class="meal-desc">Smoky BBQ base, grilled chicken strips, caramelised onions and mozzarella cheese.</div>
+            <div class="meal-footer">
+              <span class="meal-price">KSH 1,100</span>
+              <span class="meal-tag">⭐ Top Rated</span>
+            </div>
+          </div>
+        </div>
+        <div class="meal-card">
+          <img class="meal-img" src="https://images.unsplash.com/photo-1576107232684-1279f390859f?w=600" alt="Crispy Fries" />
+          <div class="meal-body">
+            <div class="meal-name">Crispy Seasoned Fries</div>
+            <div class="meal-desc">Golden fries tossed in our house seasoning blend, served piping hot and extra crispy.</div>
+            <div class="meal-footer">
+              <span class="meal-price">KSH 300</span>
+              <span class="meal-tag">🧂 Fan Fave</span>
+            </div>
+          </div>
+        </div>
+        <div class="meal-card">
+          <img class="meal-img" src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600" alt="Milkshake" />
+          <div class="meal-body">
+            <div class="meal-name">Thick Milkshakes</div>
+            <div class="meal-desc">Rich, creamy milkshakes in chocolate, vanilla, strawberry and more — blended fresh to order.</div>
+            <div class="meal-footer">
+              <span class="meal-price">KSH 350</span>
+              <span class="meal-tag">🥛 Chilled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section">
+    <div class="container">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title">Order in three easy steps</h2>
+      <p class="section-sub">Getting your favourite meal has never been simpler.</p>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-icon">🔐</div>
+          <h3>Create an Account</h3>
+          <p>Sign up in seconds — just your name, email and a password. No unnecessary details.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-icon">🛒</div>
+          <h3>Browse & Add to Cart</h3>
+          <p>Explore our full menu, filter by category, and add your favourites to your cart.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-icon">🍽️</div>
+          <h3>Enjoy Your Meal</h3>
+          <p>Confirm your order and sit back while we prepare it fresh, just for you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to dig in? <span>Let's go.</span></h2>
+      <p>Sign in or create a free account to unlock the full menu and start ordering.</p>
+      <a href="auth.html" class="cta-btn">Get Started &nbsp;→</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="home.html" class="logo">Skyline Treats</a>
+        <p>Premium street food and fast bites, crafted fresh for every craving. Nairobi's favourite since day one.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="home.html">Home</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contactus.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <a href="auth.html">Sign In</a>
+        <a href="auth.html">Create Account</a>
+        <a href="profile.html">My Profile</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <a href="#">📷 Instagram</a>
+        <a href="#">🎵 TikTok</a>
+        <a href="#">📞 Call Support</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Skyline Treats. All rights reserved.</p>
+      <div>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="contactus.html">Contact</a>
+      </div>
+    </div>
+  </footer>
 
 </body>
 </html>
