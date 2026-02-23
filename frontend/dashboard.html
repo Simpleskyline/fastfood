@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Skyline Treats - Menu</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="main.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
@@ -37,6 +37,10 @@
     <div class="hero-content">
       <h1 class="hero-title">Delicious Food, Delivered Fresh</h1>
       <p class="hero-sub">Order premium street food and fast bites crafted for every craving.</p>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search by name..." />
+      </div>
     </div>
   </section>
 
@@ -48,6 +52,16 @@
       <button class="pill" data-cat="sides">Sides</button>
       <button class="pill" data-cat="drinks">Drinks</button>
       <button class="pill" data-cat="snacks">Snacks</button>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Sort by:</span>
+      <select id="sort-select">
+        <option value="default">Default</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name A–Z</option>
+      </select>
+      <span class="product-count" id="product-count">18 items</span>
     </div>
   </section>
 
@@ -80,7 +94,7 @@
 
     <div class="food-card" data-cat="sides" data-name="Fries" data-price="150">
       <a href="fries.html" class="card-img-wrap">
-        <img src="https://www.allrecipes.com/thmb/a4SMZFrhzyTfJZx4YLiqnntL9T4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/50223-homemade-crispy-seasoned-french-fries-VAT-Beauty-2x1-ca56fb55e12046bd94a3a26a9e2ca4a8.jpg" alt="Fries" />
+        <img src="https://images.themodernproper.com/production/posts/2022/Homemade-French-Fries_8.jpg?w=1200&h=1200&q=60&fm=jpg&fit=crop" alt="Fries" />
       </a>
       <div class="card-body">
         <h3><a href="fries.html" class="food-link">Fries</a></h3>
@@ -248,7 +262,7 @@
 
     <div class="food-card" data-cat="drinks" data-name="African Tea" data-price="50">
       <div class="card-img-wrap">
-        <img src="https://www.teaforturmeric.com/wp-content/uploads/2021/11/Masala-Chai-Tea-Recipe-Card.jpg" alt="African Tea" />
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd1PF7mNqD4YwcTQalztUvYoI7tPD-4bqu8A&s" alt="African Tea" />
       </div>
       <div class="card-body">
         <h3>African Tea</h3>

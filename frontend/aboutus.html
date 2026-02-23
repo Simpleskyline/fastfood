@@ -1,80 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us | Skyline Treats</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css" />
 </head>
-
 <body>
-  
-  <header class="header">
-    <h1>🍔 Skyline Treats</h1>
-    <div class="menu-toggle" id="toggle">
-      <div class="bar"></div>         
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
 
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
     <nav class="nav-links" id="nav">
-      <a href="profile.html">Profile</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="contactus.html">Contact Us</a>
+      <a href="dashboard.html">Menu</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
       <a href="faq.html">FAQ</a>
+      <a href="profile.html">Profile</a>
       <a href="../php/auth/logout.php" class="signout">Sign Out</a>
     </nav>
-
+    <div class="nav-right">
+      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
   </header>
 
-  <main class="about-container">
-    <section class="intro">
-      <h2>Welcome to Skyline Treats</h2>
-      <p>At Skyline Treats, we believe that great food brings people together. Whether you're craving a cheesy pizza, crispy fries, a juicy burger, or a refreshing soda, we have something delicious for everyone!</p>
-    </section>
+  <!-- HERO -->
+  <section class="about-hero">
+    <div class="about-hero-content">
+      <h1>Our Story</h1>
+      <p>Crafting bold flavours that bring people together, one meal at a time</p>
+    </div>
+  </section>
 
-    <section class="offerings">
-      <h3>Our Specialties</h3>
-      <ul>
-        <li><strong>Pizza:</strong> Choose from small, medium, large, or extra-large hot & cheesy pizzas made with love.</li>
-        <li><strong>Burgers:</strong> Single, double, and veggie burgers loaded with flavor.</li>
-        <li><strong>Fries:</strong> Regular, masala, or cheese fries – crispy and golden every time.</li>
-        <li><strong>Soda:</strong> Quench your thirst with 300ml, 500ml, or 1L cold sodas.</li>
-        <li><strong>Extras:</strong> Enjoy our tasty chapati, grilled chicken, and spicy sausages!</li>
-      </ul>
-    </section>
+  <!-- FOUNDER -->
+  <div class="founder-section">
+    <h2>Meet Tranquil Telvin</h2>
+    <p>
+      Skyline Treats began with a simple passion — to serve food that feels like home. Tranquil Telvin started this journey from a small street-side kitchen in Nairobi CBD, with nothing more than a charcoal grill, a handful of recipes, and an unwavering belief that great food should be accessible to everyone.
+    </p>
+    <p>
+      What started as a humble operation quickly grew into a beloved spot for Nairobians craving quality fast food at honest prices. Every item on our menu — from the double cheeseburgers to the freshly squeezed juices — is a reflection of Telvin's commitment to taste, freshness, and consistency.
+    </p>
+    <p>
+      We don't cut corners on ingredients. Every burger is grilled to order, every chapati rolled fresh, and every juice squeezed on the spot. Our kitchen runs on one standard: if it's not good enough for our own table, it's not leaving ours.
+    </p>
+    <p>
+      Today, Skyline Treats serves hundreds of customers daily across Nairobi, and the mission remains exactly the same — to make every person who walks through our door (or opens our app) feel well-fed, happy, and at home.
+    </p>
 
-    <section class="delivery">
-      <h3>Fast & Reliable Delivery</h3>
-      <p>We are located in Utawala near V-Mall</p>
-      <p>Our delivery service is quick, safe, and efficient. Once you place an order, our team gets to work immediately to make sure your food arrives hot and fresh, right at your doorstep.</p>
-      <p>We deliver within major towns and neighborhoods, with flexible payment options including cash on delivery and mobile payment.</p>
-    </section>
+    <div class="founder-badge">
+      <div class="founder-badge-icon">❤️</div>
+      <p>Making Nairobi feel full, one plate at a time</p>
+    </div>
+  </div>
 
-    <section class="promise">
-      <h3>Our Promise</h3>
-      <p>We are committed to quality, hygiene, and excellent customer service. At Skyline Treats, your satisfaction is our priority. Try us today and become part of our growing food family!</p>
-    </section>
-  </main>
+  <!-- VALUES -->
+  <section class="values-section">
+    <h2>Our Values</h2>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🛡️</div>
+        <h3>Quality First</h3>
+        <p>We source only the freshest ingredients for every single meal we serve.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">👥</div>
+        <h3>Community Focus</h3>
+        <p>Bringing bold flavours to our community, one satisfied customer at a time.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">⚡</div>
+        <h3>Speed & Consistency</h3>
+        <p>Fast service without compromise — every order, every time, no exceptions.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">💡</div>
+        <h3>Innovation</h3>
+        <p>Constantly evolving our menu to bring you exciting new flavours and options.</p>
+      </div>
+    </div>
+  </section>
 
+  <!-- MISSION -->
+  <section style="background:#f7f7f5;">
+    <div class="mission-section">
+      <h2>Our Mission</h2>
+      <p>
+        We're dedicated to bringing the finest fast food experience to Nairobi, combining bold street-food tradition with modern convenience. Our meals are more than just food — they're moments of joy, connection, and satisfaction.
+      </p>
+      <p>
+        Every item in our menu is carefully chosen to ensure flavour, freshness, and affordability. We believe great food shouldn't be a luxury — it should be something everyone can enjoy every day, without compromise.
+      </p>
+      <p>
+        From our kitchen to your table, we put heart into everything we make. That's the Skyline Treats promise.
+      </p>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <h3>500+</h3>
+      <p>Orders served daily</p>
+    </div>
+    <div class="stat-item">
+      <h3>18+</h3>
+      <p>Menu items</p>
+    </div>
+    <div class="stat-item">
+      <h3>4.8★</h3>
+      <p>Average customer rating</p>
+    </div>
+    <div class="stat-item">
+      <h3>3+</h3>
+      <p>Years serving Nairobi</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
   <footer class="footer">
-    <p>&copy; 2026 Skyline Treats. All rights reserved.</p>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Menu</h4>
+        <a href="dashboard.html">All Items</a>
+        <a href="burger.html">Burgers</a>
+        <a href="pizza.html">Pizza</a>
+        <a href="chicken.html">Chicken</a>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <a href="contactus.html">Contact Us</a>
+        <a href="profile.html">My Account</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="aboutus.html">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <a href="#">📸 Instagram</a>
+        <a href="#">🎵 TikTok</a>
+        <a href="#">📞 Call Support</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Skyline Treats. All rights reserved.</p>
+    </div>
   </footer>
 
   <script>
-    const toggle = document.getElementById('toggle');
-    const nav = document.getElementById('nav');
-
-    toggle.addEventListener('click', (e) => {
+    document.getElementById('toggle').addEventListener('click', e => {
       e.stopPropagation();
-      nav.classList.toggle('active');
+      document.getElementById('nav').classList.toggle('active');
     });
-
-    document.addEventListener('click', function (e) {
-      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+    document.addEventListener('click', e => {
+      const nav = document.getElementById('nav');
+      if (!nav.contains(e.target) && !document.getElementById('toggle').contains(e.target))
         nav.classList.remove('active');
-      }
     });
   </script>
 
