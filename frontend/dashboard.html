@@ -2,36 +2,45 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Skyline Treats - Menu</title>
   <link rel="stylesheet" href="main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    // ── Auth guard: redirect to login if no token ──────────────────────────────
+   /* (function () {
+      if (!localStorage.getItem("st_token")) {
+        window.location.href = "auth.html";
+      }
+    })();
+    // ── Global API base so cart.js and others pick it up ──────────────────────
+    window.API_BASE = "http://localhost:8000/api";*/
+  </script>
 </head>
 
 <body>
 
   <!-- NAVBAR -->
   <header class="navbar">
-    <a href="#" class="logo">Skyline Treats</a>
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
     <nav class="nav-links" id="nav">
       <a href="home.html">Home</a>
       <a href="aboutus.html">About</a>
       <a href="contactus.html">Contact</a>
       <a href="faq.html">FAQ</a>
       <a href="profile.html">Profile</a>
-      <a href="../php/auth/logout.php" class="signout">Sign Out</a>
+      <a href="#" class="signout" id="signoutBtn">Sign Out</a>
     </nav>
     <div class="nav-right">
       <button id="cart-icon" class="cart-btn">🛒 Cart (<span id="cart-count">0</span>)</button>
       <div class="menu-toggle" id="toggle">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
       </div>
     </div>
   </header>
 
-  <!-- HERO SECTION -->
+  <!-- HERO -->
   <section class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -61,7 +70,7 @@
         <option value="price-desc">Price: High to Low</option>
         <option value="name">Name A–Z</option>
       </select>
-      <span class="product-count" id="product-count">18 items</span>
+      <span class="product-count" id="product-count">Loading…</span>
     </div>
   </section>
 
@@ -69,42 +78,37 @@
   <main class="products-grid" id="products-grid">
 
     <div class="food-card" data-cat="mains" data-name="Burger" data-price="350">
-      <a href="burger.html" class="card-img-wrap">
-        <img src="https://www.kitchensanctuary.com/wp-content/uploads/2021/05/Double-Cheeseburger-square-FS-42.jpg" alt="Burger" />
-      </a>
+      <a href="burger.html" class="card-img-wrap"><img src="https://www.kitchensanctuary.com/wp-content/uploads/2021/05/Double-Cheeseburger-square-FS-42.jpg" alt="Burger" /></a>
       <div class="card-body">
         <h3><a href="burger.html" class="food-link">Burger</a></h3>
         <p class="card-desc">Juicy double-patty burger with fresh lettuce, cheese and our signature sauce.</p>
         <p class="price">KSH 350.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:1, name:'Burger', price:350})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="mains" data-name="Pizza" data-price="500">
-      <a href="pizza.html" class="card-img-wrap">
-        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/db/05/bd/my-special-order-pizza.jpg?w=900&h=500&s=1" alt="Pizza" />
-      </a>
+      <a href="pizza.html" class="card-img-wrap"><img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/db/05/bd/my-special-order-pizza.jpg?w=900&h=500&s=1" alt="Pizza" /></a>
       <div class="card-body">
         <h3><a href="pizza.html" class="food-link">Pizza</a></h3>
         <p class="card-desc">Wood-fired pizza loaded with toppings and melted mozzarella cheese.</p>
         <p class="price">KSH 500.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:2, name:'Pizza', price:500})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="sides" data-name="Fries" data-price="150">
-      <a href="fries.html" class="card-img-wrap">
-        <img src="https://www.allrecipes.com/thmb/8_B6OD1w6h1V0zPi8KAGzD41Kzs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/50223-homemade-crispy-seasoned-french-fries-VAT-Beauty-4x3-789ecb2eaed34d6e879b9a93dd56a50a.jpg" alt="Fries" />
-      </a>
+      <a href="fries.html" class="card-img-wrap"><img src="https://www.allrecipes.com/thmb/8_B6OD1w6h1V0zPi8KAGzD41Kzs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/50223-homemade-crispy-seasoned-french-fries-VAT-Beauty-4x3-789ecb2eaed34d6e879b9a93dd56a50a.jpg" alt="Fries" /></a>
       <div class="card-body">
         <h3><a href="fries.html" class="food-link">Fries</a></h3>
         <p class="card-desc">Crispy golden fries seasoned with our special house spice blend.</p>
         <p class="price">KSH 150.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:3, name:'Fries', price:150})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="mains" data-name="Shawarma" data-price="350">
-      <div class="card-img-wrap">
-        <img src="https://www.munatycooking.com/wp-content/uploads/2023/12/chicken-shawarma-image-feature-2023.jpg" alt="Shawarma" />
-      </div>
+      <div class="card-img-wrap"><img src="https://www.munatycooking.com/wp-content/uploads/2023/12/chicken-shawarma-image-feature-2023.jpg" alt="Shawarma" /></div>
       <div class="card-body">
         <h3>Shawarma</h3>
         <p class="card-desc">Slow-roasted meat wrapped in flatbread with garlic sauce and veggies.</p>
@@ -114,20 +118,17 @@
     </div>
 
     <div class="food-card" data-cat="drinks" data-name="Soda" data-price="80">
-      <a href="soda.html" class="card-img-wrap">
-        <img src="https://media.istockphoto.com/id/537699621/photo/fanta-drink-in-can-on-ice-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=SYrfyTjTukaR6_IsWusmOX-2-ZjCF5UyuvFZEAqTChs=" alt="Soda" />
-      </a>
+      <a href="soda.html" class="card-img-wrap"><img src="https://media.istockphoto.com/id/537699621/photo/fanta-drink-in-can-on-ice-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=SYrfyTjTukaR6_IsWusmOX-2-ZjCF5UyuvFZEAqTChs=" alt="Soda" /></a>
       <div class="card-body">
         <h3><a href="soda.html" class="food-link">Soda</a></h3>
         <p class="card-desc">Chilled soda in a variety of flavours — Fanta, Coke, Sprite & more.</p>
         <p class="price">KSH 80.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:5, name:'Soda', price:80})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="sides" data-name="Chapati" data-price="30">
-      <div class="card-img-wrap">
-        <img src="https://toasterding.com/wp-content/uploads/2024/04/Screenshot-2025-04-16-at-12.46.56.webp" alt="Chapati" />
-      </div>
+      <div class="card-img-wrap"><img src="https://toasterding.com/wp-content/uploads/2024/04/Screenshot-2025-04-16-at-12.46.56.webp" alt="Chapati" /></div>
       <div class="card-body">
         <h3>Chapati</h3>
         <p class="card-desc">Soft, layered East African flatbread made fresh to order.</p>
@@ -137,31 +138,27 @@
     </div>
 
     <div class="food-card" data-cat="mains" data-name="Chicken" data-price="400">
-      <a href="chicken.html" class="card-img-wrap">
-        <img src="https://hips.hearstapps.com/hmg-prod/images/roast-chicken-recipe-2-66b231ac9a8fb.jpg?resize=1200:*" alt="Chicken" />
-      </a>
+      <a href="chicken.html" class="card-img-wrap"><img src="https://hips.hearstapps.com/hmg-prod/images/roast-chicken-recipe-2-66b231ac9a8fb.jpg?resize=1200:*" alt="Chicken" /></a>
       <div class="card-body">
         <h3><a href="chicken.html" class="food-link">Chicken</a></h3>
         <p class="card-desc">Tender roasted chicken with herbs and a crispy golden skin.</p>
         <p class="price">KSH 400.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:7, name:'Chicken', price:400})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="mains" data-name="Cheese Wraps" data-price="280">
-      <a href="cheese_wraps.html" class="card-img-wrap">
-        <img src="https://life-in-the-lofthouse.com/wp-content/uploads/2022/08/Grilled-Cheeseburger-Wraps282-500x500.jpg" alt="Cheese Wraps" />
-      </a>
+      <a href="cheese_wraps.html" class="card-img-wrap"><img src="https://life-in-the-lofthouse.com/wp-content/uploads/2022/08/Grilled-Cheeseburger-Wraps282-500x500.jpg" alt="Cheese Wraps" /></a>
       <div class="card-body">
         <h3><a href="cheese_wraps.html" class="food-link">Cheese Wraps</a></h3>
         <p class="card-desc">Grilled cheese-filled wraps packed with flavour and crunch.</p>
         <p class="price">KSH 280.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:8, name:'Cheese Wraps', price:280})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="snacks" data-name="Kebab" data-price="80">
-      <div class="card-img-wrap">
-        <img src="https://dukamajuu.com/wp-content/uploads/2024/06/Fm-Beef-Kebabs-160G_2.jpg" alt="Kebab" />
-      </div>
+      <div class="card-img-wrap"><img src="https://dukamajuu.com/wp-content/uploads/2024/06/Fm-Beef-Kebabs-160G_2.jpg" alt="Kebab" /></div>
       <div class="card-body">
         <h3>Kebab</h3>
         <p class="card-desc">Spiced minced beef skewers grilled over charcoal to perfection.</p>
@@ -171,9 +168,7 @@
     </div>
 
     <div class="food-card" data-cat="snacks" data-name="Egg Rolex" data-price="100">
-      <div class="card-img-wrap">
-        <img src="https://www.thefooddictator.com/wp-content/uploads/2019/09/rolex1-907x1024.jpg" alt="Egg Rolex" />
-      </div>
+      <div class="card-img-wrap"><img src="https://www.thefooddictator.com/wp-content/uploads/2019/09/rolex1-907x1024.jpg" alt="Egg Rolex" /></div>
       <div class="card-body">
         <h3>Egg Rolex</h3>
         <p class="card-desc">A classic street egg omelette rolled in fresh chapati — a true gem.</p>
@@ -183,9 +178,7 @@
     </div>
 
     <div class="food-card" data-cat="snacks" data-name="Smokies" data-price="40">
-      <div class="card-img-wrap">
-        <img src="https://littlesunnykitchen.com/wp-content/uploads/2020/11/Crockpot-Little-Smokies-10.jpg" alt="Smokies" />
-      </div>
+      <div class="card-img-wrap"><img src="https://littlesunnykitchen.com/wp-content/uploads/2020/11/Crockpot-Little-Smokies-10.jpg" alt="Smokies" /></div>
       <div class="card-body">
         <h3>Smokies</h3>
         <p class="card-desc">Bite-sized smoky sausage bites, great as a quick street snack.</p>
@@ -195,9 +188,7 @@
     </div>
 
     <div class="food-card" data-cat="snacks" data-name="Sausages" data-price="50">
-      <div class="card-img-wrap">
-        <img src="https://cuetopiatexas.com/wp-content/uploads/2015/12/Beef-Texas-Sausage-1.jpg" alt="Sausages" />
-      </div>
+      <div class="card-img-wrap"><img src="https://cuetopiatexas.com/wp-content/uploads/2015/12/Beef-Texas-Sausage-1.jpg" alt="Sausages" /></div>
       <div class="card-body">
         <h3>Sausages</h3>
         <p class="card-desc">Grilled beef sausages served hot with ketchup and mustard.</p>
@@ -207,9 +198,7 @@
     </div>
 
     <div class="food-card" data-cat="snacks" data-name="Samosas" data-price="50">
-      <div class="card-img-wrap">
-        <img src="https://www.awesomecuisine.com/wp-content/uploads/2014/11/vegetable-samosa.jpg" alt="Samosa" />
-      </div>
+      <div class="card-img-wrap"><img src="https://www.awesomecuisine.com/wp-content/uploads/2014/11/vegetable-samosa.jpg" alt="Samosas" /></div>
       <div class="card-body">
         <h3>Samosas</h3>
         <p class="card-desc">Crispy triangle pastries filled with spiced potatoes or beef.</p>
@@ -219,9 +208,7 @@
     </div>
 
     <div class="food-card" data-cat="snacks" data-name="Bhajia" data-price="170">
-      <div class="card-img-wrap">
-        <img src="https://keeshaskitchen.com/wp-content/uploads/2023/11/KENYAN-BHAJIAS-2.jpg" alt="Bhajia" />
-      </div>
+      <div class="card-img-wrap"><img src="https://keeshaskitchen.com/wp-content/uploads/2023/11/KENYAN-BHAJIAS-2.jpg" alt="Bhajia" /></div>
       <div class="card-body">
         <h3>Bhajia</h3>
         <p class="card-desc">Deep-fried spiced potato fritters — crispy outside, soft inside.</p>
@@ -231,20 +218,17 @@
     </div>
 
     <div class="food-card" data-cat="drinks" data-name="Fresh Juice" data-price="120">
-      <a href="fresh_juice.html" class="card-img-wrap">
-        <img src="https://www.vfi.co.ke/wp-content/uploads/2020/02/Fresh-Juice-1-1024x988.jpg" alt="Fresh Juice" />
-      </a>
+      <a href="fresh_juice.html" class="card-img-wrap"><img src="https://www.vfi.co.ke/wp-content/uploads/2020/02/Fresh-Juice-1-1024x988.jpg" alt="Fresh Juice" /></a>
       <div class="card-body">
         <h3><a href="fresh_juice.html" class="food-link">Fresh Juice</a></h3>
         <p class="card-desc">Freshly squeezed fruit juice — mango, passion, watermelon & more.</p>
         <p class="price">KSH 120.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:15, name:'Fresh Juice', price:120})">🛒 Add to Cart</button>
       </div>
     </div>
 
     <div class="food-card" data-cat="drinks" data-name="Coffee" data-price="140">
-      <div class="card-img-wrap">
-        <img src="https://www.gourmetkava.cz/modules/ph_simpleblog/featured/75.jpg" alt="Coffee" />
-      </div>
+      <div class="card-img-wrap"><img src="https://www.gourmetkava.cz/modules/ph_simpleblog/featured/75.jpg" alt="Coffee" /></div>
       <div class="card-body">
         <h3>Coffee</h3>
         <p class="card-desc">Rich brewed Kenyan coffee served hot or iced, your choice.</p>
@@ -254,9 +238,7 @@
     </div>
 
     <div class="food-card" data-cat="drinks" data-name="African Tea" data-price="50">
-      <div class="card-img-wrap">
-        <img src="https://www.teaforturmeric.com/wp-content/uploads/2021/11/Masala-Chai-Tea-Recipe-Card.jpg" alt="African Tea" />
-      </div>
+      <div class="card-img-wrap"><img src="https://www.teaforturmeric.com/wp-content/uploads/2021/11/Masala-Chai-Tea-Recipe-Card.jpg" alt="African Tea" /></div>
       <div class="card-body">
         <h3>African Tea</h3>
         <p class="card-desc">Spiced milk tea brewed the East African way — warm and comforting.</p>
@@ -266,19 +248,17 @@
     </div>
 
     <div class="food-card" data-cat="drinks" data-name="Water" data-price="50">
-      <a href="water.html" class="card-img-wrap">
-        <img src="https://olkeriliquor.com/wp-content/uploads/2023/06/DASANI-500ML-MINERAL-WATER.jpg" alt="Water" />
-      </a>
+      <a href="water.html" class="card-img-wrap"><img src="https://olkeriliquor.com/wp-content/uploads/2023/06/DASANI-500ML-MINERAL-WATER.jpg" alt="Water" /></a>
       <div class="card-body">
         <h3><a href="water.html" class="food-link">Water</a></h3>
         <p class="card-desc">Cold mineral water — the perfect companion to any meal.</p>
         <p class="price">KSH 50.00</p>
+        <button class="add-to-cart-btn" onclick="addToCart({id:18, name:'Water', price:50})">🛒 Add to Cart</button>
       </div>
     </div>
 
   </main>
 
-  <!-- NO RESULTS -->
   <div class="no-results" id="no-results" style="display:none;">
     <p>😔 No items found. Try a different search or category.</p>
   </div>
@@ -300,11 +280,8 @@
     <div class="footer-grid">
       <div class="footer-col">
         <h4>Menu</h4>
-        <a href="#">All Items</a>
-        <a href="#">Mains</a>
-        <a href="#">Sides</a>
-        <a href="#">Drinks</a>
-        <a href="#">Snacks</a>
+        <a href="#">All Items</a><a href="#">Mains</a>
+        <a href="#">Sides</a><a href="#">Drinks</a><a href="#">Snacks</a>
       </div>
       <div class="footer-col">
         <h4>Customer Service</h4>
@@ -316,7 +293,7 @@
         <h4>Company</h4>
         <a href="aboutus.html">About Us</a>
         <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
+        <a href="#">Terms &amp; Conditions</a>
       </div>
       <div class="footer-col">
         <h4>Follow Us</h4>
@@ -331,116 +308,53 @@
   </footer>
 
   <script src="ui-helpers.js"></script>
+  <script src="cart.js"></script>
   <script>
-    const cartIcon = document.getElementById('cart-icon');
-    const cartContainer = document.getElementById('cart-container');
-    const closeCartBtn = document.getElementById('close-cart');
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartCount = document.getElementById('cart-count');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const toggle = document.getElementById('toggle');
-    const nav = document.getElementById('nav');
+    // ── Nav ──────────────────────────────────────────────────────────────────
+    const toggle = document.getElementById("toggle");
+    const nav    = document.getElementById("nav");
+    toggle.addEventListener("click", e => { e.stopPropagation(); nav.classList.toggle("active"); });
+    document.addEventListener("click", e => {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) nav.classList.remove("active");
+    });
 
-    let cartItems = JSON.parse(localStorage.getItem('ronz_cart') || '[]');
+    document.getElementById("signoutBtn").addEventListener("click", e => {
+      e.preventDefault();
+      localStorage.removeItem("st_token");
+      localStorage.removeItem("st_user");
+      window.location.href = "auth.html";
+    });
+
+    // ── Cart UI ───────────────────────────────────────────────────────────────
+    const cartIcon      = document.getElementById("cart-icon");
+    const cartContainer = document.getElementById("cart-container");
+    const closeCartBtn  = document.getElementById("close-cart");
+    const cartItemsEl   = document.getElementById("cart-items");
+    const cartCountEl   = document.getElementById("cart-count");
+    const checkoutBtn   = document.getElementById("checkout-btn");
+
+    let cartItems = getCart();
     renderCartItems();
 
-    // Nav toggle
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      nav.classList.toggle('active');
+    cartIcon.addEventListener("click", () => cartContainer.classList.toggle("active"));
+    closeCartBtn.addEventListener("click", () => cartContainer.classList.remove("active"));
+    document.addEventListener("click", e => {
+      if (!cartContainer.contains(e.target) && !cartIcon.contains(e.target))
+        cartContainer.classList.remove("active");
     });
-    document.addEventListener('click', (e) => {
-      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-        nav.classList.remove('active');
-      }
-    });
-
-    // Cart open/close
-    cartIcon.addEventListener('click', () => cartContainer.classList.toggle('active'));
-    closeCartBtn.addEventListener('click', () => cartContainer.classList.remove('active'));
-    document.addEventListener('click', (e) => {
-      if (!cartContainer.contains(e.target) && !cartIcon.contains(e.target)) {
-        cartContainer.classList.remove('active');
-      }
-    });
-
-    // Category filter
-    const pills = document.querySelectorAll('.pill');
-    const cards = document.querySelectorAll('.food-card');
-    let activeCategory = 'all';
-    let searchQuery = '';
-
-    pills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        pills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        activeCategory = pill.dataset.cat;
-        filterCards();
-      });
-    });
-
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      searchQuery = e.target.value.toLowerCase();
-      filterCards();
-    });
-
-    document.getElementById('sort-select').addEventListener('change', (e) => {
-      sortCards(e.target.value);
-    });
-
-    function filterCards() {
-      let visible = 0;
-      cards.forEach(card => {
-        const cat = card.dataset.cat;
-        const name = card.dataset.name.toLowerCase();
-        const matchesCat = activeCategory === 'all' || cat === activeCategory;
-        const matchesSearch = name.includes(searchQuery);
-        if (matchesCat && matchesSearch) {
-          card.style.display = '';
-          visible++;
-        } else {
-          card.style.display = 'none';
-        }
-      });
-      document.getElementById('product-count').textContent = visible + ' items';
-      document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
-    }
-
-    function sortCards(val) {
-      const grid = document.getElementById('products-grid');
-      const cardsArr = [...cards];
-      if (val === 'price-asc') cardsArr.sort((a, b) => +a.dataset.price - +b.dataset.price);
-      else if (val === 'price-desc') cardsArr.sort((a, b) => +b.dataset.price - +a.dataset.price);
-      else if (val === 'name') cardsArr.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
-      cardsArr.forEach(c => grid.appendChild(c));
-    }
-
-
-
-    function addToCart(item) {
-      const existing = cartItems.find(i => i.id === item.id);
-      if (existing) {
-        existing.quantity = (existing.quantity || 1) + 1;
-      } else {
-        cartItems.push({ ...item, quantity: 1 });
-      }
-      localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-      renderCartItems();
-      cartContainer.classList.add('active');
-    }
 
     function renderCartItems() {
-      cartItemsContainer.innerHTML = '';
-      if (!cartItems || cartItems.length === 0) {
-        cartItemsContainer.innerHTML = '<p class="empty-cart-msg">Your cart is empty.</p>';
-        checkoutBtn.style.display = 'none';
+      cartItemsEl.innerHTML = "";
+      if (!cartItems.length) {
+        cartItemsEl.innerHTML = "<p class='empty-cart-msg'>Your cart is empty.</p>";
+        checkoutBtn.style.display = "none";
       } else {
-        checkoutBtn.style.display = 'block';
-        let totalCost = 0;
+        checkoutBtn.style.display = "block";
+        let total = 0;
         cartItems.forEach(item => {
-          const itemDiv = document.createElement('div');
-          itemDiv.classList.add('cart-item');
-          itemDiv.innerHTML = `
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
             <div class="cart-item-details">
               <h4>${item.name}</h4>
               <p>KSH ${Number(item.price).toFixed(2)}</p>
@@ -452,60 +366,107 @@
             </div>
             <button class="remove-btn">×</button>
           `;
-          itemDiv.querySelector('.decrease-btn').addEventListener('click', () => {
-            if (item.quantity > 1) item.quantity--;
-            else if (confirm(`Remove ${item.name} from cart?`)) cartItems = cartItems.filter(i => i.id !== item.id);
-            localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-            renderCartItems();
+          div.querySelector(".decrease-btn").addEventListener("click", () => {
+            if (item.quantity > 1) { item.quantity--; }
+            else cartItems = cartItems.filter(i => i.id !== item.id);
+            saveCart(cartItems); renderCartItems();
           });
-          itemDiv.querySelector('.increase-btn').addEventListener('click', () => {
-            item.quantity++;
-            localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-            renderCartItems();
+          div.querySelector(".increase-btn").addEventListener("click", () => {
+            item.quantity++; saveCart(cartItems); renderCartItems();
           });
-          itemDiv.querySelector('.remove-btn').addEventListener('click', () => {
-            if (confirm(`Remove ${item.name} from cart?`)) {
-              cartItems = cartItems.filter(i => i.id !== item.id);
-              localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-              renderCartItems();
-            }
+          div.querySelector(".remove-btn").addEventListener("click", () => {
+            cartItems = cartItems.filter(i => i.id !== item.id);
+            saveCart(cartItems); renderCartItems();
           });
-          cartItemsContainer.appendChild(itemDiv);
-          totalCost += Number(item.price) * Number(item.quantity);
+          cartItemsEl.appendChild(div);
+          total += Number(item.price) * item.quantity;
         });
-        const totalDiv = document.createElement('div');
-        totalDiv.classList.add('cart-total');
-        totalDiv.innerHTML = `<p><strong>Total: KSH ${totalCost.toFixed(2)}</strong></p>`;
-        cartItemsContainer.appendChild(totalDiv);
+        const totDiv = document.createElement("div");
+        totDiv.className = "cart-total";
+        totDiv.innerHTML = `<p><strong>Total: KSH ${total.toFixed(2)}</strong></p>`;
+        cartItemsEl.appendChild(totDiv);
       }
-      cartCount.textContent = cartItems.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0);
+      cartCountEl.textContent = cartItems.reduce((a, i) => a + (i.quantity || 0), 0);
     }
 
-    checkoutBtn.addEventListener('click', () => {
-      if (cartItems.length === 0) { alert('Your cart is empty!'); return; }
-      const total = cartItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
-      fetch('../backend/api/create_order.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: 1, items: cartItems, total: total.toFixed(2) })
-      })
-      .then(async res => { const text = await res.text(); return JSON.parse(text); })
-      .then(data => {
-        if (data.success) {
-          localStorage.setItem('last_order_total', total.toFixed(2));
-          localStorage.removeItem('ronz_cart');
-          cartItems = [];
-          renderCartItems();
-          cartContainer.classList.remove('active');
-          window.location.href = 'thankyou.html';
-        } else {
-          alert("Checkout failed: " + (data.message || "Unknown error"));
-        }
-      })
-      .catch(error => alert("Error placing order: " + error.message));
+    // Override addToCart to update local state + re-render
+    window.addToCart = function (item) {
+      const cart = getCart();
+      const ex = cart.find(i => i.id === item.id);
+      if (ex) ex.quantity = (ex.quantity || 1) + 1;
+      else cart.push({ ...item, quantity: 1 });
+      saveCart(cart);
+      cartItems = cart;
+      renderCartItems();
+      cartContainer.classList.add("active");
+      if (typeof UI !== "undefined") UI.showToast(`${item.name} added to cart 🛒`, "success");
+    };
+
+    // ── Checkout ──────────────────────────────────────────────────────────────
+    checkoutBtn.addEventListener("click", async () => {
+      if (!cartItems.length) { alert("Your cart is empty!"); return; }
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = "Placing order…";
+      const result = await checkout(cartItems);
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = "Checkout";
+      if (result && result.success) {
+        cartItems = [];
+        renderCartItems();
+        cartContainer.classList.remove("active");
+        window.location.href = "thankyou.html";
+      } else {
+        const msg = result?.detail || result?.error || "Order failed. Please try again.";
+        if (typeof UI !== "undefined") UI.showToast(msg, "error");
+        else alert(msg);
+      }
     });
 
-    window.addToCart = addToCart;
+    // ── Filters / Search / Sort (work on static HTML cards) ──────────────────
+    const pills   = document.querySelectorAll(".pill");
+    const cards   = document.querySelectorAll(".food-card");
+    let activeCategory = "all";
+    let searchQuery    = "";
+
+    // Set initial count
+    document.getElementById("product-count").textContent = cards.length + " items";
+
+    function filterCards() {
+      let visible = 0;
+      cards.forEach(card => {
+        const matchesCat    = activeCategory === "all" || card.dataset.cat === activeCategory;
+        const matchesSearch = card.dataset.name.toLowerCase().includes(searchQuery);
+        const show = matchesCat && matchesSearch;
+        card.style.display = show ? "" : "none";
+        if (show) visible++;
+      });
+      document.getElementById("product-count").textContent = visible + " items";
+      document.getElementById("no-results").style.display = visible === 0 ? "block" : "none";
+    }
+
+    pills.forEach(pill => {
+      pill.addEventListener("click", () => {
+        pills.forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        activeCategory = pill.dataset.cat;
+        filterCards();
+      });
+    });
+
+    document.getElementById("search-input").addEventListener("input", e => {
+      searchQuery = e.target.value.toLowerCase();
+      filterCards();
+    });
+
+    document.getElementById("sort-select").addEventListener("change", e => {
+      const grid     = document.getElementById("products-grid");
+      const cardsArr = [...document.querySelectorAll(".food-card")];
+      if (e.target.value === "price-asc")  cardsArr.sort((a, b) => +a.dataset.price - +b.dataset.price);
+      if (e.target.value === "price-desc") cardsArr.sort((a, b) => +b.dataset.price - +a.dataset.price);
+      if (e.target.value === "name")       cardsArr.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+      cardsArr.forEach(c => grid.appendChild(c));
+    });
+
   </script>
 
 </body>
