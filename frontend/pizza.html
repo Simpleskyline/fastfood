@@ -1,65 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pizza - Ron'z Pizza</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <title>Pizza – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="product.css" />
 </head>
-
 <body>
-  <header>
-    <h1>🍕 Pizza Varieties</h1>
+
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="nav">
+      <a href="dashboard.html">Menu</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="profile.html">Profile</a>
+      <a href="../php/auth/logout.php" class="signout" style="background:var(--accent);color:var(--dark);padding:6px 18px;border-radius:20px;font-weight:700;">Sign Out</a>
+    </nav>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
   </header>
 
-  <main>
+  <div class="page-wrapper">
+    <nav class="breadcrumb">
+      <a href="dashboard.html">🏠</a><span class="sep">›</span>
+      <a href="dashboard.html">Menu</a><span class="sep">›</span>
+      <span class="current">Pizza</span>
+    </nav>
 
-    <div class="food-item">
-      <h3>Small-size Pizza</h3>
-      <p class="price">Ksh.500</p>
-      <button onclick="addToCart({id: 21, name: 'Small-size Pizza', price: 500})">Add to Cart</button>
+    <div class="product-detail">
+      <div class="product-image">
+        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/db/05/bd/my-special-order-pizza.jpg?w=900&h=500&s=1" alt="Pizza" />
+      </div>
+
+      <div class="product-info">
+        <h1 class="product-title">Pizza</h1>
+        <div class="product-price-row">
+          <span class="product-price" id="display-price">KSH 500.00</span>
+          <span class="price-currency">KES</span>
+        </div>
+
+        <div class="promos">
+          <div class="promo-item"><div class="promo-icon">🚚</div><span>Spend KSH 2,000 in one order and we deliver it free.</span></div>
+          <div class="promo-item"><div class="promo-icon">⭐</div><span>Order KSH 3,000+ and get KSH 200 credit for your next treat.</span></div>
+        </div>
+
+        <div class="product-section">
+          <p class="variant-label">Choose your size:</p>
+          <div class="variants">
+            <button class="variant-btn selected" data-id="21" data-price="500" onclick="selectVariant(this, 'Small Pizza', 500)">Small</button>
+            <button class="variant-btn" data-id="22" data-price="650" onclick="selectVariant(this, 'Medium Pizza', 650)">Medium</button>
+            <button class="variant-btn" data-id="23" data-price="850" onclick="selectVariant(this, 'Large Pizza', 850)">Large</button>
+            <button class="variant-btn" data-id="24" data-price="1500" onclick="selectVariant(this, 'Extra Large Pizza', 1500)">Extra Large</button>
+          </div>
+        </div>
+
+        <div class="product-section">
+          <p class="section-title">Description</p>
+          <p class="section-body">Wood-fired pizza with a thin, crispy base loaded with rich tomato sauce, premium mozzarella, and your choice of toppings. Made fresh to order in four generous sizes.</p>
+        </div>
+
+        <div class="product-section">
+          <p class="section-title">Product Details</p>
+          <p class="section-body">Baked fresh · Serves 1–4 depending on size · Allergens: gluten, dairy</p>
+        </div>
+
+        <button class="cta-add-cart" onclick="addSelected()">🛒 Add to Cart</button>
+        <a href="dashboard.html" class="back-link">← Back to Menu</a>
+      </div>
     </div>
+  </div>
 
-    <div class="food-item">
-      <h3>Medium-size Pizza</h3>
-      <p class="price">Ksh.650</p>
-      <button onclick="addToCart({id: 22, name: 'Medium-size Pizza', price: 650})">Add to Cart</button>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Menu</h4><a href="dashboard.html">All Items</a><a href="burger.html">Burgers</a><a href="pizza.html">Pizza</a><a href="chicken.html">Chicken</a></div>
+      <div class="footer-col"><h4>Customer Service</h4><a href="contactus.html">Contact Us</a><a href="profile.html">My Account</a><a href="faq.html">FAQ</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="aboutus.html">About Us</a><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a></div>
+      <div class="footer-col"><h4>Follow Us</h4><a href="#">📸 Instagram</a><a href="#">🎵 TikTok</a><a href="#">📞 Call Support</a></div>
     </div>
+    <div class="footer-bottom"><p>© 2026 Skyline Treats. All rights reserved.</p></div>
+  </footer>
 
-    <div class="food-item">
-      <h3>Large-size Pizza</h3>
-      <p class="price">Ksh.850</p>
-      <button onclick="addToCart({id: 23, name: 'Large-size Pizza', price: 850})">Add toCart</button>
-    </div>
-    
-    <div class="food-item">
-      <h3>Extra Large-size Pizza</h3>
-      <p class="price">Ksh.1500</p>
-      <button onclick="addToCart({id: 24, name: 'Extra Large-size Pizza', price: 1500})">Add to Cart</button>
-    </div>
-  </main>
+  <div class="toast" id="toast">✅ Added to cart!</div>
 
- <script>
-  function addToCart(item) {
-    // Get existing cart or create new
-    let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+  <script>
+    let selected = { id: 21, name: 'Small Pizza', price: 500 };
 
-    // Check if item exists
-    const existingItem = cart.find(i => i.id === item.id);
-    if (existingItem) {
-      existingItem.quantity++;
-    } else {
-      cart.push({ ...item, quantity: 1 });
+    function selectVariant(btn, name, price) {
+      document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selected = { id: parseInt(btn.dataset.id), name, price };
+      document.getElementById('display-price').textContent = 'KSH ' + price.toFixed(2);
     }
 
-    // Save updated cart to localStorage
-    localStorage.setItem('ronz_cart', JSON.stringify(cart));
+    function addSelected() {
+      let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+      const existing = cart.find(i => i.id === selected.id);
+      if (existing) existing.quantity++;
+      else cart.push({ ...selected, quantity: 1 });
+      localStorage.setItem('ronz_cart', JSON.stringify(cart));
+      showToast();
+    }
 
-    // Notify user
-    alert(`${item.name} added to cart!`);
-    window.location.href = 'dashboard.html';
-  }
-</script>
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    document.getElementById('toggle').addEventListener('click', e => { e.stopPropagation(); document.getElementById('nav').classList.toggle('active'); });
+    document.addEventListener('click', e => { const nav = document.getElementById('nav'); if (!nav.contains(e.target) && !document.getElementById('toggle').contains(e.target)) nav.classList.remove('active'); });
+  </script>
 </body>
 </html>

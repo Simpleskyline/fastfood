@@ -333,6 +333,9 @@ body {
 .card-img-wrap {
   overflow: hidden;
   height: 210px;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .card-img-wrap img {

@@ -1,135 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Soda - Ron'z Pizza</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soda – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="product.css" />
 </head>
-
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #fff8f0;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      color: #ff4b2b;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .soda-container {
-      /* This is already set up for horizontal alignment with wrapping */
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      /* Optional: Center the container itself */
-      max-width: 1200px; /* Adjust as needed */
-      margin: 0 auto;
-    }
-
-    .soda-size {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 20px;
-      text-align: center;
-    }
-
-    .soda-size h3 {
-      color: #333;
-      margin-bottom: 10px;
-    }
-
-    .soda-size a.button {
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 6px;
-      font-size: 14px;
-      text-decoration: none;
-      display: inline-block;
-      transition: background 0.3s ease;
-    }
-
-    .soda-size a.button:hover {
-      background: #218838;
-    }
-
-    /* Additional styling for price if needed */
-    .soda-size .price {
-      font-size: 1.1em;
-      color: #555;
-      margin-bottom: 15px;
-    }
-  </style>
-  
 <body>
-  <header>
-    <h1>Soda Flavours</h1>
+
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="nav">
+      <a href="dashboard.html">Menu</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="profile.html">Profile</a>
+      <a href="../php/auth/logout.php" class="signout" style="background:var(--accent);color:var(--dark);padding:6px 18px;border-radius:20px;font-weight:700;">Sign Out</a>
+    </nav>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
   </header>
 
-  <main>
+  <div class="page-wrapper">
+    <nav class="breadcrumb">
+      <a href="dashboard.html">🏠</a><span class="sep">›</span>
+      <a href="dashboard.html">Menu</a><span class="sep">›</span>
+      <span class="current">Soda</span>
+    </nav>
 
-  <h1>Choose Your Soda Size</h1>
-  <div class="soda-container">
-    <div class="soda-size">
-      <h3>300ml</h3>
-      <p class="price">Ksh.50</p>
-      <a class="button" href="soda-flavours.html?size=300ml" target="_blank">Choose Flavour</a>
-    </div>
+    <div class="product-detail">
+      <div class="product-image">
+        <img src="https://media.istockphoto.com/id/537699621/photo/fanta-drink-in-can-on-ice-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=SYrfyTjTukaR6_IsWusmOX-2-ZjCF5UyuvFZEAqTChs=" alt="Soda" />
+      </div>
 
-    <div class="soda-size">
-      <h3>350ml</h3>
-      <p class="price">Ksh.60</p>
-      <a class="button" href="soda-flavours.html?size=300ml" target="_blank">Choose Flavour</a>
-    </div>
+      <div class="product-info">
+        <h1 class="product-title">Soda</h1>
+        <div class="product-price-row">
+          <span class="product-price" id="display-price">KSH 50.00</span>
+          <span class="price-currency">KES</span>
+        </div>
 
-    <div class="soda-size">
-      <h3>500ml</h3>
-      <p class="price">Ksh.80</p>
-      <a class="button" href="soda-flavours.html?size=500ml" target="_blank">Choose Flavour</a>
-    </div>
-    
-    <div class="soda-size">
-      <h3>1.25 Litre</h3>
-      <p class="price">Ksh.150</p>
-      <a class="button" href="soda-flavours.html?size=1ltr" target="_blank">Choose Flavour</a>
-    </div>
+        <div class="promos">
+          <div class="promo-item"><div class="promo-icon">🚚</div><span>Spend KSH 2,000 in one order and we deliver it free.</span></div>
+          <div class="promo-item"><div class="promo-icon">⭐</div><span>Order KSH 3,000+ and get KSH 200 credit for your next treat.</span></div>
+        </div>
 
-    <div class="soda-size">
-      <h3>2 Litre</h3>
-      <p class="price">Ksh.200</p>
-      <a class="button" href="soda-flavours.html?size=2ltr" target="_blank">Choose Flavour</a>
+        <div class="product-section">
+          <p class="variant-label">Choose your flavour:</p>
+          <select class="flavour-select" id="flavour-select">
+            <option value="Fanta Orange">Fanta Orange</option>
+            <option value="Fanta Blackcurrant">Fanta Blackcurrant</option>
+            <option value="Coca-Cola">Coca-Cola</option>
+            <option value="Sprite">Sprite</option>
+            <option value="Stoney Ginger Beer">Stoney Ginger Beer</option>
+            <option value="Krest Bitter Lemon">Krest Bitter Lemon</option>
+          </select>
+          <p class="variant-label">Choose your size:</p>
+          <div class="variants">
+            <button class="variant-btn selected" data-id="61" data-price="50" onclick="selectVariant(this, '300ml', 50)">300ml — KSH 50</button>
+            <button class="variant-btn" data-id="62" data-price="60" onclick="selectVariant(this, '350ml', 60)">350ml — KSH 60</button>
+            <button class="variant-btn" data-id="63" data-price="80" onclick="selectVariant(this, '500ml', 80)">500ml — KSH 80</button>
+            <button class="variant-btn" data-id="64" data-price="150" onclick="selectVariant(this, '1.25L', 150)">1.25 Litre — KSH 150</button>
+            <button class="variant-btn" data-id="65" data-price="200" onclick="selectVariant(this, '2L', 200)">2 Litre — KSH 200</button>
+          </div>
+        </div>
+
+        <div class="product-section">
+          <p class="section-title">Description</p>
+          <p class="section-body">Chilled soda available in a variety of refreshing flavours and sizes. The perfect pairing with any meal — served ice-cold.</p>
+        </div>
+
+        <button class="cta-add-cart" onclick="addSelected()">🛒 Add to Cart</button>
+        <a href="dashboard.html" class="back-link">← Back to Menu</a>
+      </div>
     </div>
   </div>
 
-  <script>
-  function addToCart(item) {
-    // Get existing cart or create new
-    let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Menu</h4><a href="dashboard.html">All Items</a><a href="burger.html">Burgers</a><a href="pizza.html">Pizza</a><a href="chicken.html">Chicken</a></div>
+      <div class="footer-col"><h4>Customer Service</h4><a href="contactus.html">Contact Us</a><a href="profile.html">My Account</a><a href="faq.html">FAQ</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="aboutus.html">About Us</a><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a></div>
+      <div class="footer-col"><h4>Follow Us</h4><a href="#">📸 Instagram</a><a href="#">🎵 TikTok</a><a href="#">📞 Call Support</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Skyline Treats. All rights reserved.</p></div>
+  </footer>
 
-    // Check if item exists
-    const existingItem = cart.find(i => i.id === item.id);
-    if (existingItem) {
-      existingItem.quantity++;
-    } else {
-      cart.push({ ...item, quantity: 1 });
+  <div class="toast" id="toast">✅ Added to cart!</div>
+
+  <script>
+    let selectedSize = { id: 61, label: '300ml', price: 50 };
+
+    function selectVariant(btn, label, price) {
+      document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedSize = { id: parseInt(btn.dataset.id), label, price };
+      document.getElementById('display-price').textContent = 'KSH ' + price.toFixed(2);
     }
 
-    // Save updated cart to localStorage
-    localStorage.setItem('ronz_cart', JSON.stringify(cart));
+    function addSelected() {
+      const flavour = document.getElementById('flavour-select').value;
+      const name = `${flavour} (${selectedSize.label})`;
+      let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+      const existing = cart.find(i => i.id === selectedSize.id && i.name === name);
+      if (existing) existing.quantity++;
+      else cart.push({ id: selectedSize.id, name, price: selectedSize.price, quantity: 1 });
+      localStorage.setItem('ronz_cart', JSON.stringify(cart));
+      showToast();
+    }
 
-    // Notify user
-    alert(`${item.name} added to cart!`);
-    window.location.href = 'dashboard.html';
-  }
-</script>
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
 
-  </main>
+    document.getElementById('toggle').addEventListener('click', e => { e.stopPropagation(); document.getElementById('nav').classList.toggle('active'); });
+    document.addEventListener('click', e => { const nav = document.getElementById('nav'); if (!nav.contains(e.target) && !document.getElementById('toggle').contains(e.target)) nav.classList.remove('active'); });
+  </script>
 </body>
 </html>

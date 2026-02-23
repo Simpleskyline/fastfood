@@ -1,46 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <title>Water</title>
-  <link rel="stylesheet" href="dashboard.css" />
-
-  <script>
-    function addToCart(item) {
-      let cartItems = JSON.parse(localStorage.getItem('ronz_cart')) || [];
-      const existingItem = cartItems.find(i => i.id === item.id);
-      if (existingItem) {
-        existingItem.quantity++;
-      } else {
-        cartItems.push({ ...item, quantity: 1 });
-      }
-      localStorage.setItem('ronz_cart', JSON.stringify(cartItems));
-      alert(item.name + " added to cart!");
-      window.location.href = 'dashboard.html';
-    }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="product.css" />
 </head>
-
 <body>
-  <header>
-    <h1>Water Sizes</h1>
+
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="nav">
+      <a href="dashboard.html">Menu</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="profile.html">Profile</a>
+      <a href="../php/auth/logout.php" class="signout" style="background:var(--accent);color:var(--dark);padding:6px 18px;border-radius:20px;font-weight:700;">Sign Out</a>
+    </nav>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
   </header>
 
-  <main>
+  <div class="page-wrapper">
+    <nav class="breadcrumb">
+      <a href="dashboard.html">🏠</a><span class="sep">›</span>
+      <a href="dashboard.html">Menu</a><span class="sep">›</span>
+      <span class="current">Water</span>
+    </nav>
 
-    <div class="food-item">
-      <h3>500ml Water</h3>
-      <p class="price">Ksh.30</p>
-      <button onclick="addToCart({id: 31, name: '500ml Water', price: 30})">Add to Cart</button>
-    </div>
+    <div class="product-detail">
+      <div class="product-image">
+        <img src="https://olkeriliquor.com/wp-content/uploads/2023/06/DASANI-500ML-MINERAL-WATER.jpg" alt="Water" />
+      </div>
 
-    <div class="food-item">
-      <h3>1 Litre Water</h3>
-      <p class="price">Ksh.50</p>
-      <button onclick="addToCart({id: 32, name: '1 Litre Water', price: 50})">Add to Cart</button>
+      <div class="product-info">
+        <h1 class="product-title">Mineral Water</h1>
+        <div class="product-price-row">
+          <span class="product-price" id="display-price">KSH 30.00</span>
+          <span class="price-currency">KES</span>
+        </div>
+
+        <div class="promos">
+          <div class="promo-item"><div class="promo-icon">🚚</div><span>Spend KSH 2,000 in one order and we deliver it free.</span></div>
+          <div class="promo-item"><div class="promo-icon">⭐</div><span>Order KSH 3,000+ and get KSH 200 credit for your next treat.</span></div>
+        </div>
+
+        <div class="product-section">
+          <p class="variant-label">Choose your size:</p>
+          <div class="variants">
+            <button class="variant-btn selected" data-id="71" data-price="30" onclick="selectVariant(this, '500ml Water', 30)">500ml — KSH 30</button>
+            <button class="variant-btn" data-id="72" data-price="50" onclick="selectVariant(this, '1 Litre Water', 50)">1 Litre — KSH 50</button>
+          </div>
+        </div>
+
+        <div class="product-section">
+          <p class="section-title">Description</p>
+          <p class="section-body">Pure chilled mineral water — the perfect companion to any meal. Available in 500ml and 1 litre sizes.</p>
+        </div>
+
+        <div class="product-section">
+          <p class="section-title">Product Details</p>
+          <p class="section-body">Served chilled · No allergens · Suitable for all dietary needs</p>
+        </div>
+
+        <button class="cta-add-cart" onclick="addSelected()">🛒 Add to Cart</button>
+        <a href="dashboard.html" class="back-link">← Back to Menu</a>
+      </div>
     </div>
-    
-  </main>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>Menu</h4><a href="dashboard.html">All Items</a><a href="burger.html">Burgers</a><a href="pizza.html">Pizza</a><a href="chicken.html">Chicken</a></div>
+      <div class="footer-col"><h4>Customer Service</h4><a href="contactus.html">Contact Us</a><a href="profile.html">My Account</a><a href="faq.html">FAQ</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="aboutus.html">About Us</a><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a></div>
+      <div class="footer-col"><h4>Follow Us</h4><a href="#">📸 Instagram</a><a href="#">🎵 TikTok</a><a href="#">📞 Call Support</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Skyline Treats. All rights reserved.</p></div>
+  </footer>
+
+  <div class="toast" id="toast">✅ Added to cart!</div>
+
+  <script>
+    let selected = { id: 71, name: '500ml Water', price: 30 };
+
+    function selectVariant(btn, name, price) {
+      document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selected = { id: parseInt(btn.dataset.id), name, price };
+      document.getElementById('display-price').textContent = 'KSH ' + price.toFixed(2);
+    }
+
+    function addSelected() {
+      let cart = JSON.parse(localStorage.getItem('ronz_cart')) || [];
+      const existing = cart.find(i => i.id === selected.id);
+      if (existing) existing.quantity++;
+      else cart.push({ ...selected, quantity: 1 });
+      localStorage.setItem('ronz_cart', JSON.stringify(cart));
+      showToast();
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    document.getElementById('toggle').addEventListener('click', e => { e.stopPropagation(); document.getElementById('nav').classList.toggle('active'); });
+    document.addEventListener('click', e => { const nav = document.getElementById('nav'); if (!nav.contains(e.target) && !document.getElementById('toggle').contains(e.target)) nav.classList.remove('active'); });
+  </script>
 </body>
 </html>
