@@ -1,81 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact Us | Skyline Treats</title>
-  <link rel="stylesheet" href="dashboard.css" />
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="product.css" />
+  <style>
+    /* ── HERO ── */
+    .contact-hero {
+      position: relative;
+      margin-top: 64px;
+      height: 340px;
+      background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
 
+    .contact-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.58);
+    }
+
+    .contact-hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .contact-hero-content p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ── BODY LAYOUT ── */
+    .contact-body {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    /* ── LEFT: Contact Info ── */
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: #111;
+    }
+
+    .contact-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .contact-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-info-text strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 3px;
+    }
+
+    .contact-info-text span {
+      font-size: 0.88rem;
+      color: #6b6b6b;
+      line-height: 1.5;
+    }
+
+    /* Follow Us */
+    .follow-us {
+      margin-top: 36px;
+    }
+
+    .follow-us h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 14px;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 14px;
+    }
+
+    .social-icon {
+      width: 38px;
+      height: 38px;
+      border: 1.5px solid #ddd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      text-decoration: none;
+      color: #111;
+      transition: all 0.2s;
+    }
+
+    .social-icon:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    /* ── RIGHT: Form ── */
+    .contact-form-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: #111;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 7px;
+    }
+
+    .form-group select,
+    .form-group textarea,
+    .form-group input {
+      width: 100%;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 0.92rem;
+      font-family: 'DM Sans', sans-serif;
+      color: #111;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .form-group select:focus,
+    .form-group textarea:focus,
+    .form-group input:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+
+    .send-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #111;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .send-btn:hover {
+      background: var(--accent-dark);
+      transform: scale(1.01);
+    }
+
+    /* Success message */
+    .success-msg {
+      display: none;
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      color: #15803d;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .contact-body {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 0 24px 60px;
+        margin-top: 36px;
+      }
+
+      .contact-hero { height: 260px; }
+    }
+  </style>
+</head>
 <body>
 
-  <header>
-    <h1>Skyline Treats</h1>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="nav">
+      <a href="dashboard.html">Menu</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="profile.html">Profile</a>
+      <a href="../php/auth/logout.php" class="signout" style="background:var(--accent);color:var(--dark);padding:6px 18px;border-radius:20px;font-weight:700;">Sign Out</a>
+    </nav>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
+  </header>
 
-    <!-- Navigation menu -->
-    <div class="header-controls">
-      <div class="menu-toggle" id="toggle">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
+  <!-- HERO -->
+  <section class="contact-hero">
+    <div class="contact-hero-overlay"></div>
+    <div class="contact-hero-content">
+      <h1>Get in Touch</h1>
+      <p>We'd love to hear from you</p>
+    </div>
+  </section>
+
+  <!-- CONTACT BODY -->
+  <div class="contact-body">
+
+    <!-- LEFT: Info -->
+    <div class="contact-info">
+      <h2>Contact Information</h2>
+
+      <div class="contact-info-item">
+        <div class="contact-icon">📞</div>
+        <div class="contact-info-text">
+          <strong>Phone</strong>
+          <span>+254 712 345 678</span>
+        </div>
+      </div>
+
+      <div class="contact-info-item">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-info-text">
+          <strong>Email</strong>
+          <span>skylinetreats@gmail.com</span>
+        </div>
+      </div>
+
+      <div class="contact-info-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-info-text">
+          <strong>Address</strong>
+          <span>Nairobi CBD, Kenyatta Avenue<br>Opposite Dynamic Mall</span>
+        </div>
+      </div>
+
+      <div class="follow-us">
+        <h3>Follow Us</h3>
+        <div class="social-icons">
+          <a href="#" class="social-icon" title="Instagram">📸</a>
+          <a href="#" class="social-icon" title="TikTok">🎵</a>
+        </div>
       </div>
     </div>
 
-    <nav class="nav-links" id="nav">
-      <a href="profile.html">Profile</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="aboutus.html">About Us</a>
-      <a href="faq.html">FAQ</a>
-      <a href="/php/auth/logout.php" class="signout">Sign Out</a>
-    </nav>
-  </header>
+    <!-- RIGHT: Form -->
+    <div class="contact-form-section">
+      <h2>Send us a Message</h2>
 
-  <main class="contact-container">
-    <h2>Contact Us</h2>
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <select id="subject" name="subject">
+          <option value="">Select a subject</option>
+          <option value="order">Order Inquiry</option>
+          <option value="delivery">Delivery Issue</option>
+          <option value="feedback">Feedback</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
 
-    <img  src="https://media.istockphoto.com/id/938742222/photo/cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=D1z4xPCs-qQIZyUqRcHrnsJSJy_YbUD9udOrXpilNpI=" alt="Skyline Treats" class="contact-image"/>
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. John Doe" />
+      </div>
 
-    <p>If you have questions, feedback, or just want to say hello, reach out to us using the form below:</p>
-    <form class="contact-form" action="#" method="POST">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="e.g. john@email.com" />
+      </div>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write your message here..."></textarea>
+      </div>
 
-      <label for="message">Message:</label>
-      <textarea id="message" name="message" rows="5" required></textarea>
+      <button class="send-btn" onclick="sendMessage()">Send Message</button>
+      <div class="success-msg" id="success-msg">✅ Message sent! We'll get back to you shortly.</div>
+    </div>
 
-      <button type="submit">Send Message</button>
-    </form>
- 
-    <h3>📍 Visit Us:</h3>
-    <p>Skyline Treats HQ,<br>Nairobi CBD, Kenyatta Avenue,<br>Opposite Dynamic Mall</p>
+  </div>
 
-    <h3>📞 Contact Us:</h3>
-    <p>+254 712 345678
-      skylinetreats@gmail.com
-    </p>
-  </main>
-
-  <footer>
-    <p>&copy; 2026 Skyline Treats. All rights reserved.</p>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Menu</h4>
+        <a href="dashboard.html">All Items</a>
+        <a href="burger.html">Burgers</a>
+        <a href="pizza.html">Pizza</a>
+        <a href="chicken.html">Chicken</a>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <a href="contactus.html">Contact Us</a>
+        <a href="profile.html">My Account</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="aboutus.html">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <a href="#">📸 Instagram</a>
+        <a href="#">🎵 TikTok</a>
+        <a href="#">📞 Call Support</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Skyline Treats. All rights reserved.</p>
+    </div>
   </footer>
 
-   <script>
-    const toggle = document.getElementById('toggle');
-    const nav = document.getElementById('nav');
-
-    toggle.addEventListener('click', (e) => {
+  <script>
+    // Mobile nav
+    document.getElementById('toggle').addEventListener('click', e => {
       e.stopPropagation();
-      nav.classList.toggle('active');
+      document.getElementById('nav').classList.toggle('active');
+    });
+    document.addEventListener('click', e => {
+      const nav = document.getElementById('nav');
+      if (!nav.contains(e.target) && !document.getElementById('toggle').contains(e.target))
+        nav.classList.remove('active');
     });
 
-    document.addEventListener('click', function (e) {
-      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-        nav.classList.remove('active');
+    // Form submit
+    function sendMessage() {
+      const subject = document.getElementById('subject').value;
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!subject || !name || !email || !message) {
+        alert('Please fill in all fields before sending.');
+        return;
       }
-    });
+
+      // Show success message (replace with real API call if needed)
+      document.getElementById('success-msg').style.display = 'block';
+      document.getElementById('subject').value = '';
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('message').value = '';
+    }
   </script>
 
 </body>

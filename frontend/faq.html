@@ -1,129 +1,597 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAQ | Skyline Treats</title>
-  <link rel="stylesheet" href="dashboard.css" />
-  <link rel="stylesheet" href="faq.css" />
-</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="product.css" />
+  <style>
 
+    /* ── HERO ── */
+    .faq-hero {
+      position: relative;
+      margin-top: 64px;
+      height: 340px;
+      background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .faq-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.58);
+    }
+
+    .faq-hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .faq-hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .faq-hero-content p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ── BODY ── */
+    .faq-body {
+      max-width: 820px;
+      margin: 60px auto 80px;
+      padding: 0 40px;
+    }
+
+    /* Search bar */
+    .faq-search {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 40px;
+      padding: 0 20px;
+      gap: 10px;
+      margin-bottom: 42px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .faq-search input {
+      border: none;
+      outline: none;
+      width: 100%;
+      padding: 14px 0;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      color: #111;
+      background: transparent;
+    }
+
+    .faq-search input::placeholder { color: #aaa; }
+
+    /* Category tabs */
+    .faq-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .faq-tab {
+      background: transparent;
+      border: 1.5px solid #ddd;
+      color: #6b6b6b;
+      padding: 7px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .faq-tab:hover { border-color: #111; color: #111; }
+    .faq-tab.active { background: var(--accent); border-color: var(--accent); color: #111; }
+
+    /* Section heading */
+    .faq-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 16px;
+      margin-top: 36px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    /* Accordion items */
+    .faq-item {
+      border-bottom: 1px solid #ececec;
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      cursor: pointer;
+      font-size: 0.97rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      color: #111;
+      text-align: left;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+
+    .faq-question:hover { color: #555; }
+
+    .faq-question.open { color: #111; }
+
+    .faq-chevron {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.3s;
+    }
+
+    .faq-question.open .faq-chevron {
+      background: var(--accent);
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.2s;
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.75;
+    }
+
+    .faq-answer.open {
+      max-height: 400px;
+      padding-bottom: 18px;
+    }
+
+    .faq-answer a {
+      color: #111;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    /* No results */
+    .no-faq {
+      text-align: center;
+      padding: 40px 0;
+      color: #aaa;
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    /* Still need help CTA */
+    .faq-cta {
+      margin-top: 56px;
+      background: #111;
+      border-radius: 14px;
+      padding: 36px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .faq-cta-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .faq-cta-text p {
+      font-size: 0.88rem;
+      color: #aaa;
+    }
+
+    .faq-cta-btn {
+      background: var(--accent);
+      color: #111;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .faq-cta-btn:hover { background: var(--accent-dark); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .faq-body { padding: 0 24px; margin-top: 36px; }
+      .faq-hero { height: 260px; }
+      .faq-cta { padding: 28px 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
 <body>
 
-  <header class="header">
-    <h1>🍔 Skyline Treats</h1>
-    <div class="menu-toggle" id="toggle">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
     <nav class="nav-links" id="nav">
-      <a href="profile.html">Profile</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="contactus.html">Contact Us</a>
+      <a href="dashboard.html">Menu</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
       <a href="faq.html">FAQ</a>
-      <a href="../php/auth/logout.php" class="signout">Sign Out</a>
+      <a href="profile.html">Profile</a>
+      <a href="../php/auth/logout.php" class="signout" style="background:var(--accent);color:var(--dark);padding:6px 18px;border-radius:20px;font-weight:700;">Sign Out</a>
     </nav>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
   </header>
 
-  <main class="faq-container">
+  <!-- HERO -->
+  <section class="faq-hero">
+    <div class="faq-hero-overlay"></div>
+    <div class="faq-hero-content">
+      <h1>Frequently Asked Questions</h1>
+      <p>Everything you need to know about ordering from Skyline Treats</p>
+    </div>
+  </section>
 
-    <section class="intro">
-      <h2>Frequently Asked Questions</h2>
-      <p>Everything you need to know about ordering from Skyline Treats.</p>
-    </section>
+  <!-- FAQ BODY -->
+  <div class="faq-body">
 
-    <section class="faq-list">
+    <div id="faq-list">
 
-      <div class="faq-item">
-        <button class="faq-question">
-          🍔 What are your opening hours?
-          <span class="icon">+</span>
+      <!-- ORDERS -->
+      <p class="faq-section-title" data-cat="orders">🛒 Orders</p>
+
+      <div class="faq-item" data-cat="orders" data-q="how do i place an order">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I place an order?
+          <span class="faq-chevron">▼</span>
         </button>
         <div class="faq-answer">
-          We are open daily from <strong>8:00 AM to 10:00 PM</strong>, including weekends and public holidays.
+          Browse our menu on the dashboard, click on any item to view details, choose your options, then click <strong>Add to Cart</strong>. Once you're ready, open the cart and click <strong>Checkout</strong> to complete your order.
         </div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-question">
-          🚚 Do you offer home delivery?
-          <span class="icon">+</span>
+      <div class="faq-item" data-cat="orders" data-q="can i modify or cancel my order">
+        <button class="faq-question" onclick="toggle(this)">
+          Can I modify or cancel my order after placing it?
+          <span class="faq-chevron">▼</span>
         </button>
         <div class="faq-answer">
-          Yes! We provide fast and reliable delivery within Utawala and nearby areas.
+          Orders can be modified or cancelled within <strong>5 minutes</strong> of placing them. After that, the kitchen begins preparation and changes may not be possible. Please contact us immediately via the <a href="contactus.html">Contact page</a> if you need to make changes.
         </div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-question">
-          ⏱ How long does delivery take?
-          <span class="icon">+</span>
+      <div class="faq-item" data-cat="orders" data-q="how do i track my order">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I track my order?
+          <span class="faq-chevron">▼</span>
         </button>
         <div class="faq-answer">
-          Most orders arrive within <strong>30–45 minutes</strong> after confirmation.
+          Once your order is confirmed, you'll receive an SMS update with the estimated arrival time. You can also check your order history under <strong>My Account → Profile</strong> for real-time status updates.
         </div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-question">
-          💳 What payment methods are accepted?
-          <span class="icon">+</span>
+      <div class="faq-item" data-cat="orders" data-q="minimum order amount">
+        <button class="faq-question" onclick="toggle(this)">
+          Is there a minimum order amount?
+          <span class="faq-chevron">▼</span>
         </button>
         <div class="faq-answer">
-          We accept Cash on Delivery, M-Pesa, debit cards, and credit cards.
+          Yes, the minimum order amount is <strong>KSH 150</strong> for delivery orders. There is no minimum for pick-up orders.
         </div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-question">
-          🥗 Do you have vegetarian options?
-          <span class="icon">+</span>
+      <!-- DELIVERY -->
+      <p class="faq-section-title" data-cat="delivery">🚚 Delivery</p>
+
+      <div class="faq-item" data-cat="delivery" data-q="do you offer home delivery">
+        <button class="faq-question" onclick="toggle(this)">
+          Do you offer home delivery?
+          <span class="faq-chevron">▼</span>
         </button>
         <div class="faq-answer">
-          Yes! We offer veggie burgers, fries, and other vegetarian-friendly meals.
+          Yes! We deliver within <strong>Nairobi CBD and surrounding areas</strong> including Westlands, Eastleigh, Kasarani, Utawala, and more. Enter your location at checkout to confirm availability.
         </div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-question">
-          📞 How can I contact customer support?
-          <span class="icon">+</span>
+      <div class="faq-item" data-cat="delivery" data-q="how long does delivery take">
+        <button class="faq-question" onclick="toggle(this)">
+          How long does delivery take?
+          <span class="faq-chevron">▼</span>
         </button>
         <div class="faq-answer">
-          Visit our Contact Us page or reach us during business hours.
+          Most orders are delivered within <strong>30–45 minutes</strong> after confirmation. During peak hours (12pm–2pm and 6pm–8pm), delivery may take up to 60 minutes. You'll be notified if there are any delays.
         </div>
       </div>
 
-    </section>
+      <div class="faq-item" data-cat="delivery" data-q="free delivery">
+        <button class="faq-question" onclick="toggle(this)">
+          Do you offer free delivery?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes! Orders above <strong>KSH 2,000</strong> qualify for free delivery. For orders below this amount, a delivery fee of KSH 100–200 applies depending on your location.
+        </div>
+      </div>
 
-  </main>
+      <div class="faq-item" data-cat="delivery" data-q="what if my order arrives late or wrong">
+        <button class="faq-question" onclick="toggle(this)">
+          What if my order arrives late or incorrect?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          We're sorry if that happens! Please <a href="contactus.html">contact us</a> immediately with your order details and we'll arrange a replacement or refund within 24 hours. Customer satisfaction is our top priority.
+        </div>
+      </div>
 
+      <!-- PAYMENT -->
+      <p class="faq-section-title" data-cat="payment">💳 Payment</p>
+
+      <div class="faq-item" data-cat="payment" data-q="what payment methods are accepted">
+        <button class="faq-question" onclick="toggle(this)">
+          What payment methods do you accept?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          We accept the following payment methods:
+          <ul style="margin-top:10px; padding-left:20px; display:flex; flex-direction:column; gap:4px;">
+            <li>M-Pesa (Paybill & Till)</li>
+            <li>Cash on Delivery</li>
+            <li>Visa & Mastercard (debit/credit)</li>
+            <li>Airtel Money</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="payment" data-q="is it safe to pay online">
+        <button class="faq-question" onclick="toggle(this)">
+          Is it safe to pay online?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Absolutely. All online payments are processed through <strong>secure, encrypted gateways</strong>. We never store your card details on our servers.
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="payment" data-q="can i get a refund">
+        <button class="faq-question" onclick="toggle(this)">
+          Can I get a refund?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Refunds are available for orders that are incorrect, missing items, or undelivered. Refunds are processed within <strong>2–5 business days</strong> back to your original payment method. Contact us within 2 hours of your order to initiate a refund.
+        </div>
+      </div>
+
+      <!-- MENU & FOOD -->
+      <p class="faq-section-title" data-cat="menu">🍔 Menu & Food</p>
+
+      <div class="faq-item" data-cat="menu" data-q="opening hours">
+        <button class="faq-question" onclick="toggle(this)">
+          What are your opening hours?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          We are open <strong>7 days a week, 8:00 AM – 10:00 PM</strong>, including weekends and public holidays. Orders placed after 9:45 PM may not be accepted.
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="menu" data-q="vegetarian vegan options">
+        <button class="faq-question" onclick="toggle(this)">
+          Do you have vegetarian or vegan options?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes! We offer several vegetarian-friendly options including veggie burgers, bhajias, samosas, chapati, fresh juices, and sides like fries. Vegan options are available on request — please mention it in your order notes.
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="menu" data-q="allergens ingredients">
+        <button class="faq-question" onclick="toggle(this)">
+          Do you list allergens / ingredients?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes — each item's product detail page lists common allergens (gluten, dairy, eggs, etc.). If you have a severe allergy, please contact us before ordering and we'll advise on safe choices.
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="menu" data-q="are meals freshly made">
+        <button class="faq-question" onclick="toggle(this)">
+          Are meals prepared fresh?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes! Every order is prepared fresh upon request. We do not reheat pre-cooked food. This is why preparation may take <strong>10–15 minutes</strong> before dispatch.
+        </div>
+      </div>
+
+      <!-- ACCOUNT -->
+      <p class="faq-section-title" data-cat="account">👤 Account</p>
+
+      <div class="faq-item" data-cat="account" data-q="do i need an account to order">
+        <button class="faq-question" onclick="toggle(this)">
+          Do I need an account to place an order?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes, you need to sign in to complete checkout. Creating an account is free and takes less than a minute — it also lets you track orders, view history, and save your delivery address.
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="account" data-q="forgot password reset">
+        <button class="faq-question" onclick="toggle(this)">
+          I forgot my password. How do I reset it?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          On the login page, click <strong>"Forgot Password"</strong> and enter your registered email. You'll receive a reset link within a few minutes. If you don't see it, check your spam folder.
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="account" data-q="how do i view my order history">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I view my order history?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Go to <strong>Profile → Order History</strong> from the navigation menu. You'll see all past orders, their status, and the total amount paid.
+        </div>
+      </div>
+
+    </div><!-- end faq-list -->
+
+    <p class="no-faq" id="no-faq">😔 No questions matched your search. Try different keywords.</p>
+
+    <!-- Still need help CTA -->
+    <div class="faq-cta">
+      <div class="faq-cta-text">
+        <h3>Still have questions?</h3>
+        <p>Our team is happy to help — reach out any time.</p>
+      </div>
+      <a href="contactus.html" class="faq-cta-btn">Contact Us</a>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
   <footer class="footer">
-    <p>&copy; 2026 Skyline Treats. All rights reserved.</p>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Menu</h4>
+        <a href="dashboard.html">All Items</a>
+        <a href="burger.html">Burgers</a>
+        <a href="pizza.html">Pizza</a>
+        <a href="chicken.html">Chicken</a>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Service</h4>
+        <a href="contactus.html">Contact Us</a>
+        <a href="profile.html">My Account</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="aboutus.html">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <a href="#">📸 Instagram</a>
+        <a href="#">🎵 TikTok</a>
+        <a href="#">📞 Call Support</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Skyline Treats. All rights reserved.</p>
+    </div>
   </footer>
 
-  <script src="faq.js"></script>
-
   <script>
-    const toggle = document.getElementById('toggle');
-    const nav = document.getElementById('nav');
-
-    toggle.addEventListener('click', (e) => {
+    // Mobile nav
+    document.getElementById('toggle').addEventListener('click', e => {
       e.stopPropagation();
-      nav.classList.toggle('active');
+      document.getElementById('nav').classList.toggle('active');
+    });
+    document.addEventListener('click', e => {
+      const nav = document.getElementById('nav');
+      if (!nav.contains(e.target) && !document.getElementById('toggle').contains(e.target))
+        nav.classList.remove('active');
     });
 
-    document.addEventListener('click', function (e) {
-      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-        nav.classList.remove('active');
+    // Accordion toggle
+    function toggle(btn) {
+      const answer = btn.nextElementSibling;
+      const isOpen = answer.classList.contains('open');
+
+      // Close all open items
+      document.querySelectorAll('.faq-answer.open').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-question.open').forEach(b => b.classList.remove('open'));
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        answer.classList.add('open');
+        btn.classList.add('open');
       }
-    });
+    }
+
+    // Filter by category tab
+    let activeTab = 'all';
+
+    function filterByTab(btn, cat) {
+      document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = cat;
+      applyFilters();
+    }
+
+    // Search
+    function filterFAQ() { applyFilters(); }
+
+    function applyFilters() {
+      const query = document.getElementById('faq-search').value.toLowerCase();
+      const items = document.querySelectorAll('.faq-item');
+      const titles = document.querySelectorAll('.faq-section-title');
+      let visible = 0;
+
+      items.forEach(item => {
+        const cat = item.dataset.cat;
+        const q = item.dataset.q || '';
+        const answerText = item.querySelector('.faq-answer').textContent.toLowerCase();
+        const matchesCat = activeTab === 'all' || cat === activeTab;
+        const matchesSearch = !query || q.includes(query) || answerText.includes(query);
+        const show = matchesCat && matchesSearch;
+        item.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      // Show/hide section titles
+      titles.forEach(title => {
+        const cat = title.dataset.cat;
+        const matchesCat = activeTab === 'all' || cat === activeTab;
+        // Check if any visible item belongs to this section
+        const hasVisible = [...items].some(i => i.dataset.cat === cat && i.style.display !== 'none');
+        title.style.display = (matchesCat && hasVisible) ? '' : 'none';
+      });
+
+      document.getElementById('no-faq').style.display = visible === 0 ? 'block' : 'none';
+    }
   </script>
 
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
