@@ -1100,3 +1100,49 @@ body {
   .values-section { padding: 56px 24px; }
   .stats-strip { gap: 36px; padding: 40px 24px; }
 }
+/* ============================================================
+   DARK MODE THEME  (toggled by data-theme="dark" on <html>)
+   ============================================================ */
+html[data-theme="dark"] {
+  --accent: #f5c518;
+  --accent-dark: #d4a800;
+  --dark: #f0f0ee;
+  --dark2: #e8e8e6;
+  --mid: #d0d0ce;
+  --text: #f0f0ee;
+  --text-muted: #aaaaaa;
+  --border: #333333;
+  --white: #1c1c1c;
+  --bg: #111111;
+  --radius: 10px;
+}
+
+html[data-theme="dark"] .navbar { background: #1a1a1a; border-bottom: 1px solid #2a2a2a; }
+html[data-theme="dark"] .food-card { background: #1c1c1c; }
+html[data-theme="dark"] .food-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.6); }
+html[data-theme="dark"] #cart-container { background: #1c1c1c; border-left: 1px solid #2a2a2a; }
+html[data-theme="dark"] .hero { background: #0a0a0a; }
+html[data-theme="dark"] .filters-section { background: #161616; border-bottom-color: #2a2a2a; }
+html[data-theme="dark"] .pill { border-color: #333; color: #ccc; }
+html[data-theme="dark"] .pill:hover { border-color: #aaa; color: #fff; }
+html[data-theme="dark"] #sort-select { background: #1c1c1c; color: #f0f0ee; border-color: #333; }
+html[data-theme="dark"] .footer { background: #0a0a0a; }
+html[data-theme="dark"] .footer-col h4 { color: #f0f0ee; }
+html[data-theme="dark"] .footer-col a { color: #888; }
+html[data-theme="dark"] input, html[data-theme="dark"] select { background:#1c1c1c; color:#f0f0ee; border-color:#333; }
+html[data-theme="dark"] .cart-item { background:#222; border-color:#333; }
+
+/* Theme toggle button */
+.theme-toggle-btn {
+  background: none;
+  border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: .85rem;
+  color: inherit;
+  transition: all .2s;
+  white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }

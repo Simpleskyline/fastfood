@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Find Us – Skyline Treats</title>
+  <link rel="stylesheet" href="main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('st_theme')||'light');</script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+  <style>
+    .loc-page { padding-top:64px; }
+    .loc-hero { background:var(--dark); padding:60px 40px; text-align:center; }
+    .loc-hero h1 { font-family:'Playfair Display',serif; font-size:2.4rem; color:var(--white); margin-bottom:10px; }
+    .loc-hero p  { color:#999; }
+    .loc-body { max-width:1100px; margin:0 auto; padding:48px 32px; display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
+    #main-map { height:460px; border-radius:16px; overflow:hidden; border:1.5px solid var(--border); }
+    .info-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:32px; }
+    .info-card h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:20px; }
+    .info-row { display:flex; gap:14px; align-items:flex-start; margin-bottom:18px; }
+    .info-icon { font-size:1.4rem; flex-shrink:0; }
+    .info-label { font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-muted); margin-bottom:2px; }
+    .info-val { font-size:.97rem; color:var(--text); }
+    .directions-btn { display:block; width:100%; padding:13px; background:var(--accent); color:var(--dark); border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:.95rem; cursor:pointer; text-align:center; text-decoration:none; margin-top:8px; transition:background .2s; }
+    .directions-btn:hover { background:var(--accent-dark); }
+    @media(max-width:768px){ .loc-body{grid-template-columns:1fr;} #main-map{height:300px;} }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="nav">
+      <a href="home.html">Home</a><a href="aboutus.html">About</a>
+      <a href="dashboard.html">Menu</a><a href="contactus.html">Contact</a>
+      <a href="#" id="signoutBtn" class="signout">Sign Out</a>
+    </nav>
+    <div class="nav-right">
+      <button class="theme-toggle-btn" id="themeBtn">🌙 Dark</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
+  </header>
+
+  <div class="loc-page">
+    <div class="loc-hero">
+      <h1>📍 Find Us</h1>
+      <p>Come visit us or order for delivery — we're in the heart of Nairobi.</p>
+    </div>
+
+    <div class="loc-body">
+      <div id="main-map"></div>
+      <div class="info-card">
+        <h2>Skyline Treats</h2>
+
+        <div class="info-row">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-label">Address</div>
+            <div class="info-val">Tom Mboya Street, Nairobi CBD<br>Nairobi, Kenya</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">🕐</div>
+          <div>
+            <div class="info-label">Opening Hours</div>
+            <div class="info-val">
+              Mon – Fri: 7:00 AM – 10:00 PM<br>
+              Sat – Sun: 8:00 AM – 11:00 PM
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">📞</div>
+          <div>
+            <div class="info-label">Phone</div>
+            <div class="info-val">+254 700 123 456</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">✉️</div>
+          <div>
+            <div class="info-label">Email</div>
+            <div class="info-val">hello@skylinetreats.co.ke</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">🚚</div>
+          <div>
+            <div class="info-label">Delivery Radius</div>
+            <div class="info-val">
+              Free delivery within <strong>10 km</strong><br>
+              KSH 25 per km beyond that
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/dir/?api=1&destination=-1.2847,36.8275" target="_blank" class="directions-btn">
+          🗺️ Get Directions on Google Maps
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer" style="background:var(--dark);padding:28px 40px;text-align:center;">
+    <p style="font-size:.85rem;color:#888;">© 2026 Skyline Treats. | <a href="privacy.html" style="color:#666;text-decoration:none;">Privacy</a> | <a href="terms.html" style="color:#666;text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script>
+    const RESTAURANT = { lat: -1.2847, lng: 36.8275 };
+
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById('main-map'), {
+        center: RESTAURANT, zoom: 16,
+      });
+      const marker = new google.maps.Marker({
+        position: RESTAURANT, map,
+        title: 'Skyline Treats',
+        animation: google.maps.Animation.DROP,
+      });
+      const info = new google.maps.InfoWindow({
+        content: '<div style="font-family:sans-serif;padding:6px"><strong>🍔 Skyline Treats</strong><br>Tom Mboya Street, Nairobi CBD<br><small style="color:#666">Open Mon–Sun | 7am – 10pm</small></div>'
+      });
+      marker.addListener('click', () => info.open(map, marker));
+      info.open(map, marker);
+
+      // Draw 10km delivery circle
+      new google.maps.Circle({
+        strokeColor: '#f5c518', strokeOpacity: 0.6, strokeWeight: 2,
+        fillColor: '#f5c518', fillOpacity: 0.08,
+        map, center: RESTAURANT, radius: 10000
+      });
+    }
+
+    const themeBtn = document.getElementById('themeBtn');
+    function applyTheme(t) { document.documentElement.setAttribute('data-theme',t); localStorage.setItem('st_theme',t); themeBtn.textContent = t==='dark'?'☀️ Light':'🌙 Dark'; }
+    applyTheme(localStorage.getItem('st_theme')||'light');
+    themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));
+    document.getElementById('toggle').addEventListener('click',e=>{e.stopPropagation();document.getElementById('nav').classList.toggle('active');});
+    document.getElementById('signoutBtn').addEventListener('click',e=>{e.preventDefault();localStorage.removeItem('st_token');localStorage.removeItem('st_user');window.location.href='home.html';});
+  </script>
+</body>
+</html>

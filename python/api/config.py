@@ -1,38 +1,44 @@
 """
-config.py – App-wide settings loaded from .env
+config.py – App settings loaded from .env
 """
-from pydantic_settings import BaseSettings
 from functools import lru_cache
+from pydantic_settings import BaseSettings
+from typing import Optional
 
 
 class Settings(BaseSettings):
-    # Database
-    DB_HOST: str = "127.0.0.1"
-    DB_PORT: int = 3306
-    DB_NAME: str = "fastfood"
-    DB_USER: str = "root"
-    DB_PASS: str = ""
+    db_host:     str = "localhost"
+    db_port:     int = 3306
+    db_name:     str = "fastfood"
+    db_user:     str = "root"
+    db_pass:     str = ""
+    jwt_secret:  str = "change_me_in_production_please"
+    jwt_expire_hours: int = 24
+    cors_origins: str = "http://localhost:5500,http://127.0.0.1:5500,http://localhost:3000"
 
-    # JWT
-    JWT_SECRET: str = "change_me"
-    JWT_ALGORITHM: str = "HS256"
-    JWT_EXPIRE_MINUTES: int = 1440  # 24h
+    # Google OAuth
+    google_client_id:     Optional[str] = None
+    google_client_secret: Optional[str] = None
+    google_redirect_uri:  str = "http://localhost:8000/api/auth/google/callback"
 
-    # App
-    APP_ENV: str = "development"
-    APP_HOST: str = "0.0.0.0"
-    APP_PORT: int = 8000
-    CORS_ORIGINS: str = "http://localhost,http://127.0.0.1,http://localhost:5500"
+    # Email (SMTP for password reset)
+    smtp_host:  Optional[str] = None
+    smtp_port:  int = 587
+    smtp_user:  Optional[str] = None
+    smtp_pass:  Optional[str] = None
+    smtp_from:  Optional[str] = None
+
+    # Frontend URL (for redirect after Google login / password reset links)
+    frontend_url: str = "http://localhost:5500"
 
     @property
-    def cors_origins_list(self) -> list[str]:
-        return [o.strip() for o in self.CORS_ORIGINS.split(",")]
+    def cors_origins_list(self):
+        return [o.strip() for o in self.cors_origins.split(",")]
 
     class Config:
         env_file = ".env"
-        env_file_encoding = "utf-8"
 
 
-@lru_cache()
-def get_settings() -> Settings:
+@lru_cache
+def get_settings():
     return Settings()

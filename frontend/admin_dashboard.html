@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard – Skyline Treats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script>
+    /*(function(){
+      const user = JSON.parse(localStorage.getItem('st_user')||'{}');
+      if (!localStorage.getItem('st_token') || user.role !== 'admin') window.location.href='auth.html';
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('st_theme')||'light');
+    })();
+    window.API_BASE = "http://localhost:8000/api";*/
+  </script>
+  <style>
+    :root { --accent:#f5c518; --dark:#111; --dark2:#1a1a1a; --mid:#2a2a2a; --text:#1c1c1c; --text-muted:#6b6b6b; --border:#e5e5e5; --white:#fff; --bg:#f7f7f5; --radius:10px; }
+    html[data-theme="dark"] { --text:#f0f0ee; --text-muted:#aaa; --border:#333; --white:#1c1c1c; --bg:#111; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; }
+
+    /* Sidebar */
+    .sidebar { width:240px; background:var(--dark); min-height:100vh; padding:0; display:flex; flex-direction:column; position:fixed; left:0; top:0; bottom:0; z-index:100; }
+    .sidebar-logo { padding:24px 20px; border-bottom:1px solid #222; }
+    .sidebar-logo a { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--accent); text-decoration:none; font-weight:700; }
+    .sidebar-logo small { display:block; font-size:.72rem; color:#666; margin-top:2px; }
+    .sidebar-nav { padding:16px 0; flex:1; }
+    .nav-item { display:flex; align-items:center; gap:12px; padding:12px 20px; color:#999; text-decoration:none; font-size:.9rem; font-weight:500; cursor:pointer; transition:all .15s; border:none; background:none; width:100%; text-align:left; }
+    .nav-item:hover { background:#1a1a1a; color:#ddd; }
+    .nav-item.active { background:#222; color:var(--accent); border-left:3px solid var(--accent); }
+    .nav-item .icon { font-size:1.1rem; width:20px; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid #222; }
+    .sidebar-footer button { background:none; border:1px solid #333; color:#999; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:.85rem; width:100%; transition:all .2s; }
+    .sidebar-footer button:hover { border-color:#555; color:#ddd; }
+
+    /* Main content */
+    .main { margin-left:240px; flex:1; padding:0; }
+    .topbar { background:var(--white); border-bottom:1px solid var(--border); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:50; }
+    .topbar h1 { font-family:'Playfair Display',serif; font-size:1.35rem; }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .theme-btn { background:none; border:1.5px solid var(--border); border-radius:20px; padding:5px 14px; cursor:pointer; font-size:.85rem; transition:all .2s; font-family:'DM Sans',sans-serif; }
+    .content { padding:32px; }
+    .page { display:none; }
+    .page.active { display:block; }
+
+    /* Stat cards */
+    .stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:20px; margin-bottom:32px; }
+    .stat-card { background:var(--white); border:1px solid var(--border); border-radius:14px; padding:22px; }
+    .stat-card .s-label { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-muted); margin-bottom:10px; }
+    .stat-card .s-val { font-size:1.8rem; font-weight:700; color:var(--dark); }
+    html[data-theme="dark"] .stat-card .s-val { color:var(--accent); }
+    .stat-card .s-sub { font-size:.82rem; color:var(--text-muted); margin-top:4px; }
+
+    /* Charts placeholder */
+    .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px; }
+    .chart-box { background:var(--white); border:1px solid var(--border); border-radius:14px; padding:24px; }
+    .chart-box h3 { font-size:1rem; font-weight:700; margin-bottom:18px; }
+    .bar-chart { display:flex; flex-direction:column; gap:8px; }
+    .bar-row { display:flex; align-items:center; gap:10px; font-size:.85rem; }
+    .bar-row .bar-label { width:130px; color:var(--text-muted); font-size:.82rem; }
+    .bar-row .bar-track { flex:1; height:22px; background:var(--bg); border-radius:4px; overflow:hidden; }
+    .bar-row .bar-fill  { height:100%; background:var(--accent); border-radius:4px; transition:width .6s ease; }
+    .bar-row .bar-val   { width:80px; text-align:right; font-weight:600; font-size:.82rem; }
+
+    /* Tables */
+    .data-table-wrap { background:var(--white); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:24px; }
+    .data-table-hdr  { padding:18px 24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .data-table-hdr h3 { font-size:1rem; font-weight:700; }
+    table { width:100%; border-collapse:collapse; }
+    th { background:var(--bg); padding:10px 16px; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--text-muted); text-align:left; border-bottom:1px solid var(--border); }
+    td { padding:12px 16px; font-size:.9rem; border-bottom:1px solid var(--border); }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:rgba(245,197,24,.04); }
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:700; }
+    .badge.pending   { background:#fff3cd; color:#856404; }
+    .badge.confirmed { background:#cff4fc; color:#055160; }
+    .badge.preparing { background:#d1fae5; color:#065f46; }
+    .badge.delivered { background:#d4edda; color:#155724; }
+    .badge.cancelled { background:#f8d7da; color:#721c24; }
+    .badge.completed { background:#d4edda; color:#155724; }
+    .badge.admin     { background:rgba(245,197,24,.2); color:#7a5f00; }
+    .badge.customer  { background:#e2e3e5; color:#383d41; }
+    .action-btn { padding:5px 12px; border:1.5px solid var(--border); border-radius:6px; background:none; cursor:pointer; font-size:.8rem; font-weight:600; color:var(--text); transition:all .15s; }
+    .action-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .action-btn.danger { border-color:#fca5a5; color:#dc2626; }
+    .action-btn.danger:hover { background:#fee2e2; }
+
+    /* Search/filter row */
+    .table-controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .table-controls input { padding:8px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:.88rem; font-family:'DM Sans',sans-serif; background:var(--white); color:var(--text); outline:none; width:220px; }
+    .table-controls select { padding:8px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:.88rem; font-family:'DM Sans',sans-serif; background:var(--white); color:var(--text); cursor:pointer; outline:none; }
+
+    /* Loading */
+    .loading { text-align:center; padding:48px; color:var(--text-muted); font-size:.95rem; }
+    .refresh-btn { padding:8px 16px; background:var(--accent); color:var(--dark); border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:.85rem; cursor:pointer; }
+    @media(max-width:768px){ .main{margin-left:0;} .sidebar{display:none;} .chart-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <a href="dashboard.html">Skyline Treats</a>
+      <small>Admin Panel</small>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="showPage('overview')"><span class="icon">📊</span> Overview</button>
+      <button class="nav-item" onclick="showPage('orders')"><span class="icon">🛒</span> Orders</button>
+      <button class="nav-item" onclick="showPage('users')"><span class="icon">👥</span> Users</button>
+      <button class="nav-item" onclick="showPage('menu')"><span class="icon">🍔</span> Menu Items</button>
+      <button class="nav-item" onclick="showPage('payments')"><span class="icon">💳</span> Payments</button>
+      <button class="nav-item" onclick="showPage('messages')"><span class="icon">✉️</span> Messages</button>
+      <button class="nav-item" onclick="showPage('analytics')"><span class="icon">📈</span> Analytics</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="signOut()">🚪 Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <h1 id="page-title">Overview</h1>
+      <div class="topbar-right">
+        <button class="refresh-btn" onclick="loadCurrentPage()">↻ Refresh</button>
+        <button class="theme-btn" id="themeBtn">🌙 Dark</button>
+        <span id="admin-name" style="font-size:.88rem;color:var(--text-muted);"></span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- OVERVIEW PAGE -->
+      <div class="page active" id="page-overview">
+        <div class="stat-grid" id="stat-grid">
+          <div class="stat-card"><div class="s-label">Total Revenue</div><div class="s-val" id="s-revenue">—</div><div class="s-sub">all time</div></div>
+          <div class="stat-card"><div class="s-label">Total Orders</div><div class="s-val" id="s-orders">—</div><div class="s-sub">all time</div></div>
+          <div class="stat-card"><div class="s-label">Registered Users</div><div class="s-val" id="s-users">—</div><div class="s-sub">accounts</div></div>
+          <div class="stat-card"><div class="s-label">Avg Order Value</div><div class="s-val" id="s-avg">—</div><div class="s-sub">KSH per order</div></div>
+          <div class="stat-card"><div class="s-label">Pending Orders</div><div class="s-val" id="s-pending">—</div><div class="s-sub">need action</div></div>
+          <div class="stat-card"><div class="s-label">New Users (30d)</div><div class="s-val" id="s-new-users">—</div><div class="s-sub">last 30 days</div></div>
+          <div class="stat-card"><div class="s-label">Delivery Orders</div><div class="s-val" id="s-delivery">—</div><div class="s-sub">vs pickup</div></div>
+          <div class="stat-card"><div class="s-label">Delivery Revenue</div><div class="s-val" id="s-delivery-rev">—</div><div class="s-sub">fees collected</div></div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-box">
+            <h3>🏆 Top Selling Items</h3>
+            <div class="bar-chart" id="top-items-chart"><div class="loading">Loading…</div></div>
+          </div>
+          <div class="chart-box">
+            <h3>💳 Payment Methods</h3>
+            <div class="bar-chart" id="payments-chart"><div class="loading">Loading…</div></div>
+          </div>
+        </div>
+
+        <div class="chart-box" style="margin-bottom:24px;">
+          <h3>📅 Revenue Last 14 Days</h3>
+          <div class="bar-chart" id="revenue-chart" style="margin-top:10px;"><div class="loading">Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- ORDERS PAGE -->
+      <div class="page" id="page-orders">
+        <div class="data-table-wrap">
+          <div class="data-table-hdr">
+            <h3>All Orders</h3>
+            <div class="table-controls">
+              <input type="text" id="orders-search" placeholder="Search by user or ID…" oninput="filterTable('orders-tbody', this.value)"/>
+              <select onchange="filterByStatus(this.value)">
+                <option value="">All Status</option>
+                <option>pending</option><option>confirmed</option><option>preparing</option>
+                <option>delivered</option><option>cancelled</option>
+              </select>
+            </div>
+          </div>
+          <table><thead><tr><th>ID</th><th>Customer</th><th>Total</th><th>Delivery</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="orders-tbody"><tr><td colspan="7" class="loading">Loading…</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- USERS PAGE -->
+      <div class="page" id="page-users">
+        <div class="data-table-wrap">
+          <div class="data-table-hdr">
+            <h3>All Users</h3>
+            <div class="table-controls">
+              <input type="text" id="users-search" placeholder="Search by name or email…" oninput="filterTable('users-tbody', this.value)"/>
+            </div>
+          </div>
+          <table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Auth</th><th>Orders</th><th>Spent</th><th>Joined</th></tr></thead>
+          <tbody id="users-tbody"><tr><td colspan="8" class="loading">Loading…</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- MENU PAGE -->
+      <div class="page" id="page-menu">
+        <div class="data-table-wrap">
+          <div class="data-table-hdr">
+            <h3>Menu Items</h3>
+            <div class="table-controls">
+              <input type="text" placeholder="Search items…" oninput="filterTable('menu-tbody', this.value)"/>
+            </div>
+          </div>
+          <table><thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Status</th></tr></thead>
+          <tbody id="menu-tbody"><tr><td colspan="5" class="loading">Loading…</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- PAYMENTS PAGE -->
+      <div class="page" id="page-payments">
+        <div class="data-table-wrap">
+          <div class="data-table-hdr"><h3>Payments</h3></div>
+          <table><thead><tr><th>ID</th><th>Order</th><th>Method</th><th>Amount</th><th>Status</th><th>Reference</th><th>Date</th></tr></thead>
+          <tbody id="payments-tbody"><tr><td colspan="7" class="loading">Loading…</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- MESSAGES PAGE -->
+      <div class="page" id="page-messages">
+        <div class="data-table-wrap">
+          <div class="data-table-hdr"><h3>Contact Messages</h3></div>
+          <table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Read</th></tr></thead>
+          <tbody id="messages-tbody"><tr><td colspan="7" class="loading">Loading…</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- ANALYTICS PAGE -->
+      <div class="page" id="page-analytics">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="s-label">Category Leader</div><div class="s-val" id="a-top-cat">—</div></div>
+          <div class="stat-card"><div class="s-label">Top Customer</div><div class="s-val" id="a-top-cust">—</div></div>
+          <div class="stat-card"><div class="s-label">Google Sign-ups</div><div class="s-val" id="a-google">—</div></div>
+          <div class="stat-card"><div class="s-label">Avg Delivery Dist</div><div class="s-val" id="a-avg-dist">—</div></div>
+        </div>
+        <div class="chart-box">
+          <h3>📊 Top 10 Food Items by Revenue</h3>
+          <div class="bar-chart" id="analytics-chart" style="margin-top:12px;"><div class="loading">Loading…</div></div>
+        </div>
+        <div class="chart-box" style="margin-top:24px;">
+          <h3>👥 User Signups per Day (Last 30d)</h3>
+          <div class="bar-chart" id="signups-chart" style="margin-top:12px;"><div class="loading">Loading…</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API    = window.API_BASE || "http://localhost:8000/api";
+    const token  = localStorage.getItem('st_token');
+    const user   = JSON.parse(localStorage.getItem('st_user') || '{}');
+    document.getElementById('admin-name').textContent = `👋 ${user.first_name || 'Admin'}`;
+
+    // Theme
+    const themeBtn = document.getElementById('themeBtn');
+    function applyTheme(t) { document.documentElement.setAttribute('data-theme',t); localStorage.setItem('st_theme',t); themeBtn.textContent = t==='dark'?'☀️ Light':'🌙 Dark'; }
+    applyTheme(localStorage.getItem('st_theme')||'light');
+    themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));
+
+    // Sign out
+    function signOut() { localStorage.removeItem('st_token'); localStorage.removeItem('st_user'); window.location.href='home.html'; }
+
+    // Page nav
+    let currentPage = 'overview';
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + name).classList.add('active');
+      document.querySelectorAll('.nav-item')[['overview','orders','users','menu','payments','messages','analytics'].indexOf(name)].classList.add('active');
+      document.getElementById('page-title').textContent = {overview:'Overview',orders:'Orders',users:'Users',menu:'Menu Items',payments:'Payments',messages:'Messages',analytics:'Analytics'}[name];
+      currentPage = name;
+      loadPage(name);
+    }
+
+    function loadCurrentPage() { loadPage(currentPage); }
+
+    function loadPage(name) {
+      if (name === 'overview' || name === 'analytics') loadOverview();
+      if (name === 'orders')   loadOrders();
+      if (name === 'users')    loadUsers();
+      if (name === 'menu')     loadMenu();
+      if (name === 'payments') loadPayments();
+      if (name === 'messages') loadMessages();
+    }
+
+    async function apiFetch(path) {
+      const res = await fetch(`${API}${path}`, { headers: { Authorization: `Bearer ${token}` } });
+      return res.json();
+    }
+
+    // ── Overview ──────────────────────────────────────────────────────────────
+    async function loadOverview() {
+      try {
+        const d = await apiFetch('/admin/stats');
+        if (!d.success) return;
+        const s = d.data;
+        document.getElementById('s-revenue').textContent   = 'KSH ' + (s.total_revenue||0).toLocaleString();
+        document.getElementById('s-orders').textContent    = s.total_orders||0;
+        document.getElementById('s-users').textContent     = s.total_users||0;
+        document.getElementById('s-avg').textContent       = 'KSH ' + Math.round(s.avg_order_value||0);
+        document.getElementById('s-pending').textContent   = s.pending_orders||0;
+        document.getElementById('s-new-users').textContent = s.new_users_30d||0;
+        document.getElementById('s-delivery').textContent  = (s.delivery_orders||0) + ' orders';
+        document.getElementById('s-delivery-rev').textContent = 'KSH ' + (s.delivery_revenue||0).toLocaleString();
+
+        // Top items bar chart
+        renderBars('top-items-chart', (s.top_items||[]).slice(0,6).map(i => ({
+          label: i.name, val: i.units_sold, total: (s.top_items[0]?.units_sold||1), suffix: ' sold'
+        })));
+
+        // Payment methods
+        const pmData = s.payment_methods || [];
+        renderBars('payments-chart', pmData.map(p => ({
+          label: p.method, val: p.total_amount, total: Math.max(...pmData.map(x=>x.total_amount),1), suffix: ' KSH', format: v => 'KSH '+Math.round(v).toLocaleString()
+        })));
+
+        // Revenue chart (last 14 days)
+        const rev = s.daily_revenue || [];
+        renderBars('revenue-chart', rev.slice(-14).map(d => ({
+          label: d.order_date?.slice(5)||d.order_date, val: d.total_revenue,
+          total: Math.max(...rev.map(x=>x.total_revenue),1), suffix:'', format: v=>'KSH '+Math.round(v).toLocaleString()
+        })), true);
+
+        // Analytics page
+        document.getElementById('a-top-cat').textContent   = s.top_category || '—';
+        document.getElementById('a-top-cust').textContent  = s.top_customer || '—';
+        document.getElementById('a-google').textContent    = s.google_users || 0;
+        document.getElementById('a-avg-dist').textContent  = (s.avg_delivery_km ? s.avg_delivery_km.toFixed(1) + ' km' : '—');
+
+        renderBars('analytics-chart', (s.top_items||[]).slice(0,10).map(i => ({
+          label: i.name, val: i.revenue, total: (s.top_items[0]?.revenue||1), suffix:'', format:v=>'KSH '+Math.round(v).toLocaleString()
+        })));
+
+        renderBars('signups-chart', (s.signups_by_day||[]).slice(-14).map(d => ({
+          label: d.signup_date?.slice(5)||d.signup_date, val: d.new_users, total: Math.max(...(s.signups_by_day||[{new_users:1}]).map(x=>x.new_users),1), suffix: ' users'
+        })), true);
+
+      } catch(e) { console.error(e); }
+    }
+
+    function renderBars(elId, items, narrow=false) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      if (!items.length) { el.innerHTML = '<div class="loading">No data yet.</div>'; return; }
+      el.innerHTML = items.map(({label,val,total,suffix,format}) => {
+        const pct = total > 0 ? Math.round((val/total)*100) : 0;
+        const display = format ? format(val) : (val||0) + suffix;
+        return `<div class="bar-row">
+          <span class="bar-label" title="${label}">${label.length > (narrow?8:18) ? label.slice(0,narrow?8:18)+'…':label}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+          <span class="bar-val">${display}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // ── Orders ────────────────────────────────────────────────────────────────
+    async function loadOrders() {
+      const d = await apiFetch('/admin/orders');
+      const tbody = document.getElementById('orders-tbody');
+      if (!d.success || !d.data.length) { tbody.innerHTML='<tr><td colspan="7" class="loading">No orders found.</td></tr>'; return; }
+      tbody.innerHTML = d.data.map(o => `
+        <tr data-search="${o.user_email||''} ${o.id}">
+          <td>#${o.id}</td>
+          <td>${o.user_name||o.user_email||'—'}</td>
+          <td>KSH ${Number(o.total_amount).toLocaleString()}</td>
+          <td>${o.delivery_type==='delivery'?`🚚 ${o.delivery_distance_km||'?'} km`:'🏪 Pickup'}</td>
+          <td><span class="badge ${o.status}">${o.status}</span></td>
+          <td>${new Date(o.created_at).toLocaleDateString()}</td>
+          <td><select class="action-btn" onchange="updateOrderStatus(${o.id}, this.value)" style="border:1.5px solid var(--border);padding:4px 8px;border-radius:6px;font-size:.8rem;background:var(--white);color:var(--text);">
+            ${['pending','confirmed','preparing','ready','out_for_delivery','delivered','cancelled'].map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}
+          </select></td>
+        </tr>`).join('');
+    }
+
+    async function updateOrderStatus(id, status) {
+      await fetch(`${API}/admin/orders/${id}/status`, {
+        method: 'PUT', headers: { 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ status }),
+      });
+    }
+
+    // ── Users ─────────────────────────────────────────────────────────────────
+    async function loadUsers() {
+      const d = await apiFetch('/admin/users');
+      const tbody = document.getElementById('users-tbody');
+      if (!d.success || !d.data.length) { tbody.innerHTML='<tr><td colspan="8" class="loading">No users.</td></tr>'; return; }
+      tbody.innerHTML = d.data.map(u => `
+        <tr data-search="${u.email} ${u.full_name||''}">
+          <td>${u.id}</td>
+          <td>${u.full_name||'—'}</td>
+          <td>${u.email}</td>
+          <td><span class="badge ${u.role}">${u.role}</span></td>
+          <td>${u.auth_provider==='google'?'🔵 Google':'📧 Email'}</td>
+          <td>${u.total_orders||0}</td>
+          <td>KSH ${Number(u.total_spent||0).toLocaleString()}</td>
+          <td>${new Date(u.created_at||Date.now()).toLocaleDateString()}</td>
+        </tr>`).join('');
+    }
+
+    // ── Menu ──────────────────────────────────────────────────────────────────
+    async function loadMenu() {
+      const d = await fetch(`${API}/food/`).then(r=>r.json());
+      const tbody = document.getElementById('menu-tbody');
+      if (!d.success || !d.data.length) { tbody.innerHTML='<tr><td colspan="5" class="loading">No items.</td></tr>'; return; }
+      tbody.innerHTML = d.data.map(f => `
+        <tr data-search="${f.name}">
+          <td>${f.id}</td>
+          <td>${f.name}</td>
+          <td>${f.category||f.category_slug||'—'}</td>
+          <td>KSH ${Number(f.price).toLocaleString()}</td>
+          <td><span class="badge ${f.is_active?'confirmed':'cancelled'}">${f.is_active?'Active':'Inactive'}</span></td>
+        </tr>`).join('');
+    }
+
+    // ── Payments ──────────────────────────────────────────────────────────────
+    async function loadPayments() {
+      const d = await apiFetch('/admin/payments');
+      const tbody = document.getElementById('payments-tbody');
+      if (!d.success || !d.data.length) { tbody.innerHTML='<tr><td colspan="7" class="loading">No payments.</td></tr>'; return; }
+      tbody.innerHTML = d.data.map(p => `
+        <tr>
+          <td>${p.id}</td><td>#${p.order_id}</td>
+          <td>${p.method}</td>
+          <td>KSH ${Number(p.amount).toLocaleString()}</td>
+          <td><span class="badge ${p.status}">${p.status}</span></td>
+          <td>${p.reference||'—'}</td>
+          <td>${new Date(p.created_at).toLocaleDateString()}</td>
+        </tr>`).join('');
+    }
+
+    // ── Messages ──────────────────────────────────────────────────────────────
+    async function loadMessages() {
+      const d = await apiFetch('/admin/messages');
+      const tbody = document.getElementById('messages-tbody');
+      if (!d.success || !d.data.length) { tbody.innerHTML='<tr><td colspan="7" class="loading">No messages.</td></tr>'; return; }
+      tbody.innerHTML = d.data.map(m => `
+        <tr style="${!m.is_read?'font-weight:600':''}">
+          <td>${m.id}</td><td>${m.name}</td><td>${m.email}</td>
+          <td>${m.subject||'—'}</td>
+          <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.message}</td>
+          <td>${new Date(m.created_at).toLocaleDateString()}</td>
+          <td>${m.is_read?'✅':'🔴 Unread'}</td>
+        </tr>`).join('');
+    }
+
+    // ── Table filter ──────────────────────────────────────────────────────────
+    function filterTable(tbodyId, q) {
+      const rows = document.getElementById(tbodyId).querySelectorAll('tr');
+      rows.forEach(r => {
+        const text = (r.dataset.search||r.textContent).toLowerCase();
+        r.style.display = text.includes(q.toLowerCase()) ? '' : 'none';
+      });
+    }
+
+    function filterByStatus(status) {
+      const rows = document.getElementById('orders-tbody').querySelectorAll('tr');
+      rows.forEach(r => {
+        if (!status) { r.style.display=''; return; }
+        r.style.display = r.textContent.includes(status) ? '' : 'none';
+      });
+    }
+
+    // Initial load
+    loadOverview();
+  </script>
+</body>
+</html>
