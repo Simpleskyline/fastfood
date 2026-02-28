@@ -1,20 +1,5 @@
 # Skyline Treats v3.0 – Full Stack Update
 
-## What's New
-1. ✅ Google Sign-In / Sign-Up on auth page
-2. ✅ All Sign Out buttons redirect to home.html
-3. ✅ Full Admin Dashboard with Python analytics (pandas)
-4. ✅ Forgot Password → email link → reset password page
-5. ✅ Food Combos on dashboard (new category + cards)
-6. ✅ Cart stays open when adding/removing — only closes on ×
-7. ✅ Privacy Policy page (privacy.html)
-8. ✅ Terms & Conditions page (terms.html)
-9. ✅ Milkshake with 7 flavours (variant modal)
-10. ✅ Theme toggle (dark/light) in navbar — active & persistent
-11. ✅ Delivery in thankyou.html — Google Maps, 10km free, KSH 25/km after
-12. ✅ Pizza page with 5 flavours on dashboard
-13. ✅ Coffee & Tea varieties with sugar/unsugared option
-14. ✅ Location page (location.html) with Google Maps + 10km delivery circle
 
 ## Setup
 
