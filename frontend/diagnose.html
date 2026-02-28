@@ -3,6 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    // ⚠️  INTERNAL TOOL — password-protected
+    (function() {
+      const allowed = sessionStorage.getItem('diag_auth');
+      if (allowed !== 'yes') {
+        const pwd = prompt('🔐 Admin password required:');
+        // Change this password before deploying to production!
+        if (pwd !== 'skyline-admin-2026') {
+          document.documentElement.innerHTML = '<body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f5f5f5"><div style="text-align:center"><h2>🚫 Access Denied</h2><p>This page is for authorised staff only.</p><a href="dashboard.html">← Go to Menu</a></div></body>';
+          throw new Error('Unauthorised');
+        }
+        sessionStorage.setItem('diag_auth', 'yes');
+      }
+    })();
+  </script>
   <title>Connection Diagnostics</title>
   <style>
     body {

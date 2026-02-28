@@ -7,65 +7,50 @@
   <link rel="stylesheet" href="main.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <script>
+    (function() {
+      const t = localStorage.getItem('st_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
     window.API_BASE = "http://localhost:8000/api";
-    const t = localStorage.getItem('st_theme') || 'light';
-    document.documentElement.setAttribute('data-theme', t);
   </script>
-  <!-- Google Maps – replace YOUR_GOOGLE_MAPS_API_KEY -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" async defer></script>
   <style>
-    .ty-page { min-height:100vh; background:var(--bg); padding-top:64px; display:flex; flex-direction:column; }
-    .ty-hero { background:var(--dark); padding:64px 40px 56px; text-align:center; position:relative; overflow:hidden; }
-    .ty-hero::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:500px; height:300px; background:radial-gradient(ellipse,rgba(245,197,24,.13) 0%,transparent 70%); pointer-events:none; }
-    .checkmark-circle { width:72px; height:72px; background:var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:2rem; animation:popIn .5s cubic-bezier(.175,.885,.32,1.275) both; }
-    @keyframes popIn { from{opacity:0;transform:scale(.4)} to{opacity:1;transform:scale(1)} }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-    .ty-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.6rem); color:var(--white); margin-bottom:10px; animation:fadeUp .5s .15s ease both; position:relative; }
-    .ty-hero p  { color:#999; font-size:1rem; animation:fadeUp .5s .25s ease both; position:relative; }
-    .ty-total-badge { display:inline-block; background:rgba(245,197,24,.15); border:1px solid rgba(245,197,24,.35); color:var(--accent); font-weight:700; font-size:1.1rem; padding:10px 28px; border-radius:30px; margin-top:18px; animation:fadeUp .5s .35s ease both; position:relative; }
-    .ty-body { flex:1; max-width:760px; width:100%; margin:0 auto; padding:48px 24px 64px; animation:fadeUp .5s .3s ease both; }
-    .ty-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:32px; margin-bottom:24px; }
-    .ty-card-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--dark); margin-bottom:24px; }
-    /* Delivery section */
-    .delivery-tabs { display:flex; background:#f0f0ee; border-radius:10px; padding:4px; margin-bottom:22px; }
-    .del-tab { flex:1; padding:11px; border:none; background:transparent; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; color:var(--text-muted); cursor:pointer; transition:all .2s; }
-    .del-tab.active { background:var(--white); color:var(--dark); box-shadow:0 1px 5px rgba(0,0,0,.1); }
-    .del-panel { display:none; } .del-panel.active { display:block; }
-    #delivery-map { height:280px; border-radius:12px; overflow:hidden; margin-bottom:14px; border:1.5px solid var(--border); background:#e8e8e8; }
-    .delivery-info-box { background:rgba(245,197,24,.1); border:1px solid rgba(245,197,24,.35); border-radius:10px; padding:14px 18px; font-size:.9rem; margin-bottom:16px; }
-    .delivery-info-box strong { color:var(--dark); }
-    .delivery-info-box .outside-range { color:#c00; font-weight:600; }
-    /* Payment tabs */
-    .pay-tabs { display:flex; background:#f0f0ee; border-radius:10px; padding:4px; margin-bottom:28px; }
-    .pay-tab { flex:1; padding:11px 10px; border:none; background:transparent; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:600; color:var(--text-muted); cursor:pointer; transition:all .2s; }
-    .pay-tab.active { background:var(--white); color:var(--dark); box-shadow:0 1px 5px rgba(0,0,0,.1); }
-    .pay-panel { display:none; } .pay-panel.active { display:block; }
-    .form-group { margin-bottom:16px; }
-    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    label { display:block; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--text-muted); margin-bottom:6px; }
-    input, select { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:var(--radius); font-family:'DM Sans',sans-serif; font-size:.95rem; color:var(--text); background:var(--white); outline:none; transition:border-color .2s,box-shadow .2s; -webkit-appearance:none; }
-    input:focus, select:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(245,197,24,.15); }
-    .pay-btn { width:100%; padding:14px; background:var(--dark); color:var(--white); border:none; border-radius:var(--radius); font-family:'DM Sans',sans-serif; font-size:.95rem; font-weight:700; cursor:pointer; margin-top:8px; transition:background .2s,transform .15s; }
-    .pay-btn:hover { background:var(--mid); transform:translateY(-1px); }
-    .pay-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
-    .pay-result { border-radius:10px; padding:14px 18px; font-size:.9rem; font-weight:500; margin-top:14px; display:none; }
-    .pay-result.success { background:#f0fff4; border:1px solid #bbf7d0; color:#166534; }
-    .pay-result.error   { background:#fff0f0; border:1px solid #fecaca; color:#991b1b; }
-    .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--text-muted); text-decoration:none; font-size:.9rem; font-weight:500; padding:10px 20px; border:1.5px solid var(--border); border-radius:30px; background:var(--white); transition:all .2s; }
-    .back-link:hover { border-color:var(--dark); color:var(--dark); }
-    @media(max-width:600px){ .form-row{grid-template-columns:1fr;} .ty-hero{padding:48px 20px 44px;} .ty-body{padding:32px 16px 48px;} }
+    .ty-page { min-height: 100vh; background: var(--bg); padding-top: 64px; display: flex; flex-direction: column; align-items: center; }
+    .ty-hero { background: var(--dark); width: 100%; padding: 72px 24px 64px; text-align: center; position: relative; overflow: hidden; }
+    .ty-hero::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(245,197,24,.15) 0%, transparent 70%); pointer-events: none; }
+    .checkmark-circle { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 2.2rem; position: relative; animation: popIn .6s cubic-bezier(.175,.885,.32,1.275) both; }
+    @keyframes popIn { from { opacity:0; transform:scale(.3); } to { opacity:1; transform:scale(1); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .ty-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3rem); color: #fff; margin: 0 0 12px; position: relative; animation: fadeUp .5s .2s ease both; }
+    .ty-hero p  { color: #999; font-size: 1rem; position: relative; animation: fadeUp .5s .35s ease both; max-width: 480px; margin: 0 auto; }
+    .order-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(245,197,24,.12); border: 1px solid rgba(245,197,24,.35); color: var(--accent); font-weight: 700; font-size: 1rem; padding: 12px 28px; border-radius: 40px; margin-top: 24px; position: relative; animation: fadeUp .5s .5s ease both; }
+    .ty-body { max-width: 600px; width: 100%; padding: 48px 20px 80px; animation: fadeUp .5s .4s ease both; }
+    .ty-card { background: var(--white, #fff); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 20px; }
+    .ty-card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--dark); margin: 0 0 18px; }
+    .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: .9rem; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: var(--text-muted); }
+    .detail-value { font-weight: 600; color: var(--text); }
+    .detail-value.highlight { color: var(--accent); font-size: 1.05rem; }
+    .steps { display: flex; flex-direction: column; gap: 16px; }
+    .step { display: flex; align-items: flex-start; gap: 14px; }
+    .step-num { width: 32px; height: 32px; min-width: 32px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .85rem; color: #111; }
+    .step-text { font-size: .9rem; color: var(--text); line-height: 1.5; padding-top: 4px; }
+    .step-text strong { color: var(--dark); }
+    .action-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+    .btn-primary { flex: 1; padding: 14px; background: var(--accent); color: #111; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; display: inline-block; transition: opacity .2s; }
+    .btn-primary:hover { opacity: .85; }
+    .btn-secondary { flex: 1; padding: 14px; background: transparent; color: var(--text); border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; display: inline-block; transition: all .2s; }
+    .btn-secondary:hover { border-color: var(--dark); color: var(--dark); }
   </style>
 </head>
 <body>
   <header class="navbar">
     <a href="dashboard.html" class="logo">Skyline Treats</a>
     <nav class="nav-links" id="nav">
-      <a href="home.html">Home</a>
-      <a href="aboutus.html">About</a>
+      <a href="dashboard.html">Menu</a>
+      <a href="profile.html">My Orders</a>
       <a href="contactus.html">Contact</a>
-      <a href="faq.html">FAQ</a>
-      <a href="profile.html">Profile</a>
-      <a href="#" id="signoutBtn" class="signout">Sign Out</a>
+      <a href="#" class="signout" id="signoutBtn">Sign Out</a>
     </nav>
     <div class="nav-right">
       <button class="theme-toggle-btn" id="themeBtn">🌙 Dark</button>
@@ -77,292 +62,71 @@
     <div class="ty-hero">
       <div class="checkmark-circle">✓</div>
       <h1>Order Confirmed!</h1>
-      <p>Thank you for ordering with Skyline Treats. Please complete your payment below.</p>
-      <div class="ty-total-badge" id="total-badge">Loading…</div>
+      <p>Your order has been received and payment processed. Your food is being prepared!</p>
+      <div class="order-badge">
+        <span>Order <span id="order-id-badge">#—</span></span>
+        <span>·</span>
+        <span id="order-total-badge">KSH 0.00</span>
+      </div>
     </div>
 
     <div class="ty-body">
-
-      <!-- DELIVERY SECTION -->
       <div class="ty-card">
-        <div class="ty-card-title">🚚 Delivery Options</div>
-        <div class="delivery-tabs">
-          <button class="del-tab active" data-del="pickup" onclick="selectDelivery('pickup', this)">🏪 Pickup (Free)</button>
-          <button class="del-tab" data-del="delivery" onclick="selectDelivery('delivery', this)">🚚 Delivery</button>
-        </div>
+        <p class="ty-card-title">📋 Order Details</p>
+        <div class="detail-row"><span class="detail-label">Order ID</span><span class="detail-value" id="detail-id">—</span></div>
+        <div class="detail-row"><span class="detail-label">Payment Method</span><span class="detail-value" id="detail-method">—</span></div>
+        <div class="detail-row"><span class="detail-label">Total Paid</span><span class="detail-value highlight" id="detail-total">—</span></div>
+        <div class="detail-row"><span class="detail-label">Date &amp; Time</span><span class="detail-value" id="detail-date">—</span></div>
+        <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" style="color:#16a34a;">✅ Confirmed</span></div>
+      </div>
 
-        <div class="del-panel active" id="panel-pickup">
-          <div class="delivery-info-box">
-            <strong>📍 Skyline Treats Location</strong><br>
-            Tom Mboya Street, Nairobi CBD, Kenya<br>
-            <small style="color:var(--text-muted)">Open: Mon–Sun 7am – 10pm</small>
-          </div>
-          <div id="pickup-map" style="height:200px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);"></div>
-        </div>
-
-        <div class="del-panel" id="panel-delivery">
-          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:14px;">Enter your location — free delivery within 10 km, KSH 25/km after that.</p>
-          <div class="form-group">
-            <label for="delivery-address">Your Delivery Address</label>
-            <input type="text" id="delivery-address" placeholder="Start typing your address in Nairobi..." autocomplete="off" />
-          </div>
-          <div id="delivery-map"></div>
-          <div class="delivery-info-box" id="delivery-info" style="display:none;"></div>
+      <div class="ty-card">
+        <p class="ty-card-title">⏱️ What happens next?</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Order received</strong> — our kitchen has been notified and will start preparing your food shortly.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Preparation</strong> — your food is freshly made to order. Usually takes 10–20 minutes.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text" id="step-3-text"><strong>Ready for pickup</strong> — we'll let you know when your order is ready at Tom Mboya Street.</div></div>
         </div>
       </div>
 
-      <!-- PAYMENT SECTION -->
-      <div class="ty-card">
-        <div class="ty-card-title">💳 Complete Payment</div>
-        <div id="final-total-display" style="background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.3);border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:1rem;font-weight:700;"></div>
-        <div class="pay-tabs">
-          <button class="pay-tab active" data-tab="mpesa">📱 M-Pesa</button>
-          <button class="pay-tab" data-tab="visa">💳 Card</button>
-          <button class="pay-tab" data-tab="crypto">₿ Crypto</button>
-        </div>
-
-        <div class="pay-panel active" id="panel-mpesa">
-          <div class="form-group">
-            <label>M-Pesa Phone Number</label>
-            <input type="tel" id="mpesa-phone" placeholder="e.g. 0712 345 678" maxlength="13" />
-          </div>
-          <button class="pay-btn" style="background:var(--accent);color:var(--dark);" onclick="processPayment('M-Pesa')">✓ Pay with M-Pesa</button>
-          <div class="pay-result" id="result-mpesa"></div>
-        </div>
-
-        <div class="pay-panel" id="panel-visa">
-          <div class="form-group">
-            <label>Card Number</label>
-            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" />
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Expiry</label><input type="text" id="expiry" placeholder="MM / YY" maxlength="7" /></div>
-            <div class="form-group"><label>CVV</label><input type="text" id="cvv" placeholder="•••" maxlength="4" /></div>
-          </div>
-          <div class="form-group">
-            <label>Cardholder Name</label>
-            <input type="text" id="cardholder" placeholder="As on card" />
-          </div>
-          <button class="pay-btn" onclick="processPayment('Card')">🔒 Pay Securely</button>
-          <div class="pay-result" id="result-visa"></div>
-        </div>
-
-        <div class="pay-panel" id="panel-crypto">
-          <div class="form-group">
-            <label>Cryptocurrency</label>
-            <select id="crypto-type"><option value="BTC">Bitcoin (BTC)</option><option value="ETH">Ethereum (ETH)</option><option value="USDT">Tether (USDT)</option></select>
-          </div>
-          <div class="form-group">
-            <label>Your Wallet Address</label>
-            <input type="text" id="wallet" placeholder="Paste wallet address" />
-          </div>
-          <button class="pay-btn" onclick="processPayment('Crypto')">₿ Pay with Crypto</button>
-          <div class="pay-result" id="result-crypto"></div>
-        </div>
-      </div>
-
-      <div class="back-row" style="text-align:center;margin-top:8px;">
-        <a href="dashboard.html" class="back-link">← Back to Menu</a>
+      <div class="action-row">
+        <a href="profile.html" class="btn-secondary">📋 View My Orders</a>
+        <a href="dashboard.html" class="btn-primary">🍔 Order Again</a>
       </div>
     </div>
   </div>
 
   <script>
-    const API = window.API_BASE || "http://localhost:8000/api";
-    // Skyline Treats restaurant coordinates (Tom Mboya St, Nairobi)
-    const RESTAURANT_LAT = -1.2847;
-    const RESTAURANT_LNG = 36.8275;
-    const FREE_DELIVERY_KM = 10;
-    const PRICE_PER_KM     = 25;
-
-    const baseTotal = parseFloat(localStorage.getItem('last_order_total') || '0');
-    const orderId   = localStorage.getItem('last_order_id');
-    let deliveryFee = 0;
-    let deliveryType = 'pickup';
-    let deliveryLat  = null, deliveryLng = null, deliveryDistKm = null;
-
-    function updateTotalDisplay() {
-      const grand = baseTotal + deliveryFee;
-      document.getElementById('total-badge').textContent    = `Order Total: KSH ${grand.toFixed(2)}`;
-      document.getElementById('final-total-display').textContent = `💳 Total to Pay: KSH ${grand.toFixed(2)}` +
-        (deliveryFee > 0 ? ` (incl. KSH ${deliveryFee.toFixed(2)} delivery fee)` : deliveryType === 'delivery' ? ' (free delivery!)' : '');
-    }
-    updateTotalDisplay();
-
-    // ── Theme & Nav ────────────────────────────────────────────────────────────
     const themeBtn = document.getElementById('themeBtn');
-    function applyTheme(t) {
-      document.documentElement.setAttribute('data-theme', t);
-      localStorage.setItem('st_theme', t);
-      themeBtn.textContent = t === 'dark' ? '☀️ Light' : '🌙 Dark';
-    }
-    applyTheme(localStorage.getItem('st_theme') || 'light');
-    themeBtn.addEventListener('click', () => applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+    function applyTheme(t) { document.documentElement.setAttribute('data-theme',t); localStorage.setItem('st_theme',t); themeBtn.textContent = t==='dark'?'☀️ Light':'🌙 Dark'; }
+    applyTheme(localStorage.getItem('st_theme')||'light');
+    themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));
+    document.getElementById('toggle').addEventListener('click',e=>{e.stopPropagation();document.getElementById('nav').classList.toggle('active');});
+    document.getElementById('signoutBtn').addEventListener('click',e=>{e.preventDefault();localStorage.removeItem('st_token');localStorage.removeItem('st_user');window.location.href='home.html';});
 
-    document.getElementById('toggle').addEventListener('click', e => { e.stopPropagation(); document.getElementById('nav').classList.toggle('active'); });
-    document.getElementById('signoutBtn').addEventListener('click', e => {
-      e.preventDefault(); localStorage.removeItem('st_token'); localStorage.removeItem('st_user');
-      window.location.href = 'home.html';
-    });
+    const orderId = localStorage.getItem('last_order_id')    || '—';
+    const total   = parseFloat(localStorage.getItem('last_order_total') || '0');
+    const method  = localStorage.getItem('last_order_method') || '—';
+    const now     = new Date().toLocaleString('en-KE', { dateStyle:'medium', timeStyle:'short' });
 
-    // Pay tabs
-    document.querySelectorAll('.pay-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.pay-panel[id^="panel-m"], .pay-panel[id^="panel-v"], .pay-panel[id^="panel-c"]').forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
-      });
-    });
+    document.getElementById('order-id-badge').textContent    = '#' + orderId;
+    document.getElementById('order-total-badge').textContent = 'KSH ' + total.toFixed(2);
+    document.getElementById('detail-id').textContent         = '#' + orderId;
+    document.getElementById('detail-method').textContent     = method;
+    document.getElementById('detail-total').textContent      = 'KSH ' + total.toFixed(2);
+    document.getElementById('detail-date').textContent       = now;
 
-    // ── Delivery toggle ────────────────────────────────────────────────────────
-    function selectDelivery(type, btn) {
-      deliveryType = type;
-      document.querySelectorAll('.del-tab').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('panel-pickup').classList.toggle('active', type === 'pickup');
-      document.getElementById('panel-delivery').classList.toggle('active', type === 'delivery');
-      if (type === 'pickup') { deliveryFee = 0; updateTotalDisplay(); }
+    const lastHistory = JSON.parse(localStorage.getItem('ronz_order_history') || '[]');
+    const lastOrder   = lastHistory[lastHistory.length - 1];
+    if (lastOrder && lastOrder.delivery_type === 'delivery') {
+      document.getElementById('step-3-text').innerHTML = '<strong>On the way!</strong> — your rider will be dispatched once ready. Expected delivery in 30–45 minutes.';
     }
 
-    // ── Google Maps ────────────────────────────────────────────────────────────
-    let pickupMap, deliveryMap, deliveryMarker, marker;
-
-    window.initMaps = function () {
-      const restLatLng = { lat: RESTAURANT_LAT, lng: RESTAURANT_LNG };
-
-      // Pickup map (static)
-      pickupMap = new google.maps.Map(document.getElementById('pickup-map'), {
-        center: restLatLng, zoom: 16,
-        mapTypeControl: false, streetViewControl: false,
-      });
-      new google.maps.Marker({ position: restLatLng, map: pickupMap, title: 'Skyline Treats' });
-
-      // Delivery map
-      deliveryMap = new google.maps.Map(document.getElementById('delivery-map'), {
-        center: restLatLng, zoom: 13,
-        mapTypeControl: false, streetViewControl: false,
-      });
-      new google.maps.Marker({ position: restLatLng, map: deliveryMap, icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', title: 'Skyline Treats (Restaurant)' });
-
-      deliveryMarker = new google.maps.Marker({ map: deliveryMap, visible: false, title: 'Your Location' });
-
-      // Autocomplete on address input
-      const input = document.getElementById('delivery-address');
-      const autocomplete = new google.maps.places.Autocomplete(input, {
-        componentRestrictions: { country: 'ke' },
-        fields: ['geometry', 'formatted_address'],
-      });
-
-      autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace();
-        if (!place.geometry) return;
-        deliveryLat = place.geometry.location.lat();
-        deliveryLng = place.geometry.location.lng();
-
-        deliveryMarker.setPosition({ lat: deliveryLat, lng: deliveryLng });
-        deliveryMarker.setVisible(true);
-        deliveryMap.setCenter({ lat: deliveryLat, lng: deliveryLng });
-        deliveryMap.setZoom(15);
-
-        calcDelivery(deliveryLat, deliveryLng);
-      });
-    };
-
-    // Also try loading maps manually if already loaded
-    if (window.google && window.google.maps) window.initMaps();
-    else window.addEventListener('load', () => { if (window.google && window.google.maps) window.initMaps(); });
-
-    function haversineKm(lat1, lng1, lat2, lng2) {
-      const R = 6371;
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLng = (lng2 - lng1) * Math.PI / 180;
-      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLng/2)**2;
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    }
-
-    function calcDelivery(lat, lng) {
-      const km = haversineKm(RESTAURANT_LAT, RESTAURANT_LNG, lat, lng);
-      deliveryDistKm = Math.round(km * 10) / 10;
-      const infoEl   = document.getElementById('delivery-info');
-      infoEl.style.display = 'block';
-
-      if (km <= FREE_DELIVERY_KM) {
-        deliveryFee = 0;
-        infoEl.innerHTML = `<strong>✅ Free Delivery!</strong> You are <strong>${deliveryDistKm} km</strong> away — delivery is free within 10 km.`;
-      } else {
-        deliveryFee = Math.ceil((km - FREE_DELIVERY_KM) * PRICE_PER_KM);
-        infoEl.innerHTML = `<strong>📦 Delivery Fee:</strong> You are <strong>${deliveryDistKm} km</strong> away.<br>First 10 km free + ${(km - FREE_DELIVERY_KM).toFixed(1)} km × KSH 25 = <strong>KSH ${deliveryFee}</strong>`;
-      }
-      updateTotalDisplay();
-    }
-
-    // ── Card formatting ────────────────────────────────────────────────────────
-    document.getElementById('card-number').addEventListener('input', function () {
-      let v = this.value.replace(/\D/g,'').substring(0,16);
-      this.value = v.replace(/(.{4})/g,'$1 ').trim();
-    });
-    document.getElementById('expiry').addEventListener('input', function () {
-      let v = this.value.replace(/\D/g,'').substring(0,4);
-      if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
-      this.value = v;
-    });
-
-    // ── Process payment ────────────────────────────────────────────────────────
-    async function processPayment(method) {
-      if (deliveryType === 'delivery' && !deliveryLat) {
-        alert('Please enter and confirm your delivery address first.'); return;
-      }
-      const grandTotal = baseTotal + deliveryFee;
-      if (!confirm(`Confirm payment of KSH ${grandTotal.toFixed(2)} via ${method}?`)) return;
-
-      if (method === 'M-Pesa' && !document.getElementById('mpesa-phone').value.trim())
-        { showResult(method, 'error', 'Please enter your M-Pesa number.'); return; }
-      if (method === 'Card') {
-        if (!document.getElementById('card-number').value.trim() || !document.getElementById('expiry').value.trim() || !document.getElementById('cvv').value.trim())
-          { showResult(method, 'error', 'Please fill in all card details.'); return; }
-      }
-      if (method === 'Crypto' && !document.getElementById('wallet').value.trim())
-        { showResult(method, 'error', 'Please enter your wallet address.'); return; }
-
-      const reference = method === 'M-Pesa' ? document.getElementById('mpesa-phone').value.trim()
-                      : method === 'Crypto' ? document.getElementById('wallet').value.trim() : null;
-      try {
-        const res  = await fetch(`${API}/payments/`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('st_token')}` },
-          body: JSON.stringify({
-            order_id: parseInt(orderId), method, amount: grandTotal, reference,
-            delivery_type: deliveryType, delivery_fee: deliveryFee,
-            delivery_lat: deliveryLat, delivery_lng: deliveryLng,
-            delivery_distance_km: deliveryDistKm,
-          }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          showResult(method, 'success', `✓ Payment of KSH ${grandTotal.toFixed(2)} confirmed! Thank you.`);
-          localStorage.removeItem('last_order_id'); localStorage.removeItem('last_order_total');
-          document.getElementById('total-badge').textContent = '✓ Payment Complete';
-        } else {
-          showResult(method, 'error', data.detail || data.error || 'Payment failed.');
-        }
-      } catch { showResult(method, 'error', 'Could not connect to server.'); }
-    }
-
-    function showResult(method, type, msg) {
-      const map = { 'M-Pesa': 'mpesa', 'Card': 'visa', 'Crypto': 'crypto' };
-      const el  = document.getElementById('result-' + map[method]);
-      if (!el) return;
-      el.className = 'pay-result ' + type;
-      el.textContent = msg;
-      el.style.display = 'block';
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  </script>
-  <!-- Google Maps callback -->
-  <script>
-    if (document.querySelector('script[src*="maps.googleapis.com"]'))
-      document.querySelector('script[src*="maps.googleapis.com"]').onload = window.initMaps;
+    setTimeout(() => {
+      localStorage.removeItem('last_order_id');
+      localStorage.removeItem('last_order_total');
+      localStorage.removeItem('last_order_method');
+    }, 5000);
   </script>
 </body>
 </html>

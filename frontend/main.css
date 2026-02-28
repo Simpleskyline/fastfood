@@ -1261,3 +1261,46 @@ html[data-theme="dark"] .sugar-btn { border-color: #444; color: #f0f0ee; }
 html[data-theme="dark"] .sugar-btn:hover, html[data-theme="dark"] .sugar-btn.selected {
   background: var(--accent, #f5c100); color: #111;
 }
+
+/* ── Combo info button row ───────────────────────────────────────────────── */
+.combo-btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.combo-btn-row .add-to-cart-btn { flex: 1; }
+.combo-info-btn {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: .8rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.combo-info-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* ── Cart sidebar mobile fix (scrollable, no overflow trap) ─────────────── */
+#cart-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 600px) {
+  #cart-container {
+    width: 100vw !important;
+    right: 0 !important;
+    border-radius: 16px 16px 0 0;
+    bottom: 0;
+    top: auto !important;
+    max-height: 85vh;
+  }
+}

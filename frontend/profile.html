@@ -832,10 +832,37 @@
     }
 
     /* ── LOAD ORDERS ── */
-    function loadOrders() {
-      const history = JSON.parse(localStorage.getItem('ronz_order_history') || '[]');
-      const total   = history.length;
-      const spent   = history.reduce((s, o) => s + (parseFloat(o.total) || 0), 0);
+    async function loadOrders() {
+      const token = localStorage.getItem('st_token');
+      let history = [];
+
+      // Try to load from API first; fall back to local history
+      if (token) {
+        try {
+          const res  = await fetch(`${API}/orders/my`, { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+          const data = await res.json();
+          if (data.success && Array.isArray(data.orders) && data.orders.length) {
+            history = data.orders.map(o => ({
+              id:     o.id,
+              items:  (o.items || []).map(i => ({ name: i.name, quantity: i.quantity })),
+              total:  parseFloat(o.total_amount) || 0,
+              date:   o.created_at,
+              status: o.status || 'pending',
+            }));
+            // Sync to localStorage so it shows even offline
+            localStorage.setItem('ronz_order_history', JSON.stringify(history));
+          } else {
+            history = JSON.parse(localStorage.getItem('ronz_order_history') || '[]');
+          }
+        } catch {
+          history = JSON.parse(localStorage.getItem('ronz_order_history') || '[]');
+        }
+      } else {
+        history = JSON.parse(localStorage.getItem('ronz_order_history') || '[]');
+      }
+
+      const total = history.length;
+      const spent = history.reduce((s, o) => s + (parseFloat(o.total) || 0), 0);
 
       $('js-stat-orders').textContent = total;
       $('js-stat-spent').textContent  = 'KSH ' + spent.toLocaleString();

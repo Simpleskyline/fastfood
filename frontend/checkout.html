@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout – Skyline Treats</title>
+  <link rel="stylesheet" href="main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    // Auth guard
+    (function () {
+      if (!localStorage.getItem('st_token')) window.location.href = 'auth.html';
+      const t = localStorage.getItem('st_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+    window.API_BASE = "http://localhost:8000/api";
+  </script>
+  <!-- Google Maps — set your key in .env or replace below -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" async defer></script>
+  <style>
+    .co-page { min-height: 100vh; background: var(--bg); padding-top: 64px; }
+    .co-wrap { max-width: 900px; margin: 0 auto; padding: 40px 20px 80px; display: grid; grid-template-columns: 1fr 380px; gap: 28px; }
+    @media(max-width:820px){ .co-wrap { grid-template-columns: 1fr; } .co-summary { order: -1; } }
+
+    /* Left column */
+    .co-card { background: var(--white, #fff); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 20px; }
+    .co-card-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--dark); margin: 0 0 20px; }
+
+    /* Tabs (delivery / pickup) */
+    .tab-bar { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 20px; gap: 4px; }
+    .tab-bar button { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all .2s; }
+    .tab-bar button.active { background: var(--white, #fff); color: var(--dark); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+
+    .del-panel { display: none; } .del-panel.active { display: block; }
+
+    .info-box { background: rgba(245,197,24,.08); border: 1px solid rgba(245,197,24,.3); border-radius: 10px; padding: 14px 16px; font-size: .9rem; margin-bottom: 16px; color: var(--text); }
+    .info-box strong { color: var(--dark); }
+
+    #pickup-map, #delivery-map { height: 220px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); background: #e8e8e8; margin-bottom: 14px; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:480px){ .form-row { grid-template-columns: 1fr; } }
+    label { display: block; font-size: .76rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); margin-bottom: 5px; }
+    input, select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .93rem; color: var(--text); background: var(--white, #fff); outline: none; transition: border-color .2s, box-shadow .2s; box-sizing: border-box; }
+    input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,197,24,.15); }
+
+    /* Payment tabs */
+    .pay-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 24px; gap: 4px; }
+    .pay-tab { flex: 1; padding: 10px 6px; border: none; background: transparent; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .86rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all .2s; }
+    .pay-tab.active { background: var(--white, #fff); color: var(--dark); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .pay-panel { display: none; } .pay-panel.active { display: block; }
+
+    .pay-notice { font-size: .8rem; color: var(--text-muted); background: var(--bg); border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; }
+
+    .place-btn { width: 100%; padding: 15px; background: var(--accent); color: #111; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity .2s, transform .15s; margin-top: 6px; }
+    .place-btn:hover { opacity: .88; transform: translateY(-1px); }
+    .place-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    .pay-result { border-radius: 10px; padding: 12px 16px; font-size: .9rem; font-weight: 500; margin-top: 12px; display: none; }
+    .pay-result.success { background: #f0fff4; border: 1px solid #bbf7d0; color: #166534; }
+    .pay-result.error   { background: #fff0f0; border: 1px solid #fecaca; color: #991b1b; }
+
+    /* Right column — order summary */
+    .co-summary { position: sticky; top: 80px; }
+    .summary-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: .9rem; }
+    .summary-item:last-of-type { border-bottom: none; }
+    .summary-item-name { color: var(--text); flex: 1; }
+    .summary-item-qty { color: var(--text-muted); font-size: .8rem; }
+    .summary-item-price { font-weight: 600; white-space: nowrap; }
+    .summary-divider { border: none; border-top: 1.5px solid var(--border); margin: 12px 0; }
+    .summary-row { display: flex; justify-content: space-between; font-size: .9rem; padding: 4px 0; }
+    .summary-total { font-weight: 800; font-size: 1.1rem; color: var(--dark); }
+    .summary-delivery-fee { color: var(--accent); font-weight: 700; }
+
+    .empty-cart-notice { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+    .empty-cart-notice a { color: var(--dark); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="dashboard.html" class="logo">Skyline Treats</a>
+    <nav class="nav-links" id="nav">
+      <a href="dashboard.html">Menu</a>
+      <a href="aboutus.html">About</a>
+      <a href="contactus.html">Contact</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" class="signout" id="signoutBtn">Sign Out</a>
+    </nav>
+    <div class="nav-right">
+      <button class="theme-toggle-btn" id="themeBtn">🌙 Dark</button>
+      <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
+  </header>
+
+  <div class="co-page">
+    <div class="co-wrap">
+
+      <!-- LEFT: Delivery + Payment -->
+      <div class="co-left">
+
+        <!-- DELIVERY -->
+        <div class="co-card">
+          <p class="co-card-title">🚚 Delivery Method</p>
+          <div class="tab-bar">
+            <button class="active" id="tab-pickup" onclick="switchDelivery('pickup')">🏪 Pickup (Free)</button>
+            <button id="tab-delivery" onclick="switchDelivery('delivery')">🚚 Deliver to me</button>
+          </div>
+
+          <div class="del-panel active" id="panel-pickup">
+            <div class="info-box">
+              <strong>📍 Skyline Treats</strong><br>
+              Tom Mboya Street, Nairobi CBD, Kenya<br>
+              <small style="color:var(--text-muted)">Open: Mon–Sun · 7am – 10pm</small>
+            </div>
+            <div id="pickup-map"></div>
+          </div>
+
+          <div class="del-panel" id="panel-delivery">
+            <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:14px;">Free delivery within 10 km. KSH 25/km after that.</p>
+            <div class="form-group">
+              <label for="delivery-address">Your Delivery Address</label>
+              <input type="text" id="delivery-address" placeholder="Start typing your address in Nairobi…" autocomplete="off" />
+            </div>
+            <div id="delivery-map"></div>
+            <div class="info-box" id="delivery-info" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="co-card">
+          <p class="co-card-title">💳 Payment</p>
+
+          <div class="pay-tabs">
+            <button class="pay-tab active" data-tab="mpesa" onclick="switchPayTab(this,'mpesa')">📱 M-Pesa</button>
+            <button class="pay-tab" data-tab="card" onclick="switchPayTab(this,'card')">💳 Card</button>
+            <button class="pay-tab" data-tab="crypto" onclick="switchPayTab(this,'crypto')">₿ Crypto</button>
+          </div>
+
+          <!-- M-Pesa -->
+          <div class="pay-panel active" id="panel-mpesa">
+            <div class="pay-notice">📲 You'll receive an M-Pesa STK push on your phone to confirm payment.</div>
+            <div class="form-group">
+              <label>M-Pesa Phone Number</label>
+              <input type="tel" id="mpesa-phone" placeholder="e.g. 0712 345 678" maxlength="13" />
+            </div>
+            <button class="place-btn" id="pay-btn-mpesa" onclick="placeOrder('M-Pesa')">✓ Pay with M-Pesa</button>
+            <div class="pay-result" id="result-mpesa"></div>
+          </div>
+
+          <!-- Card — via Flutterwave/Pesapal -->
+          <div class="pay-panel" id="panel-card">
+            <div class="pay-notice">🔒 Card payments are processed securely via <strong>Flutterwave</strong>. Your card details are never stored on our servers.</div>
+            <div class="form-group">
+              <label>Card Number</label>
+              <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" />
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Expiry</label><input type="text" id="card-expiry" placeholder="MM / YY" maxlength="7" /></div>
+              <div class="form-group"><label>CVV</label><input type="password" id="card-cvv" placeholder="•••" maxlength="4" /></div>
+            </div>
+            <div class="form-group">
+              <label>Cardholder Name</label>
+              <input type="text" id="card-name" placeholder="As printed on card" />
+            </div>
+            <button class="place-btn" id="pay-btn-card" onclick="placeOrder('Card')">🔒 Pay Securely</button>
+            <div class="pay-result" id="result-card"></div>
+          </div>
+
+          <!-- Crypto -->
+          <div class="pay-panel" id="panel-crypto">
+            <div class="pay-notice">₿ Send the exact amount to the wallet address shown after confirming.</div>
+            <div class="form-group">
+              <label>Cryptocurrency</label>
+              <select id="crypto-type">
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="ETH">Ethereum (ETH)</option>
+                <option value="USDT">Tether (USDT)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Your Wallet Address</label>
+              <input type="text" id="wallet-addr" placeholder="Paste your wallet address" />
+            </div>
+            <button class="place-btn" id="pay-btn-crypto" onclick="placeOrder('Crypto')">₿ Confirm & Pay</button>
+            <div class="pay-result" id="result-crypto"></div>
+          </div>
+        </div>
+
+      </div><!-- end co-left -->
+
+      <!-- RIGHT: Order Summary -->
+      <div class="co-summary">
+        <div class="co-card" id="summary-card">
+          <p class="co-card-title">🧾 Order Summary</p>
+          <div id="summary-items"></div>
+          <hr class="summary-divider">
+          <div class="summary-row"><span>Subtotal</span><span id="summary-subtotal">KSH 0.00</span></div>
+          <div class="summary-row"><span>Delivery</span><span id="summary-delivery" class="summary-delivery-fee">Free (Pickup)</span></div>
+          <hr class="summary-divider">
+          <div class="summary-row summary-total"><span>Total</span><span id="summary-total">KSH 0.00</span></div>
+        </div>
+        <a href="dashboard.html" style="display:block;text-align:center;margin-top:12px;color:var(--text-muted);font-size:.88rem;text-decoration:none;">← Back to menu</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="cart.js"></script>
+  <script>
+    const API = window.API_BASE || 'http://localhost:8000/api';
+    const RESTAURANT_LAT = -1.2847, RESTAURANT_LNG = 36.8275;
+    const FREE_KM = 10, RATE_KM = 25;
+
+    let deliveryType = 'pickup';
+    let deliveryFee  = 0;
+    let deliveryLat  = null, deliveryLng = null, deliveryDistKm = null;
+    let cartItems    = getCart();
+
+    // ── Theme & Nav ────────────────────────────────────────────────────────
+    const themeBtn = document.getElementById('themeBtn');
+    function applyTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('st_theme', t);
+      themeBtn.textContent = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+    }
+    applyTheme(localStorage.getItem('st_theme') || 'light');
+    themeBtn.addEventListener('click', () => applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+    document.getElementById('toggle').addEventListener('click', e => { e.stopPropagation(); document.getElementById('nav').classList.toggle('active'); });
+    document.getElementById('signoutBtn').addEventListener('click', e => {
+      e.preventDefault(); localStorage.removeItem('st_token'); localStorage.removeItem('st_user');
+      window.location.href = 'home.html';
+    });
+
+    // ── Redirect if cart empty ────────────────────────────────────────────
+    if (!cartItems.length) window.location.href = 'dashboard.html';
+
+    // ── Render order summary ──────────────────────────────────────────────
+    function renderSummary() {
+      const container = document.getElementById('summary-items');
+      let subtotal = 0;
+      container.innerHTML = cartItems.map(item => {
+        const line = item.price * item.quantity;
+        subtotal += line;
+        const name = item.name + (item.sugar ? ` [${item.sugar}]` : '');
+        return `<div class="summary-item">
+          <div>
+            <div class="summary-item-name">${name}</div>
+            <div class="summary-item-qty">× ${item.quantity}</div>
+          </div>
+          <div class="summary-item-price">KSH ${line.toFixed(2)}</div>
+        </div>`;
+      }).join('');
+      const grand = subtotal + deliveryFee;
+      document.getElementById('summary-subtotal').textContent = `KSH ${subtotal.toFixed(2)}`;
+      document.getElementById('summary-total').textContent    = `KSH ${grand.toFixed(2)}`;
+      document.getElementById('summary-delivery').textContent =
+        deliveryType === 'pickup'  ? 'Free (Pickup)' :
+        deliveryFee === 0          ? 'Free 🎉' :
+                                     `KSH ${deliveryFee.toFixed(2)}`;
+    }
+    renderSummary();
+
+    // ── Delivery toggle ───────────────────────────────────────────────────
+    function switchDelivery(type) {
+      deliveryType = type;
+      document.getElementById('tab-pickup').classList.toggle('active', type === 'pickup');
+      document.getElementById('tab-delivery').classList.toggle('active', type === 'delivery');
+      document.getElementById('panel-pickup').classList.toggle('active', type === 'pickup');
+      document.getElementById('panel-delivery').classList.toggle('active', type === 'delivery');
+      if (type === 'pickup') { deliveryFee = 0; renderSummary(); }
+    }
+
+    // ── Google Maps ───────────────────────────────────────────────────────
+    window.initMaps = function() {
+      const restLL = { lat: RESTAURANT_LAT, lng: RESTAURANT_LNG };
+      const pMap = new google.maps.Map(document.getElementById('pickup-map'), { center: restLL, zoom: 16, mapTypeControl: false, streetViewControl: false });
+      new google.maps.Marker({ position: restLL, map: pMap, title: 'Skyline Treats' });
+
+      const dMap = new google.maps.Map(document.getElementById('delivery-map'), { center: restLL, zoom: 13, mapTypeControl: false, streetViewControl: false });
+      new google.maps.Marker({ position: restLL, map: dMap, icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', title: 'Skyline Treats' });
+      const dMarker = new google.maps.Marker({ map: dMap, visible: false });
+
+      const ac = new google.maps.places.Autocomplete(document.getElementById('delivery-address'), { componentRestrictions: { country: 'ke' }, fields: ['geometry','formatted_address'] });
+      ac.addListener('place_changed', () => {
+        const place = ac.getPlace();
+        if (!place.geometry) return;
+        deliveryLat = place.geometry.location.lat();
+        deliveryLng = place.geometry.location.lng();
+        dMarker.setPosition({ lat: deliveryLat, lng: deliveryLng });
+        dMarker.setVisible(true);
+        dMap.setCenter({ lat: deliveryLat, lng: deliveryLng });
+        dMap.setZoom(15);
+        calcDelivery(deliveryLat, deliveryLng);
+      });
+    };
+    if (window.google && window.google.maps) window.initMaps();
+
+    function haversineKm(lat1,lng1,lat2,lng2) {
+      const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
+      const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+      return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    }
+    function calcDelivery(lat,lng) {
+      const km = haversineKm(RESTAURANT_LAT,RESTAURANT_LNG,lat,lng);
+      deliveryDistKm = Math.round(km*10)/10;
+      const infoEl = document.getElementById('delivery-info');
+      infoEl.style.display = 'block';
+      if (km <= FREE_KM) {
+        deliveryFee = 0;
+        infoEl.innerHTML = `<strong>✅ Free Delivery!</strong> You're ${deliveryDistKm} km away — delivery is free within 10 km.`;
+      } else {
+        deliveryFee = Math.ceil((km-FREE_KM)*RATE_KM);
+        infoEl.innerHTML = `<strong>📦 Delivery Fee: KSH ${deliveryFee}</strong><br>You're ${deliveryDistKm} km away. First 10 km free + ${(km-FREE_KM).toFixed(1)} km × KSH 25.`;
+      }
+      renderSummary();
+    }
+
+    // ── Payment tab switch ────────────────────────────────────────────────
+    function switchPayTab(btn, tab) {
+      document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + tab).classList.add('active');
+    }
+
+    // ── Card input formatting ─────────────────────────────────────────────
+    document.getElementById('card-number').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'').substring(0,16);
+      this.value = v.replace(/(.{4})/g,'$1 ').trim();
+    });
+    document.getElementById('card-expiry').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'').substring(0,4);
+      if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
+      this.value = v;
+    });
+
+    // ── Place order ───────────────────────────────────────────────────────
+    async function placeOrder(method) {
+      if (deliveryType === 'delivery' && !deliveryLat) {
+        alert('Please enter your delivery address first.'); return;
+      }
+      // Validate payment fields
+      if (method === 'M-Pesa' && !document.getElementById('mpesa-phone').value.trim()) {
+        showResult('mpesa','error','Please enter your M-Pesa number.'); return;
+      }
+      if (method === 'Card') {
+        const cn = document.getElementById('card-number').value.trim();
+        const ce = document.getElementById('card-expiry').value.trim();
+        const cv = document.getElementById('card-cvv').value.trim();
+        const cname = document.getElementById('card-name').value.trim();
+        if (!cn || !ce || !cv || !cname) { showResult('card','error','Please fill in all card details.'); return; }
+      }
+      if (method === 'Crypto' && !document.getElementById('wallet-addr').value.trim()) {
+        showResult('crypto','error','Please enter your wallet address.'); return;
+      }
+
+      const grand = cartItems.reduce((s,i) => s + i.price * i.quantity, 0) + deliveryFee;
+      const btnId = { 'M-Pesa':'pay-btn-mpesa','Card':'pay-btn-card','Crypto':'pay-btn-crypto' }[method];
+      const btn   = document.getElementById(btnId);
+      btn.disabled = true; btn.textContent = 'Processing…';
+
+      try {
+        // 1. Place the order
+        const orderRes = await fetch(`${API}/orders/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('st_token')}` },
+          body: JSON.stringify({
+            items: cartItems.map(i => ({ food_id: i.id, quantity: i.quantity, variant: i.variant || null, sugar: i.sugar || null })),
+            delivery_type: deliveryType,
+            delivery_address: deliveryType === 'delivery' ? document.getElementById('delivery-address').value : null,
+            delivery_lat: deliveryLat, delivery_lng: deliveryLng,
+            delivery_distance_km: deliveryDistKm, delivery_fee: deliveryFee,
+          }),
+        });
+        const orderData = await orderRes.json();
+        if (!orderData.success) {
+          btn.disabled = false; btn.textContent = getPayBtnLabel(method);
+          const tabKey = { 'M-Pesa':'mpesa','Card':'card','Crypto':'crypto' }[method];
+          showResult(tabKey, 'error', orderData.detail || orderData.error || 'Order failed.');
+          return;
+        }
+
+        // 2. Process payment
+        const reference = method === 'M-Pesa' ? document.getElementById('mpesa-phone').value.trim()
+                        : method === 'Crypto'  ? document.getElementById('wallet-addr').value.trim() : null;
+        const payRes  = await fetch(`${API}/payments/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('st_token')}` },
+          body: JSON.stringify({
+            order_id: orderData.order_id, method, amount: grand, reference,
+            delivery_type: deliveryType, delivery_fee: deliveryFee,
+            delivery_lat: deliveryLat, delivery_lng: deliveryLng, delivery_distance_km: deliveryDistKm,
+          }),
+        });
+        const payData = await payRes.json();
+        if (payData.success) {
+          // Save order info for thank you page and order history
+          localStorage.setItem('last_order_id',    String(orderData.order_id));
+          localStorage.setItem('last_order_total', String(grand));
+          localStorage.setItem('last_order_method', method);
+
+          // Save to local order history for profile page
+          const history = JSON.parse(localStorage.getItem('ronz_order_history') || '[]');
+          history.push({
+            id: orderData.order_id,
+            items: cartItems.map(i => ({ name: i.name, quantity: i.quantity })),
+            total: grand,
+            method,
+            date: new Date().toISOString(),
+            status: 'pending',
+          });
+          localStorage.setItem('ronz_order_history', JSON.stringify(history));
+
+          clearCart();
+          window.location.href = 'thankyou.html';
+        } else {
+          btn.disabled = false; btn.textContent = getPayBtnLabel(method);
+          const tabKey = { 'M-Pesa':'mpesa','Card':'card','Crypto':'crypto' }[method];
+          showResult(tabKey, 'error', payData.detail || payData.error || 'Payment failed. Please try again.');
+        }
+      } catch(e) {
+        btn.disabled = false; btn.textContent = getPayBtnLabel(method);
+        const tabKey = { 'M-Pesa':'mpesa','Card':'card','Crypto':'crypto' }[method];
+        showResult(tabKey, 'error', 'Network error. Please check your connection and try again.');
+      }
+    }
+
+    function getPayBtnLabel(method) {
+      return method === 'M-Pesa' ? '✓ Pay with M-Pesa' : method === 'Card' ? '🔒 Pay Securely' : '₿ Confirm & Pay';
+    }
+
+    function showResult(tab, type, msg) {
+      const el = document.getElementById('result-' + tab);
+      if (!el) return;
+      el.className = 'pay-result ' + type;
+      el.textContent = msg;
+      el.style.display = 'block';
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
+  <script>
+    if (document.querySelector('script[src*="maps.googleapis.com"]'))
+      document.querySelector('script[src*="maps.googleapis.com"]').setAttribute('onload','initMaps()');
+  </script>
+</body>
+</html>

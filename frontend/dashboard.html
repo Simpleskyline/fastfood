@@ -10,13 +10,13 @@
   
   <script>
     // Auth guard
-   /* (function () {
+    /*(function () {
       if (!localStorage.getItem('st_token')) window.location.href = 'home.html';
       // Theme
       const saved = localStorage.getItem('st_theme') || 'light';
       document.documentElement.setAttribute('data-theme', saved);
     })();
-    window.API_BASE = "http://localhost:8000/api"; */
+    window.API_BASE = "http://localhost:8000/api";*/
   </script>
 </head>
 <body>
@@ -93,7 +93,10 @@
         <h3>Burger Combo</h3>
         <p class="card-desc">Burger + Fries + Soda — the classic combo deal. Save KSH 80!</p>
         <p class="price">KSH 500.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:101,name:'Burger Combo',price:500})">🛒 Add to Cart</button>
+        <div class="combo-btn-row">
+          <button class="combo-info-btn" onclick="openComboInfo('Burger Combo','KSH 500',['🍔 Double Cheese Burger','🍟 Regular Fries','🥤 Soda (any flavour, 300ml)'],'Save KSH 80 vs ordering separately!')">ℹ️ What\'s inside</button>
+          <button class="add-to-cart-btn" onclick="addToCart({id:101,name:'Burger Combo',price:500})">🛒 Add to Cart</button>
+        </div>
       </div>
     </div>
 
@@ -104,7 +107,10 @@
         <h3>Chicken Combo</h3>
         <p class="card-desc">Crispy Chicken + Fries + Water — a satisfying meal deal.</p>
         <p class="price">KSH 520.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:102,name:'Chicken Combo',price:520})">🛒 Add to Cart</button>
+        <div class="combo-btn-row">
+          <button class="combo-info-btn" onclick="openComboInfo('Chicken Combo','KSH 520',['🍗 Quarter Chicken','🍟 Chips Masala','💧 Water (1 Litre)'],'Save KSH 130 vs ordering separately!')">ℹ️ What\'s inside</button>
+          <button class="add-to-cart-btn" onclick="addToCart({id:102,name:'Chicken Combo',price:520})">🛒 Add to Cart</button>
+        </div>
       </div>
     </div>
 
@@ -115,7 +121,10 @@
         <h3>Snack Box</h3>
         <p class="card-desc">Kebab + Samosas + Bhajia + Soda — ultimate snack platter.</p>
         <p class="price">KSH 300.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:103,name:'Snack Box',price:300})">🛒 Add to Cart</button>
+        <div class="combo-btn-row">
+          <button class="combo-info-btn" onclick="openComboInfo('Snack Box','KSH 300',['🍢 2× Kebab','🥟 2× Samosas','🥔 Bhajia portion','🥤 Soda (any flavour, 300ml)'],'Great for sharing — save KSH 70!')">ℹ️ What\'s inside</button>
+          <button class="add-to-cart-btn" onclick="addToCart({id:103,name:'Snack Box',price:300})">🛒 Add to Cart</button>
+        </div>
       </div>
     </div>
 
@@ -126,7 +135,10 @@
         <h3>Morning Boost</h3>
         <p class="card-desc">Egg Rolex + African Chai + Fresh Juice — perfect breakfast combo.</p>
         <p class="price">KSH 220.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:104,name:'Morning Boost',price:220})">🛒 Add to Cart</button>
+        <div class="combo-btn-row">
+          <button class="combo-info-btn" onclick="openComboInfo('Morning Boost','KSH 220',['🌯 Egg Rolex','🍵 African Chai','🧃 Fresh Juice (any flavour)'],'Save KSH 80 — the perfect start to your day!')">ℹ️ What\'s inside</button>
+          <button class="add-to-cart-btn" onclick="addToCart({id:104,name:'Morning Boost',price:220})">🛒 Add to Cart</button>
+        </div>
       </div>
     </div>
 
@@ -137,7 +149,10 @@
         <h3>Pizza Party</h3>
         <p class="card-desc">Any whole pizza + 2 Sodas — great for sharing with friends.</p>
         <p class="price">KSH 680.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:105,name:'Pizza Party',price:680})">🛒 Add to Cart</button>
+        <div class="combo-btn-row">
+          <button class="combo-info-btn" onclick="openComboInfo('Pizza Party','KSH 680',['🍕 Any whole pizza (Small size)','🥤 2× Sodas (any flavour, 300ml each)'],'Save KSH 100 — perfect for two!')">ℹ️ What\'s inside</button>
+          <button class="add-to-cart-btn" onclick="addToCart({id:105,name:'Pizza Party',price:680})">🛒 Add to Cart</button>
+        </div>
       </div>
     </div>
 
@@ -164,13 +179,14 @@
       </div>
     </div>
 
-    <div class="food-card" data-cat="mains" data-name="Shawarma" data-price="350">
+    <div class="food-card" data-cat="mains" data-name="Shawarma" data-price="350"
+         data-variants='[{"label":"Chicken Shawarma","price_add":0},{"label":"Beef Shawarma","price_add":50},{"label":"Mixed Shawarma","price_add":70}]'>
       <div class="card-img-wrap"><img src="https://www.munatycooking.com/wp-content/uploads/2023/12/chicken-shawarma-image-feature-2023.jpg" alt="Shawarma" loading="lazy"/></div>
       <div class="card-body">
         <h3>Shawarma</h3>
         <p class="card-desc">Slow-roasted meat wrapped in flatbread with garlic sauce and veggies.</p>
-        <p class="price">KSH 350.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:3,name:'Shawarma',price:350})">🛒 Add to Cart</button>
+        <p class="price">From KSH 350.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="3" data-name="Shawarma" data-price="350">🛒 Choose Type</button>
       </div>
     </div>
 
@@ -491,6 +507,19 @@
     <p>😔 No items found. Try a different search or category.</p>
   </div>
 
+  <!-- COMBO INFO MODAL -->
+  <div class="variant-overlay" id="comboOverlay">
+    <div class="variant-modal">
+      <button class="close-vm" onclick="document.getElementById('comboOverlay').classList.remove('active')">×</button>
+      <h3 id="combo-title"></h3>
+      <p class="vm-desc" id="combo-price"></p>
+      <p style="font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:12px;">What's included</p>
+      <ul id="combo-items-list" style="list-style:none;padding:0;margin:0 0 18px;display:flex;flex-direction:column;gap:10px;"></ul>
+      <p id="combo-savings" style="background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.35);border-radius:8px;padding:10px 14px;font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:20px;"></p>
+      <button class="vm-add-btn" id="combo-add-btn">🛒 Add to Cart</button>
+    </div>
+  </div>
+
   <!-- VARIANT MODAL -->
   <div class="variant-overlay" id="variantOverlay">
     <div class="variant-modal">
@@ -671,19 +700,9 @@
       cartContainer.classList.add('active');
     };
 
-    checkoutBtn.addEventListener('click', async () => {
+    checkoutBtn.addEventListener('click', () => {
       if (!cartItems.length) { alert('Your cart is empty!'); return; }
-      checkoutBtn.disabled = true; checkoutBtn.textContent = 'Placing order…';
-      const result = await checkout(cartItems);
-      checkoutBtn.disabled = false; checkoutBtn.textContent = 'Checkout';
-      if (result && result.success) {
-        cartItems = []; renderCartItems();
-        cartContainer.classList.remove('active');
-        window.location.href = 'thankyou.html';
-      } else {
-        const msg = result?.detail || result?.error || 'Order failed. Please try again.';
-        alert(msg);
-      }
+      window.location.href = 'checkout.html';
     });
 
     // ── Variant Modal ─────────────────────────────────────────────────────────
@@ -855,6 +874,25 @@
       if (e.target.value === 'price-desc') cardsArr.sort((a,b) => +b.dataset.price - +a.dataset.price);
       if (e.target.value === 'name')       cardsArr.sort((a,b) => a.dataset.name.localeCompare(b.dataset.name));
       cardsArr.forEach(c => grid.appendChild(c));
+    });
+
+    // ── Combo Info Modal ──────────────────────────────────────────────────────
+    function openComboInfo(name, price, items, savings) {
+      document.getElementById('combo-title').textContent = name;
+      document.getElementById('combo-price').textContent = price;
+      document.getElementById('combo-savings').textContent = '💰 ' + savings;
+      const list = document.getElementById('combo-items-list');
+      list.innerHTML = items.map(i => `<li style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:8px;font-size:.92rem;">${i}</li>`).join('');
+      const idMap   = {'Burger Combo':101,'Chicken Combo':102,'Snack Box':103,'Morning Boost':104,'Pizza Party':105};
+      const priceMap= {'Burger Combo':500,'Chicken Combo':520,'Snack Box':300,'Morning Boost':220,'Pizza Party':680};
+      document.getElementById('combo-add-btn').onclick = () => {
+        window.addToCart({id: idMap[name], name, price: priceMap[name]});
+        document.getElementById('comboOverlay').classList.remove('active');
+      };
+      document.getElementById('comboOverlay').classList.add('active');
+    }
+    document.getElementById('comboOverlay').addEventListener('click', function(e) {
+      if (e.target === this) this.classList.remove('active');
     });
 
   </script>
