@@ -1,30 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Skyline Treats – Menu</title>
   <link rel="stylesheet" href="main.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    /* Variant modal */
-    .variant-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9000; align-items:center; justify-content:center; }
-    .variant-overlay.active { display:flex; }
-    .variant-modal { background:var(--white); border-radius:16px; padding:30px 28px; max-width:440px; width:90%; position:relative; }
-    .variant-modal h3 { font-family:'Playfair Display',serif; font-size:1.2rem; margin-bottom:6px; }
-    .variant-modal p.vm-desc { font-size:.9rem; color:var(--text-muted); margin-bottom:18px; }
-    .variant-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
-    .variant-btn { padding:10px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--white); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:500; color:var(--text); transition:all .15s; text-align:left; }
-    .variant-btn:hover, .variant-btn.selected { border-color:var(--accent); background:rgba(245,197,24,.1); color:var(--dark); }
-    .sugar-row { display:flex; gap:10px; margin-bottom:18px; }
-    .sugar-btn { flex:1; padding:10px; border:1.5px solid var(--border); border-radius:10px; background:var(--white); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:600; transition:all .15s; }
-    .sugar-btn.selected { border-color:var(--accent); background:rgba(245,197,24,.1); }
-    .vm-add-btn { width:100%; padding:13px; background:var(--dark); color:var(--white); border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:.95rem; cursor:pointer; transition:background .2s; }
-    .vm-add-btn:hover { background:var(--mid); }
-    .variant-modal .close-vm { position:absolute; top:12px; right:14px; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--text-muted); }
-    /* Combo badge */
-    .combo-badge { display:inline-block; background:var(--accent); color:var(--dark); font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:20px; margin-bottom:6px; }
-  </style>
+  
   <script>
     // Auth guard
    /* (function () {
@@ -42,15 +25,15 @@
   <header class="navbar">
     <a href="dashboard.html" class="logo">Skyline Treats</a>
     <nav class="nav-links" id="nav">
-      <a href="home.html">Home</a>
       <a href="aboutus.html">About</a>
       <a href="contactus.html">Contact</a>
       <a href="faq.html">FAQ</a>
-      <a href="profile.html">Profile</a>
       <a href="privacy.html">Privacy</a>
       <a href="terms.html">Terms</a>
+      <a href="profile.html">Profile</a>
       <a href="#" class="signout" id="signoutBtn">Sign Out</a>
     </nav>
+    
     <div class="nav-right">
       <button class="theme-toggle-btn" id="themeBtn" title="Toggle dark/light mode">🌙 Dark</button>
       <button id="cart-icon" class="cart-btn">🛒 Cart (<span id="cart-count">0</span>)</button>
@@ -159,23 +142,25 @@
     </div>
 
     <!-- MAINS -->
-    <div class="food-card" data-cat="mains" data-name="Burger" data-price="350">
-      <a href="burger.html" class="card-img-wrap"><img src="https://www.kitchensanctuary.com/wp-content/uploads/2021/05/Double-Cheeseburger-square-FS-42.jpg" alt="Burger" loading="lazy"/></a>
+    <div class="food-card" data-cat="mains" data-name="Burger" data-price="250"
+         data-variants='[{"label":"Single Cheese Burger","price_add":0},{"label":"Double Cheese Burger","price_add":100},{"label":"Single + Fries","price_add":100},{"label":"Double + Fries","price_add":200}]'>
+      <div class="card-img-wrap"><img src="https://www.kitchensanctuary.com/wp-content/uploads/2021/05/Double-Cheeseburger-square-FS-42.jpg" alt="Burger" loading="lazy"/></div>
       <div class="card-body">
-        <h3><a href="burger.html" class="food-link">Burger</a></h3>
-        <p class="card-desc">Juicy double-patty burger with fresh lettuce, cheese and our signature sauce.</p>
-        <p class="price">KSH 350.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:1,name:'Burger',price:350})">🛒 Add to Cart</button>
+        <h3>Burger</h3>
+        <p class="card-desc">Juicy hand-pressed beef patty with melted cheese, fresh lettuce and our signature sauce.</p>
+        <p class="price">From KSH 250.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="1" data-name="Burger" data-price="250">🛒 Choose Style</button>
       </div>
     </div>
 
-    <div class="food-card" data-cat="mains" data-name="Chicken" data-price="400">
-      <a href="chicken.html" class="card-img-wrap"><img src="https://hips.hearstapps.com/hmg-prod/images/roast-chicken-recipe-2-66b231ac9a8fb.jpg?resize=1200:*" alt="Chicken" loading="lazy"/></a>
+    <div class="food-card" data-cat="mains" data-name="Chicken" data-price="250"
+         data-variants='[{"label":"Quarter Chicken","price_add":0},{"label":"Half Chicken","price_add":250},{"label":"Full Chicken","price_add":750}]'>
+      <div class="card-img-wrap"><img src="https://hips.hearstapps.com/hmg-prod/images/roast-chicken-recipe-2-66b231ac9a8fb.jpg?resize=1200:*" alt="Chicken" loading="lazy"/></div>
       <div class="card-body">
-        <h3><a href="chicken.html" class="food-link">Chicken</a></h3>
-        <p class="card-desc">Tender roasted chicken with herbs and a crispy golden skin.</p>
-        <p class="price">KSH 400.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:2,name:'Chicken',price:400})">🛒 Add to Cart</button>
+        <h3>Chicken</h3>
+        <p class="card-desc">Tender roasted chicken with herbs and a crispy golden skin — quarter, half or full.</p>
+        <p class="price">From KSH 250.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="2" data-name="Chicken" data-price="250">🛒 Choose Size</button>
       </div>
     </div>
 
@@ -189,75 +174,82 @@
       </div>
     </div>
 
-    <div class="food-card" data-cat="mains" data-name="Cheese Wraps" data-price="280">
-      <a href="cheese_wraps.html" class="card-img-wrap"><img src="https://life-in-the-lofthouse.com/wp-content/uploads/2022/08/Grilled-Cheeseburger-Wraps282-500x500.jpg" alt="Cheese Wraps" loading="lazy"/></a>
+    <div class="food-card" data-cat="mains" data-name="Cheese Wraps" data-price="390"
+         data-variants='[{"label":"Beef Wrap","price_add":0},{"label":"Chicken Wrap","price_add":100}]'>
+      <div class="card-img-wrap"><img src="https://life-in-the-lofthouse.com/wp-content/uploads/2022/08/Grilled-Cheeseburger-Wraps282-500x500.jpg" alt="Cheese Wraps" loading="lazy"/></div>
       <div class="card-body">
-        <h3><a href="cheese_wraps.html" class="food-link">Cheese Wraps</a></h3>
-        <p class="card-desc">Grilled cheese-filled wraps packed with flavour and crunch.</p>
-        <p class="price">KSH 280.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:4,name:'Cheese Wraps',price:280})">🛒 Add to Cart</button>
+        <h3>Cheese Wraps</h3>
+        <p class="card-desc">Grilled cheese-filled wraps packed with flavour and crunch — beef or chicken.</p>
+        <p class="price">From KSH 390.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="4" data-name="Cheese Wrap" data-price="390">🛒 Choose Filling</button>
       </div>
     </div>
 
     <!-- PIZZA -->
-    <div class="food-card" data-cat="pizza" data-name="Margherita Pizza" data-price="500">
+    <div class="food-card" data-cat="pizza" data-name="Margherita Pizza" data-price="500"
+         data-variants='[{"label":"Small","price_add":0},{"label":"Medium","price_add":150},{"label":"Large","price_add":350},{"label":"Extra Large","price_add":700}]'>
       <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600" alt="Margherita" loading="lazy"/></div>
       <div class="card-body">
         <h3>Margherita Pizza</h3>
         <p class="card-desc">Classic tomato sauce, fresh mozzarella and basil. A timeless favourite.</p>
-        <p class="price">KSH 500.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:20,name:'Margherita Pizza',price:500})">🛒 Add to Cart</button>
+        <p class="price">From KSH 500.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="20" data-name="Margherita Pizza" data-price="500">🛒 Choose Size</button>
       </div>
     </div>
 
-    <div class="food-card" data-cat="pizza" data-name="Pepperoni Pizza" data-price="600">
+    <div class="food-card" data-cat="pizza" data-name="Pepperoni Pizza" data-price="500"
+         data-variants='[{"label":"Small","price_add":0},{"label":"Medium","price_add":150},{"label":"Large","price_add":350},{"label":"Extra Large","price_add":700}]'>
       <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600" alt="Pepperoni" loading="lazy"/></div>
       <div class="card-body">
         <h3>Pepperoni Pizza</h3>
         <p class="card-desc">Loaded with generous pepperoni and melted cheese on crispy crust.</p>
-        <p class="price">KSH 600.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:21,name:'Pepperoni Pizza',price:600})">🛒 Add to Cart</button>
+        <p class="price">From KSH 500.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="21" data-name="Pepperoni Pizza" data-price="500">🛒 Choose Size</button>
       </div>
     </div>
 
-    <div class="food-card" data-cat="pizza" data-name="BBQ Chicken Pizza" data-price="650">
+    <div class="food-card" data-cat="pizza" data-name="BBQ Chicken Pizza" data-price="500"
+         data-variants='[{"label":"Small","price_add":0},{"label":"Medium","price_add":150},{"label":"Large","price_add":350},{"label":"Extra Large","price_add":700}]'>
       <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600" alt="BBQ Chicken Pizza" loading="lazy"/></div>
       <div class="card-body">
         <h3>BBQ Chicken Pizza</h3>
         <p class="card-desc">Smoky BBQ sauce base with grilled chicken and caramelised onions.</p>
-        <p class="price">KSH 650.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:22,name:'BBQ Chicken Pizza',price:650})">🛒 Add to Cart</button>
+        <p class="price">From KSH 500.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="22" data-name="BBQ Chicken Pizza" data-price="500">🛒 Choose Size</button>
       </div>
     </div>
 
-    <div class="food-card" data-cat="pizza" data-name="Veggie Supreme" data-price="550">
+    <div class="food-card" data-cat="pizza" data-name="Veggie Supreme" data-price="500"
+         data-variants='[{"label":"Small","price_add":0},{"label":"Medium","price_add":150},{"label":"Large","price_add":350},{"label":"Extra Large","price_add":700}]'>
       <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=600" alt="Veggie Supreme" loading="lazy"/></div>
       <div class="card-body">
         <h3>Veggie Supreme</h3>
         <p class="card-desc">Roasted peppers, mushrooms, olives and spinach on a cheese base.</p>
-        <p class="price">KSH 550.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:23,name:'Veggie Supreme',price:550})">🛒 Add to Cart</button>
+        <p class="price">From KSH 500.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="23" data-name="Veggie Supreme Pizza" data-price="500">🛒 Choose Size</button>
       </div>
     </div>
 
-    <div class="food-card" data-cat="pizza" data-name="Meat Lovers Pizza" data-price="700">
+    <div class="food-card" data-cat="pizza" data-name="Meat Lovers Pizza" data-price="500"
+         data-variants='[{"label":"Small","price_add":0},{"label":"Medium","price_add":150},{"label":"Large","price_add":350},{"label":"Extra Large","price_add":700}]'>
       <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600" alt="Meat Lovers" loading="lazy"/></div>
       <div class="card-body">
         <h3>Meat Lovers Pizza</h3>
         <p class="card-desc">Beef, sausage, bacon and ham — the ultimate meat feast pizza.</p>
-        <p class="price">KSH 700.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:24,name:'Meat Lovers Pizza',price:700})">🛒 Add to Cart</button>
+        <p class="price">From KSH 500.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="24" data-name="Meat Lovers Pizza" data-price="500">🛒 Choose Size</button>
       </div>
     </div>
 
     <!-- SIDES -->
-    <div class="food-card" data-cat="sides" data-name="Fries" data-price="150">
-      <a href="fries.html" class="card-img-wrap"><img src="https://www.allrecipes.com/thmb/8_B6OD1w6h1V0zPi8KAGzD41Kzs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/50223-homemade-crispy-seasoned-french-fries-VAT-Beauty-4x3-789ecb2eaed34d6e879b9a93dd56a50a.jpg" alt="Fries" loading="lazy"/></a>
+    <div class="food-card" data-cat="sides" data-name="Fries" data-price="100"
+         data-variants='[{"label":"Regular Fries","price_add":0},{"label":"Chips Masala","price_add":50},{"label":"Cheese Fries","price_add":150}]'>
+      <div class="card-img-wrap"><img src="https://www.allrecipes.com/thmb/8_B6OD1w6h1V0zPi8KAGzD41Kzs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/50223-homemade-crispy-seasoned-french-fries-VAT-Beauty-4x3-789ecb2eaed34d6e879b9a93dd56a50a.jpg" alt="Fries" loading="lazy"/></div>
       <div class="card-body">
-        <h3><a href="fries.html" class="food-link">Fries</a></h3>
-        <p class="card-desc">Crispy golden fries seasoned with our special house spice blend.</p>
-        <p class="price">KSH 150.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:11,name:'Fries',price:150})">🛒 Add to Cart</button>
+        <h3>Fries</h3>
+        <p class="card-desc">Crispy golden fries — regular, chips masala or loaded cheese fries.</p>
+        <p class="price">From KSH 100.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="11" data-name="Fries" data-price="100">🛒 Choose Style</button>
       </div>
     </div>
 
@@ -333,33 +325,37 @@
     </div>
 
     <!-- DRINKS -->
-    <div class="food-card" data-cat="drinks" data-name="Soda" data-price="80">
-      <a href="soda.html" class="card-img-wrap"><img src="https://media.istockphoto.com/id/537699621/photo/fanta-drink-in-can-on-ice-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=SYrfyTjTukaR6_IsWusmOX-2-ZjCF5UyuvFZEAqTChs=" alt="Soda" loading="lazy"/></a>
+    <div class="food-card" data-cat="drinks" data-name="Soda" data-price="50"
+         data-flavours='["Fanta Orange","Fanta Blackcurrant","Coca-Cola","Sprite","Stoney Ginger Beer","Krest Bitter Lemon"]'
+         data-variants='[{"label":"300ml","price_add":0},{"label":"350ml","price_add":10},{"label":"500ml","price_add":30},{"label":"1.25L","price_add":100},{"label":"2L","price_add":150}]'>
+      <div class="card-img-wrap"><img src="https://media.istockphoto.com/id/537699621/photo/fanta-drink-in-can-on-ice-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=SYrfyTjTukaR6_IsWusmOX-2-ZjCF5UyuvFZEAqTChs=" alt="Soda" loading="lazy"/></div>
       <div class="card-body">
-        <h3><a href="soda.html" class="food-link">Soda</a></h3>
+        <h3>Soda</h3>
         <p class="card-desc">Chilled soda in a variety of flavours — Fanta, Coke, Sprite & more.</p>
-        <p class="price">KSH 80.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:15,name:'Soda',price:80})">🛒 Add to Cart</button>
+        <p class="price">From KSH 50.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="15" data-name="Soda" data-price="50">🛒 Choose Flavour & Size</button>
       </div>
     </div>
 
-    <div class="food-card" data-cat="drinks" data-name="Water" data-price="50">
+    <div class="food-card" data-cat="drinks" data-name="Water" data-price="30"
+         data-variants='[{"label":"500ml","price_add":0},{"label":"1 Litre","price_add":20}]'>
       <div class="card-img-wrap"><img src="https://olkeriliquor.com/wp-content/uploads/2023/06/DASANI-500ML-MINERAL-WATER.jpg" alt="Water" loading="lazy"/></div>
       <div class="card-body">
         <h3>Water</h3>
         <p class="card-desc">Cold mineral water — the perfect companion to any meal.</p>
-        <p class="price">KSH 50.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:16,name:'Water',price:50})">🛒 Add to Cart</button>
+        <p class="price">From KSH 30.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="16" data-name="Water" data-price="30">🛒 Choose Size</button>
       </div>
     </div>
 
-    <div class="food-card" data-cat="drinks" data-name="Fresh Juice" data-price="120">
+    <div class="food-card" data-cat="drinks" data-name="Fresh Juice" data-price="150"
+         data-flavours='["Cocktail","Passion","Mango","Tamarind","Apple","Watermelon"]'>
       <div class="card-img-wrap"><img src="https://www.vfi.co.ke/wp-content/uploads/2020/02/Fresh-Juice-1-1024x988.jpg" alt="Fresh Juice" loading="lazy"/></div>
       <div class="card-body">
         <h3>Fresh Juice</h3>
         <p class="card-desc">Freshly squeezed fruit juice — mango, passion, watermelon & more.</p>
-        <p class="price">KSH 120.00</p>
-        <button class="add-to-cart-btn" onclick="addToCart({id:25,name:'Fresh Juice',price:120})">🛒 Add to Cart</button>
+        <p class="price">KSH 150.00</p>
+        <button class="add-to-cart-btn variant-trigger" data-id="25" data-name="Fresh Juice" data-price="150">🛒 Choose Flavour</button>
       </div>
     </div>
 
@@ -501,8 +497,12 @@
       <button class="close-vm" onclick="closeVariantModal()">×</button>
       <h3 id="vm-title">Choose Your Option</h3>
       <p class="vm-desc" id="vm-desc"></p>
+      <div id="vm-flavour-section" style="display:none;">
+        <p style="font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Choose Flavour</p>
+        <div class="vm-flavour-grid" id="vm-flavour-grid"></div>
+      </div>
       <div id="vm-variants-section" style="display:none;">
-        <p style="font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Flavour / Style</p>
+        <p style="font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px;">Choose Size</p>
         <div class="variant-grid" id="vm-variant-grid"></div>
       </div>
       <div id="vm-sugar-section" style="display:none;">
@@ -689,6 +689,7 @@
     // ── Variant Modal ─────────────────────────────────────────────────────────
     let vmItem = {};
     let vmSelectedVariant = null;
+    let vmSelectedFlavour = null;
     let vmSelectedSugar   = null;
 
     document.querySelectorAll('.variant-trigger').forEach(btn => {
@@ -700,24 +701,56 @@
           name:     btn.dataset.name,
           price:    parseFloat(btn.dataset.price),
           variants: card.dataset.variants ? JSON.parse(card.dataset.variants) : null,
+          flavours: card.dataset.flavours ? JSON.parse(card.dataset.flavours) : null,
           sugar:    card.dataset.sugar === 'true',
         };
         openVariantModal();
       });
     });
 
-    function openVariantModal() {
-      vmSelectedVariant = null; vmSelectedSugar = null;
-      document.getElementById('vm-title').textContent = vmItem.name;
-      document.getElementById('vm-desc').textContent  = `Base price: KSH ${vmItem.price.toFixed(2)}`;
+    function updatePriceDisplay() {
+      const priceAdd = vmSelectedVariant ? (vmSelectedVariant.price_add || 0) : 0;
+      document.getElementById('vm-desc').textContent = `KSH ${(vmItem.price + priceAdd).toFixed(2)}`;
+    }
 
+    function openVariantModal() {
+      vmSelectedVariant = null; vmSelectedFlavour = null; vmSelectedSugar = null;
+      document.getElementById('vm-title').textContent = vmItem.name;
+
+      // Flavour section
+      const flavourSection = document.getElementById('vm-flavour-section');
+      const flavourGrid    = document.getElementById('vm-flavour-grid');
+      flavourGrid.innerHTML = '';
+
+      if (vmItem.flavours && vmItem.flavours.length) {
+        flavourSection.style.display = 'block';
+        vmItem.flavours.forEach(f => {
+          const btn = document.createElement('button');
+          btn.className = 'variant-btn';
+          btn.textContent = f;
+          btn.addEventListener('click', () => {
+            flavourGrid.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            vmSelectedFlavour = f;
+          });
+          flavourGrid.appendChild(btn);
+        });
+        // auto-select first
+        flavourGrid.querySelector('.variant-btn').click();
+      } else {
+        flavourSection.style.display = 'none';
+      }
+
+      // Size/style variants section
       const varSection = document.getElementById('vm-variants-section');
-      const sugarSection = document.getElementById('vm-sugar-section');
-      const grid = document.getElementById('vm-variant-grid');
-      grid.innerHTML = '';
+      const varLabel   = varSection.querySelector('p');
+      const grid       = document.getElementById('vm-variant-grid');
+      grid.innerHTML   = '';
 
       if (vmItem.variants && vmItem.variants.length) {
         varSection.style.display = 'block';
+        // If there are flavours too, label this section as "Size", else "Flavour / Style"
+        varLabel.textContent = vmItem.flavours ? 'Choose Size' : 'Flavour / Style';
         vmItem.variants.forEach(v => {
           const btn = document.createElement('button');
           btn.className = 'variant-btn';
@@ -726,16 +759,19 @@
             grid.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
             vmSelectedVariant = v;
-            document.getElementById('vm-desc').textContent = `KSH ${(vmItem.price + (v.price_add||0)).toFixed(2)}`;
+            updatePriceDisplay();
           });
           grid.appendChild(btn);
         });
-        // Auto-select first
+        // auto-select first
         grid.querySelector('.variant-btn').click();
       } else {
         varSection.style.display = 'none';
       }
 
+      updatePriceDisplay();
+
+      const sugarSection = document.getElementById('vm-sugar-section');
       sugarSection.style.display = vmItem.sugar ? 'block' : 'none';
       document.querySelectorAll('.sugar-btn').forEach(b => b.classList.remove('selected'));
 
@@ -753,15 +789,23 @@
     }
 
     function confirmVariantAdd() {
-      if (vmItem.variants && !vmSelectedVariant) { alert('Please choose a flavour/style first.'); return; }
+      if (vmItem.flavours && !vmSelectedFlavour) { alert('Please choose a flavour first.'); return; }
+      if (vmItem.variants && !vmSelectedVariant) { alert('Please choose a size/style first.'); return; }
       if (vmItem.sugar && !vmSelectedSugar)       { alert('Please choose sugared or unsugared.'); return; }
-      const priceAdd = vmSelectedVariant ? (vmSelectedVariant.price_add || 0) : 0;
-      const label    = vmSelectedVariant ? vmSelectedVariant.label : null;
+      const priceAdd   = vmSelectedVariant ? (vmSelectedVariant.price_add || 0) : 0;
+      const sizeLabel  = vmSelectedVariant ? vmSelectedVariant.label : null;
+      const flavour    = vmSelectedFlavour || null;
+      // Build display name: "Fanta Orange Soda (500ml)" or "Milkshake (Chocolate)"
+      let displayName = vmItem.name;
+      const parts = [];
+      if (flavour)   parts.push(flavour);
+      if (sizeLabel) parts.push(sizeLabel);
+      if (parts.length) displayName += ` (${parts.join(', ')})`;
       window.addToCart({
-        id:      vmItem.id,
-        name:    vmItem.name + (label ? ` (${label})` : ''),
+        id:      vmItem.id + (flavour||'') + (sizeLabel||''),
+        name:    displayName,
         price:   vmItem.price + priceAdd,
-        variant: label,
+        variant: sizeLabel,
         sugar:   vmSelectedSugar,
       });
       closeVariantModal();

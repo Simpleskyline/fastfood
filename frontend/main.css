@@ -88,7 +88,7 @@ body {
 
 .cart-btn {
   background: transparent;
-  border: 1.5px solid #444;
+  border: 1.5px solid #fff1f1;
   color: var(--white);
   padding: 7px 18px;
   border-radius: 20px;
@@ -1146,3 +1146,118 @@ html[data-theme="dark"] .cart-item { background:#222; border-color:#333; }
   font-family: 'DM Sans', sans-serif;
 }
 .theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Variant / Customisation Modal ──────────────────────────────────────── */
+.variant-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.variant-overlay.active { display: flex; }
+
+.variant-modal {
+  background: var(--card-bg, #fff);
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  animation: modalIn 0.22s ease;
+}
+@keyframes modalIn {
+  from { opacity:0; transform: translateY(18px) scale(.97); }
+  to   { opacity:1; transform: none; }
+}
+
+.close-vm {
+  position: absolute;
+  top: 14px; right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--text-muted, #888);
+  line-height: 1;
+  padding: 0;
+}
+.close-vm:hover { color: var(--accent, #f5c100); }
+
+.variant-modal h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  margin: 0 0 4px;
+  color: var(--text, #111);
+  padding-right: 28px;
+}
+.vm-desc {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent, #f5c100);
+  margin: 0 0 18px;
+}
+
+.vm-flavour-grid, .variant-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.sugar-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.sugar-btn {
+  flex: 1;
+  border: 1.5px solid var(--border, #ddd);
+  background: transparent;
+  color: var(--text, #111);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sugar-btn:hover, .sugar-btn.selected {
+  border-color: var(--accent, #f5c100);
+  background: var(--accent, #f5c100);
+  color: #111;
+}
+
+.vm-add-btn {
+  width: 100%;
+  background: var(--accent, #f5c100);
+  border: none;
+  color: #111;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.vm-add-btn:hover { opacity: 0.85; }
+
+html[data-theme="dark"] .variant-modal {
+  background: #1a1a1a;
+  color: #f0f0ee;
+}
+html[data-theme="dark"] .variant-modal h3 { color: #f0f0ee; }
+html[data-theme="dark"] .close-vm { color: #888; }
+html[data-theme="dark"] .sugar-btn { border-color: #444; color: #f0f0ee; }
+html[data-theme="dark"] .sugar-btn:hover, html[data-theme="dark"] .sugar-btn.selected {
+  background: var(--accent, #f5c100); color: #111;
+}

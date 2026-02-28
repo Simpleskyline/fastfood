@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="main.css" />
 </head>
+
 <body>
 
   <header class="navbar">
@@ -20,7 +22,7 @@
       <a href="../php/auth/logout.php" class="signout">Sign Out</a>
     </nav>
     <div class="nav-right">
-      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
+      <button id="cart-icon" class="cart-btn">🛒 Cart (<span id="cart-count">0</span>)</button>
       <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
     </div>
   </header>
@@ -73,6 +75,15 @@
       </div>
     </div>
   </div>
+
+  <aside id="cart-container" aria-label="Shopping Cart">
+    <h2>Your Cart</h2>
+    <div id="cart-items"><p class="empty-cart-msg">Your cart is empty.</p></div>
+    <div class="cart-actions">
+      <button id="close-cart">Close</button>
+      <button id="checkout-btn" style="display:none;">Checkout</button>
+    </div>
+  </aside>
 
   <footer class="footer">
     <div class="footer-grid">

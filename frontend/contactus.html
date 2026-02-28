@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,13 +16,14 @@
     <nav class="nav-links" id="nav">
       <a href="dashboard.html">Menu</a>
       <a href="aboutus.html">About</a>
-      <a href="contactus.html">Contact</a>
       <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
       <a href="profile.html">Profile</a>
-      <a href="#" class="signout" id="signoutBtn">Sign Out</a>
+      <a href="#" id="signoutBtn" class="signout">Sign Out</a>
     </nav>
+    
     <div class="nav-right">
-      <button class="cart-btn" onclick="window.location.href='dashboard.html'">🛒 Cart</button>
       <div class="menu-toggle" id="toggle"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
     </div>
   </header>
@@ -174,6 +176,8 @@
       document.getElementById('name').value = '';
       document.getElementById('email').value = '';
       document.getElementById('message').value = '';
+      document.getElementById('signoutBtn').addEventListener('click',e=>{e.preventDefault();localStorage.removeItem('st_token');localStorage.removeItem('st_user');window.location.href='home.html';});
+
     }
   </script>
 
